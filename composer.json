@@ -1,0 +1,24 @@
+{
+  "name": "codeinwp/themeisle-content-forms",
+  "description": "ThemeIsle Content Forms ",
+  "keywords": [
+    "wordpress"
+  ],
+  "homepage": "https://github.com/Codeinwp/themeisle-content-forms",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "ThemeIsle team",
+      "email": "friends@themeisle.com",
+      "homepage": "https://themeisle.com"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "load.php"
+    ]
+  },
+  "support": {
+    "issues": "https://github.com/Codeinwp/themeisle-content-forms/issues"
+  }
+}
