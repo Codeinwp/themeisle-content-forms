@@ -3,7 +3,7 @@
 namespace ThemeIsle\ContentForms;
 
 /**
- * This class is responsable for creating a Contact "Content" Form
+ * This class is responsible for creating a Contact "Content" Form
  * Class ContentForms_Contact
  * @package ThemeIsle
  */
@@ -11,34 +11,43 @@ class ContactForm {
 
 	public function __construct() {
 
-		$config = $this->get_config();
+		// add the initial config for the Contact Content Form
+		add_filter( 'content_forms_config_for_contact', array( $this, 'make_form_config' ) );
+
+		$config = apply_filters( 'content_forms_config_for_contact', array() );
+
 		$this->build_form( $config );
 	}
 
-	function get_config() {
-		return apply_filters( '', array(
-				'id' => 'contact',
-				'label' => 'contact',
+	function make_form_config( $config ) {
+		return array(
+				'id'                           => 'contact',
+				'icon'                         => 'eicon-align-left',
+				'title'                        => esc_html__( 'Contact Form' ),
 				'fields' /* or form_fields? */ => array(
 					'contact_name'    => array(
-						'type'    => 'text',
-						'label'   => esc_html__( 'Name' ),
-						'require' => 'required'
+						'type'        => 'text',
+						'label'       => esc_html__( 'Name' ),
+						'placeholder' => esc_html__( 'Your Name' ),
+						'require'     => 'required'
 					),
 					'contact_email'   => array(
-						'type'    => 'email',
-						'label'   => esc_html__( 'Email' ),
-						'require' => 'required'
+						'type'        => 'email',
+						'label'       => esc_html__( 'Email' ),
+						'placeholder' => esc_html__( '@who.com' ),
+						'require'     => 'required'
 					),
 					'contact_phone'   => array(
-						'type'    => 'number',
-						'label'   => esc_html__( 'Phone' ),
-						'require' => 'optional'
+						'type'        => 'number',
+						'label'       => esc_html__( 'Phone' ),
+						'placeholder' => esc_html__( '+555 555 555' ),
+						'require'     => 'optional'
 					),
 					'contact_message' => array(
-						'type'    => 'textarea',
-						'label'   => esc_html__( 'Message' ),
-						'require' => 'required'
+						'type'        => 'textarea',
+						'label'       => esc_html__( 'Message' ),
+						'placeholder' => esc_html__( 'Add your thoughts here' ),
+						'require'     => 'required'
 					)
 				),
 
@@ -59,7 +68,6 @@ class ContactForm {
 						'description' => esc_html__( 'By default, the robots spam filter is enabled for every form, if for some reason you want to disable it.', 'textdomain' )
 					)
 				)
-			)
 		);
 	}
 

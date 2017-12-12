@@ -17,6 +17,7 @@ class ContentForm {
 		 * @TODO These setups will be in separate method. They are called here only for dev purposes
 		 */
 		$this->set_config( $config );
+		$this->set_name( $name );
 		$this->hooks();
 	}
 
@@ -25,10 +26,6 @@ class ContentForm {
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 		// Register the Beaver Module
 		// Register the Gutenberg Block
-	}
-
-	private function set_config( $config ) {
-		$this->config = $config;
 	}
 
 	public function register_elementor_widget() {
@@ -42,35 +39,57 @@ class ContentForm {
 			\Elementor\Plugin::instance()->widgets_manager->register_widget_type(
 				new \ThemeIsle\ContentForms\ElementorWidget(
 					array(
-						'id' => 'content_form_contact',
-						'content_forms_config',
-						$this->config
+						'id'                   => 'content_form_' . $this->get_name(),
+						'content_forms_config' => $this->get_config()
 					),
-					array()
+					array(
+						'content_forms_config' => $this->get_config()
+					)
 				)
 			);
 		}
-
-	}
-
-	private function add_elementor_field( $args ) {
-
 	}
 
 	private function register_beaver_module() {
 		// TODO https://www.wpbeaverbuilder.com/custom-module-documentation/
 	}
 
-	private function add_beaver_field( $args ) {
-
-	}
-
 	private function register_gutenberg_block() {
 		//@TODO https://github.com/WordPress/gutenberg-examples/tree/master/04-controls
 	}
 
-	// prolly this will be in js
-	private function add_gutenberg_field( $args ) {
-
+	/**
+	 * Setter method for the form name
+	 *
+	 * @param $name
+	 */
+	private function set_name( $name ) {
+		$this->name = $name;
 	}
+
+	/**
+	 * Getter method for the form name
+	 * @return mixed
+	 */
+	private function get_name() {
+		return $this->name;
+	}
+
+	/**
+	 * Setter method for the config property
+	 *
+	 * @param $config
+	 */
+	private function set_config( $config ) {
+		$this->config = $config;
+	}
+
+	/**
+	 * Getter method for the config property
+	 * @return mixed
+	 */
+	private function get_config() {
+		return $this->config;
+	}
+
 }

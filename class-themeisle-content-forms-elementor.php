@@ -9,12 +9,60 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class is used to create an Elementor widget based on a ContentForms config.
  * @TODO this is a work in progress and it's the basic example of and Elementor widget
- * @TODO make the base atributes like name, title and desc dynamic
  * @TODO Make the the Widget Section details and fields dynamic and inherited from the ContentForms config
  */
 class ElementorWidget extends \Elementor\Widget_Base {
+
+	private $name;
+
+	private $title;
+
+	private $icon;
+
+	private $forms_config;
+
 	/**
-	 * Retrieve text editor widget name.
+	 * Widget base constructor.
+	 *
+	 * Initializing the widget base class.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @param array $data Widget data. Default is an empty array.
+	 * @param array|null $args Optional. Widget default arguments. Default is null.
+	 */
+	public function __construct( $data = [], $args = null ) {
+		parent::__construct( $data, $args );
+		$this->setup_attributes( $data );
+	}
+
+	/**
+	 * This method takes the given attributes and sets them as properties
+	 *
+	 * @param $data array
+	 */
+	private function setup_attributes( $data ) {
+
+		if ( ! empty( $data['content_forms_config'] ) ) {
+			$this->forms_config = $data['content_forms_config'];
+		}
+
+		if ( ! empty( $data['id'] ) ) {
+			$this->set_name( $data['id'] );
+		}
+
+		if ( ! empty( $this->forms_config['title'] ) ) {
+			$this->set_title( $this->forms_config['title'] );
+		}
+
+		if ( ! empty( $this->forms_config['icon'] ) ) {
+			$this->set_icon( $this->forms_config['icon'] );
+		}
+	}
+
+	/**
+	 * Retrieve the widget name.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -22,11 +70,18 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @return string Widget name.
 	 */
 	public function get_name() {
-		return 'contact-form';
+		return $this->name;
 	}
 
 	/**
-	 * Retrieve text editor widget title.
+	 * Set the widget name property
+	 */
+	private function set_name( $name ) {
+		$this->name = $name;
+	}
+
+	/**
+	 * Retrieve the widget title.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -34,11 +89,18 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @return string Widget title.
 	 */
 	public function get_title() {
-		return __( 'Contact Form Editor', 'elementor' );
+		return $this->title;
 	}
 
 	/**
-	 * Retrieve text editor widget icon.
+	 * Set the widget title property
+	 */
+	private function set_title( $title ) {
+		$this->title = $title;
+	}
+
+	/**
+	 * Retrieve content form widget icon.
 	 *
 	 * @since 1.0.0
 	 * @access public
@@ -46,7 +108,14 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'eicon-align-left';
+		return $this->icon;
+	}
+
+	/**
+	 * Set the widget title property
+	 */
+	private function set_icon( $icon ) {
+		$this->icon = $icon;
 	}
 
 	/**
@@ -59,7 +128,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	}
 
 	/**
-	 * Register text editor widget controls.
+	 * Register widget controls.
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
@@ -68,276 +137,113 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 */
 	protected function _register_controls() {
 
-		$this->start_controls_section(
-			'section_editor',
-			[
-				'label' => __( 'Text Editor', 'elementor' ),
-			]
-		);
+		// first we need to make sure that we have some fields to build on
+		if ( empty( $this->forms_config['fields'] ) ) {
+			return;
+		}
 
-		$this->add_control(
-			'editor',
-			[
-				'label'   => '',
-				'type'    => \Elementor\Controls_Manager::WYSIWYG,
-				'default' => __( 'I am text block. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor' ),
-			]
-		);
+		// get the fields from config
+		$fields = $this->forms_config['fields'];
 
-		$this->add_control(
-			'drop_cap', [
-				'label'              => __( 'Drop Cap', 'elementor' ),
-				'type'               => \Elementor\Controls_Manager::SWITCHER,
-				'label_off'          => __( 'Off', 'elementor' ),
-				'label_on'           => __( 'On', 'elementor' ),
-				'prefix_class'       => 'elementor-drop-cap-',
-				'frontend_available' => true,
-			]
-		);
+		foreach ( $fields as $field_name => $field ) {
 
-		$this->end_controls_section();
+			$this->start_controls_section(
+				$field_name,
+				[
+					'label' => $field['label'],
+				]
+			);
 
-		$this->start_controls_section(
-			'section_style',
-			[
-				'label' => __( 'Text Editor', 'elementor' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_STYLE,
-			]
-		);
+			$this->add_control(
+				$field_name . '_label',
+				[
+					'label'   => $field['label'] . ' label',
+					'type'    => 'text',
+					'default' => isset( $field['placeholder'] ) ? $field['placeholder'] : ''
+				]
+			);
 
-		$this->add_responsive_control(
-			'align',
-			[
-				'label'     => __( 'Alignment', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::CHOOSE,
-				'options'   => [
-					'left'    => [
-						'title' => __( 'Left', 'elementor' ),
-						'icon'  => 'fa fa-align-left',
-					],
-					'center'  => [
-						'title' => __( 'Center', 'elementor' ),
-						'icon'  => 'fa fa-align-center',
-					],
-					'right'   => [
-						'title' => __( 'Right', 'elementor' ),
-						'icon'  => 'fa fa-align-right',
-					],
-					'justify' => [
-						'title' => __( 'Justified', 'elementor' ),
-						'icon'  => 'fa fa-align-justify',
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .elementor-text-editor' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
+			$this->add_control(
+				$field_name . '_requirement',
+				[
+					'label'   => esc_html__( 'Requirement' ),
+					'type'    => 'select',
+					'options' => array(
+						'required' => esc_html__( 'Required' ),
+						'optional' => esc_html__( 'Optional' ),
+						'hidden'   => esc_html__( 'Hidden' )
+					),
+					'default' => isset( $field['require'] ) ? $field['require'] : 'optional'
+				]
+			);
 
-		$this->add_control(
-			'text_color',
-			[
-				'label'     => __( 'Text Color', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::COLOR,
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}}' => 'color: {{VALUE}};',
-				],
-				'scheme'    => [
-					'type'  => \Elementor\Scheme_Color::get_type(),
-					'value' => \Elementor\Scheme_Color::COLOR_3,
-				],
-			]
-		);
+			$this->end_controls_section();
 
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			[
-				'name'   => 'typography',
-				'scheme' => \Elementor\Scheme_Typography::TYPOGRAPHY_3,
-			]
-		);
-
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_drop_cap',
-			[
-				'label'     => __( 'Drop Cap', 'elementor' ),
-				'tab'       => \Elementor\Controls_Manager::TAB_STYLE,
-				'condition' => [
-					'drop_cap' => 'yes',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_view',
-			[
-				'label'        => __( 'View', 'elementor' ),
-				'type'         => \Elementor\Controls_Manager::SELECT,
-				'options'      => [
-					'default' => __( 'Default', 'elementor' ),
-					'stacked' => __( 'Stacked', 'elementor' ),
-					'framed'  => __( 'Framed', 'elementor' ),
-				],
-				'default'      => 'default',
-				'prefix_class' => 'elementor-drop-cap-view-',
-				'condition'    => [
-					'drop_cap' => 'yes',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_primary_color',
-			[
-				'label'     => __( 'Primary Color', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}}.elementor-drop-cap-view-stacked .elementor-drop-cap'                                                                 => 'background-color: {{VALUE}};',
-					'{{WRAPPER}}.elementor-drop-cap-view-framed .elementor-drop-cap, {{WRAPPER}}.elementor-drop-cap-view-default .elementor-drop-cap' => 'color: {{VALUE}}; border-color: {{VALUE}};',
-				],
-				'scheme'    => [
-					'type'  => \Elementor\Scheme_Color::get_type(),
-					'value' => \Elementor\Scheme_Color::COLOR_1,
-				],
-				'condition' => [
-					'drop_cap' => 'yes',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_secondary_color',
-			[
-				'label'     => __( 'Secondary Color', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}}.elementor-drop-cap-view-framed .elementor-drop-cap'  => 'background-color: {{VALUE}};',
-					'{{WRAPPER}}.elementor-drop-cap-view-stacked .elementor-drop-cap' => 'color: {{VALUE}};',
-				],
-				'condition' => [
-					'drop_cap_view!' => 'default',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_size',
-			[
-				'label'     => __( 'Size', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => 5,
-				],
-				'range'     => [
-					'px' => [
-						'max' => 30,
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .elementor-drop-cap' => 'padding: {{SIZE}}{{UNIT}};',
-				],
-				'condition' => [
-					'drop_cap_view!' => 'default',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_space',
-			[
-				'label'     => __( 'Space', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => 10,
-				],
-				'range'     => [
-					'px' => [
-						'max' => 50,
-					],
-				],
-				'selectors' => [
-					'body:not(.rtl) {{WRAPPER}} .elementor-drop-cap' => 'margin-right: {{SIZE}}{{UNIT}};',
-					'body.rtl {{WRAPPER}} .elementor-drop-cap'       => 'margin-left: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_border_radius',
-			[
-				'label'      => __( 'Border Radius', 'elementor' ),
-				'type'       => \Elementor\Controls_Manager::SLIDER,
-				'size_units' => [ '%', 'px' ],
-				'default'    => [
-					'unit' => '%',
-				],
-				'range'      => [
-					'%' => [
-						'max' => 50,
-					],
-				],
-				'selectors'  => [
-					'{{WRAPPER}} .elementor-drop-cap' => 'border-radius: {{SIZE}}{{UNIT}};',
-				],
-			]
-		);
-
-		$this->add_control(
-			'drop_cap_border_width', [
-				'label'     => __( 'Border Width', 'elementor' ),
-				'type'      => \Elementor\Controls_Manager::DIMENSIONS,
-				'selectors' => [
-					'{{WRAPPER}} .elementor-drop-cap' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-				],
-				'condition' => [
-					'drop_cap_view' => 'framed',
-				],
-			]
-		);
-
-		$this->add_group_control(
-			\Elementor\Group_Control_Typography::get_type(),
-			[
-				'name'      => 'drop_cap_typography',
-				'selector'  => '{{WRAPPER}} .elementor-drop-cap-letter',
-				'exclude'   => [
-					'letter_spacing',
-				],
-				'condition' => [
-					'drop_cap' => 'yes',
-				],
-			]
-		);
+		}
 
 		$this->end_controls_section();
 	}
 
 	/**
-	 * Render text editor widget output on the frontend.
+	 * Render content form widget output on the frontend.
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function render() {
-		$editor_content = $this->get_settings( 'editor' );
+	protected function render( $instance = [] ) {
+		$form_type = $this->get_data( 'widgetType' );
 
-		$editor_content = $this->parse_text_editor( $editor_content );
+		if ( false === strpos( $form_type, 'content_form_' ) ) {
+			return;
+		}
 
-		$this->add_render_attribute( 'editor', 'class', [ 'elementor-text-editor', 'elementor-clearfix' ] );
+		$form_type = str_replace( 'content_form_', '', $form_type );
 
-		$this->add_inline_editing_attributes( 'editor', 'advanced' );
+		$config = array();
+
+		$config = apply_filters( 'content_forms_config_for_' . $form_type, $config );
+
+		if ( empty( $config['fields'] ) ) {
+			return;
+		}
+
+		// @TOOD This is just a dummy output... work in progress
 		?>
-        <div <?php echo $this->get_render_attribute_string( 'editor' ); ?>><?php echo $editor_content; ?></div>
+		<h3> Form: <?php echo $form_type ?></h3>
 		<?php
+
+		foreach ( $config['fields'] as $field_name => $field ) {
+			$field_id = $form_type . '_' . $field_name;
+			// @TOOD This is just a dummy output... work in progress
+			?>
+			<fieldset>
+				<label for="<?php echo $field_id ?>"><?php echo $field['label'] ?></label>
+				<input type="text" name="<?php echo $field_id ?>" id="<?php echo $field_id ?>">
+			</fieldset>
+
+			<?php
+		}
+
+		/**
+		 * $editor_content = $this->get_settings( 'editor' );
+		 *
+		 * $editor_content = $this->parse_text_editor( $editor_content );
+		 *
+		 * $this->add_render_attribute( 'editor', 'class', [ 'elementor-text-editor', 'elementor-clearfix' ] );
+		 *
+		 * $this->add_inline_editing_attributes( 'editor', 'advanced' );
+		 * ?>
+		 * <div <?php echo $this->get_render_attribute_string( 'editor' ); ?>><?php echo $editor_content; ?></div>
+		 * <?php
+		 *
+		 *
+		 * */
 	}
 
 	/**
-	 * Render text editor widget as plain content.
+	 * Render content form widget as plain content.
 	 *
 	 * Override the default behavior by printing the content without rendering it.
 	 *
@@ -350,7 +256,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	}
 
 	/**
-	 * Render text editor widget output in the editor.
+	 * Render content form widget output in the editor.
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
@@ -359,10 +265,10 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 */
 	protected function _content_template() {
 		?>
-        <div class="elementor-text-editor elementor-clearfix elementor-inline-editing"
-             data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">{{{ settings.editor
-            }}}
-        </div>
+		<div class="elementor-text-editor elementor-clearfix elementor-inline-editing"
+		     data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">{{{ settings.editor
+			}}}
+		</div>
 		<?php
 	}
 }
