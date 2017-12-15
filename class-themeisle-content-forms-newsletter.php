@@ -2,16 +2,27 @@
 
 namespace ThemeIsle\ContentForms;
 
-class Newsletter {
+/**
+ * Class NewsletterForm
+ * @package ThemeIsle\ContentForms
+ */
+class NewsletterForm {
 
 	public function __construct() {
+		// add the initial config for the Contact Content Form
+		add_filter( 'content_forms_config_for_newsletter', array( $this, 'make_form_config' ) );
 
+		$config = apply_filters( 'content_forms_config_for_newsletter', array() );
+
+		$this->build_form( $config );
 	}
 
-	function make_form() {
+	function make_form_config() {
 
-		$config = array(
-			// for sure,
+		return array(
+			'id'    => 'newsletter',
+			'icon'  => 'eicon-align-left',
+			'title' => esc_html__( 'Newsletter Form' ),
 			'fields' /* or form_fields? */ => array(
 				'email' => array(
 					'type'    => 'email',

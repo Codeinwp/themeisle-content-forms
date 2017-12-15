@@ -9,17 +9,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class is used to create an Elementor widget based on a ContentForms config.
  * @TODO this is a work in progress and it's the basic example of and Elementor widget
- * @TODO Make the the Widget Section details and fields dynamic and inherited from the ContentForms config
+ * @TODO handle in a better way the preview state
+ * @TODO handle submit action
  */
 class ElementorWidget extends \Elementor\Widget_Base {
 
 	private $name;
 
+	private $form_type;
+
 	private $title;
 
 	private $icon;
 
-	private $forms_config;
+	private $forms_config = array();
 
 	/**
 	 * Widget base constructor.
@@ -43,9 +46,13 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @param $data array
 	 */
 	private function setup_attributes( $data ) {
-
 		if ( ! empty( $data['content_forms_config'] ) ) {
 			$this->forms_config = $data['content_forms_config'];
+		} else {
+			$this->form_type = $this->get_data( 'widgetType' );
+			$this->form_type = str_replace( 'content_form_', '', $this->form_type );
+
+			$this->forms_config = apply_filters( 'content_forms_config_for_' . $this->form_type, $this->forms_config );
 		}
 
 		if ( ! empty( $data['id'] ) ) {
@@ -136,7 +143,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @access protected
 	 */
 	protected function _register_controls() {
-
 		// first we need to make sure that we have some fields to build on
 		if ( empty( $this->forms_config['fields'] ) ) {
 			return;
@@ -178,7 +184,67 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			);
 
 			$this->end_controls_section();
+		}
 
+		if ( empty( $this->forms_config['controls'] ) ) {
+			return;
+		}
+
+		$controls = $this->forms_config['controls'];
+
+		$this->start_controls_section(
+			'section_settings',
+			[
+				'label' => __( 'Settings', 'textdoamin' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_SETTINGS,
+			]
+		);
+
+		foreach ( $controls as $control_name => $control ) {
+
+			switch ( $control['type'] ) {
+
+				case 'select':
+
+					if ( ! empty( $control['options'] ) ) {
+						$this->add_control(
+							$control_name,
+							[
+								'label'       => $control['label'],
+								'type'        => 'select',
+								'description' => isset( $control['description'] ) ? $control['description'] : '',
+								'options'     => $control['options']
+							]
+						);
+					}
+					break;
+
+				case 'checkbox':
+					$this->add_control(
+						$control_name,
+						[
+							'label'       => $control['label'],
+							'type'        => 'checkbox',
+							'description' => isset( $control['description'] ) ? $control['description'] : '',
+						]
+					);
+					break;
+
+				case 'text':
+				case 'email':
+				default:
+
+					$this->add_control(
+						$control_name,
+						[
+							'label'       => $control['label'],
+							'type'        => 'text',
+							'description' => isset( $control['description'] ) ? $control['description'] : '',
+						]
+					);
+
+					break;
+			}
 		}
 
 		$this->end_controls_section();
@@ -193,53 +259,111 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @access protected
 	 */
 	protected function render( $instance = [] ) {
-		$form_type = $this->get_data( 'widgetType' );
 
-		if ( false === strpos( $form_type, 'content_form_' ) ) {
+		$form_id  = $this->get_data( 'id' );
+
+		if ( empty( $this->forms_config['fields'] ) ) {
 			return;
 		}
 
-		$form_type = str_replace( 'content_form_', '', $form_type );
+		$fields   = $this->forms_config['fields'];
+		$controls = $this->forms_config['controls'];
 
-		$config = array();
+		$this->render_form_header( $form_id );
 
-		$config = apply_filters( 'content_forms_config_for_' . $form_type, $config );
-
-		if ( empty( $config['fields'] ) ) {
-			return;
+		foreach ( $fields as $field_name => $field ) {
+			$field_id = $this->form_type . '_' . $field_name;
+			$this->render_form_field( $field_name, $field );
 		}
 
-		// @TOOD This is just a dummy output... work in progress
-		?>
-		<h3> Form: <?php echo $form_type ?></h3>
+		$btn_label = esc_html__( 'Submit', 'textdomain' );
+		if ( ! empty( $controls['submit_label'] ) ) {
+			$btn_label = $this->get_settings( 'submit_label' );
+		} ?>
+		<fieldset>
+			<button type="submit" name="submit" value="submit-<?php echo $this->form_type; ?>-<?php echo $form_id; ?>">
+				<?php echo $btn_label; ?>
+			</button>
+		</fieldset>
 		<?php
 
-		foreach ( $config['fields'] as $field_name => $field ) {
-			$field_id = $form_type . '_' . $field_name;
-			// @TOOD This is just a dummy output... work in progress
-			?>
-			<fieldset>
-				<label for="<?php echo $field_id ?>"><?php echo $field['label'] ?></label>
-				<input type="text" name="<?php echo $field_id ?>" id="<?php echo $field_id ?>">
-			</fieldset>
+		$this->render_form_footer();
+	}
 
-			<?php
+	/**
+	 * Display method for the form's header
+	 * It is also takes care about the form attributes and the regular hidden fields
+	 *
+	 * @param $type
+	 * @param $id
+	 */
+	public function render_form_header( $id ) {
+		// create an url for the form's action
+		$url = admin_url( 'admin-post.php' );
+
+		echo '<form action="' . esc_url( $url ) . '" method="post" class="content-form content-form-' . $this->form_type . '">';
+
+		wp_nonce_field( 'content-form-' . $id, '_wpnonce' );
+
+		echo '<input type="hidden" name="action" value="content_form_submit" />';
+		// there could be also the possibility to submit by type
+		// echo '<input type="hidden" name="action" value="content_form_{type}_submit" />';
+		echo '<input type="hidden" name="form-type" value="' . $this->form_type . '" />';
+		echo '<input type="hidden" name="form-id" value="' . $id . '" />';
+	}
+
+	/**
+	 * Display method for the form's footer
+	 */
+	public function render_form_footer() {
+		echo '</form>';
+	}
+
+	public function render_form_field( $field_id, $field, $is_preview = false ) {
+
+		$required = 'false';
+
+		if ( $field['require'] === 'required' ) {
+			$required = $field['require'];
 		}
 
-		/**
-		 * $editor_content = $this->get_settings( 'editor' );
-		 *
-		 * $editor_content = $this->parse_text_editor( $editor_content );
-		 *
-		 * $this->add_render_attribute( 'editor', 'class', [ 'elementor-text-editor', 'elementor-clearfix' ] );
-		 *
-		 * $this->add_inline_editing_attributes( 'editor', 'advanced' );
-		 * ?>
-		 * <div <?php echo $this->get_render_attribute_string( 'editor' ); ?>><?php echo $editor_content; ?></div>
-		 * <?php
-		 *
-		 *
-		 * */
+		// in case this is a preview, we need to disable the actual inputs and transform the labels in inputs
+		$disabled = '';
+		if ( $is_preview ) {
+			$disabled = 'disabled="disabled"';
+		}
+
+		$this->add_inline_editing_attributes( $field_id . '_label', 'none' );
+
+		$saved_label = $this->get_settings( $field_id . '_label' ); ?>
+		<fieldset>
+			<label for="<?php echo $field_id ?>" <?php echo $this->get_render_attribute_string( 'title' ); ?>>
+				<?php
+				if ( $is_preview ) { ?>
+					<p class="elementor-inline-editing" data-elementor-setting-key="<?php echo $field_id . '_label'; ?>">
+						{{{settings.<?php echo $field_id . '_label'; ?>}}}
+					</p>
+				<?php } else {
+					echo $saved_label;
+				} ?>
+			</label>
+
+			<?php
+			switch ( $field['type'] ) {
+				case 'textarea': ?>
+					<textarea name="<?php echo $field_id ?>" id="<?php echo $field_id ?>"
+					          required="<?php echo $required; ?>" cols="30"
+					          rows="10" <?php echo $disabled; ?>></textarea>
+					<?php break;
+				default: ?>
+					<input type="text" name="<?php echo $field_id ?>" id="<?php echo $field_id ?>"
+					       required="<?php echo $required; ?>" <?php echo $disabled; ?>>
+					<?php
+					break;
+			}
+			?>
+		</fieldset>
+		<?php
 	}
 
 	/**
@@ -250,10 +374,14 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @since 1.0.0
 	 * @access public
 	 */
-	public function render_plain_content() {
-		// In plain mode, render without shortcode
-		echo $this->get_settings( 'editor' );
-	}
+//	public function render_plain_content() {
+//		// In plain mode, render without shortcode
+//		echo $this->get_settings( 'editor' );
+//	}
+
+	protected function content_template() {}
+
+	public function render_plain_content( $instance = [] ) {}
 
 	/**
 	 * Render content form widget output in the editor.
@@ -262,13 +390,20 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-	 */
+
 	protected function _content_template() {
-		?>
-		<div class="elementor-text-editor elementor-clearfix elementor-inline-editing"
-		     data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">{{{ settings.editor
-			}}}
-		</div>
-		<?php
-	}
+
+	$fields = $this->forms_config['fields'];
+	?>
+	<div class="elementor-content-form elementor-clearfix elementor-inline-editing"
+	data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">
+	<?php
+	foreach ( $fields as $field_name => $field ) {
+	$field_id = $this->form_type . '_' . $field_name;
+	$this->render_form_field( $field_id, $field, true );
+	} ?>
+	</div>
+	</div>
+	<?php
+	}	 */
 }
