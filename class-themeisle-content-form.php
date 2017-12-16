@@ -26,6 +26,8 @@ class ContentForm {
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 		// Register the Beaver Module
 		// Register the Gutenberg Block
+		$this->register_gutenberg_block();
+
 	}
 
 	public function register_elementor_widget() {
@@ -56,6 +58,16 @@ class ContentForm {
 
 	private function register_gutenberg_block() {
 		//@TODO https://github.com/WordPress/gutenberg-examples/tree/master/04-controls
+
+		require_once( __DIR__ . '/class-themeisle-content-forms-gutenberg.php' );
+
+		$mod = new \ThemeIsle\ContentForms\GutenbergModule(
+			array(
+				'id'                   => 'content_form_' . $this->get_name(),
+				'type'                 => $this->get_name(),
+				'content_forms_config' => $this->get_config()
+			)
+		);
 	}
 
 	/**

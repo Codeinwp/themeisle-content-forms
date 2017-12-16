@@ -69,72 +69,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	}
 
 	/**
-	 * Retrieve the widget name.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Widget name.
-	 */
-	public function get_name() {
-		return $this->name;
-	}
-
-	/**
-	 * Set the widget name property
-	 */
-	private function set_name( $name ) {
-		$this->name = $name;
-	}
-
-	/**
-	 * Retrieve the widget title.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Widget title.
-	 */
-	public function get_title() {
-		return $this->title;
-	}
-
-	/**
-	 * Set the widget title property
-	 */
-	private function set_title( $title ) {
-		$this->title = $title;
-	}
-
-	/**
-	 * Retrieve content form widget icon.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Widget icon.
-	 */
-	public function get_icon() {
-		return $this->icon;
-	}
-
-	/**
-	 * Set the widget title property
-	 */
-	private function set_icon( $icon ) {
-		$this->icon = $icon;
-	}
-
-	/**
-	 * Widget Category.
-	 *
-	 * @return array
-	 */
-	public function get_categories() {
-		return [ 'obfx-elementor-widgets' ];
-	}
-
-	/**
 	 * Register widget controls.
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
@@ -393,17 +327,86 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 	protected function _content_template() {
 
-	$fields = $this->forms_config['fields'];
-	?>
-	<div class="elementor-content-form elementor-clearfix elementor-inline-editing"
-	data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">
-	<?php
-	foreach ( $fields as $field_name => $field ) {
-	$field_id = $this->form_type . '_' . $field_name;
-	$this->render_form_field( $field_id, $field, true );
-	} ?>
-	</div>
-	</div>
-	<?php
+		$fields = $this->forms_config['fields'];
+		?>
+		<div class="elementor-content-form elementor-clearfix elementor-inline-editing"
+		     data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">
+			<?php
+			foreach ( $fields as $field_name => $field ) {
+				$field_id = $this->form_type . '_' . $field_name;
+				$this->render_form_field( $field_id, $field, true );
+			} ?>
+		</div>
+		</div>
+		<?php
 	}	 */
+
+
+
+	/**
+	 * Retrieve the widget name.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string Widget name.
+	 */
+	public function get_name() {
+		return $this->name;
+	}
+
+	/**
+	 * Set the widget name property
+	 */
+	private function set_name( $name ) {
+		$this->name = $name;
+	}
+
+	/**
+	 * Retrieve the widget title.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string Widget title.
+	 */
+	public function get_title() {
+		return $this->title;
+	}
+
+	/**
+	 * Set the widget title property
+	 */
+	private function set_title( $title ) {
+		$this->title = $title;
+	}
+
+	/**
+	 * Retrieve content form widget icon.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 * @return string Widget icon.
+	 */
+	public function get_icon() {
+		return $this->icon;
+	}
+
+	/**
+	 * Set the widget title property
+	 */
+	private function set_icon( $icon ) {
+		$this->icon = $icon;
+	}
+
+	/**
+	 * Widget Category.
+	 *
+	 * @return array
+	 */
+	public function get_categories() {
+		return [ 'obfx-elementor-widgets' ];
+	}
+
 }
