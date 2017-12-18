@@ -75,7 +75,7 @@ class ContactForm {
 				),
 				'disable_honeypot' => array(
 					'type'        => 'checkbox',
-					'default'     => 'off',
+					'default'     => 'false',
 					'label'       => esc_html__( 'Disable Spam Filter (Honeypot)', 'textdomain' ),
 					'description' => esc_html__( 'By default, the robots spam filter is enabled for every form, if for some reason you want to disable it.', 'textdomain' )
 				)

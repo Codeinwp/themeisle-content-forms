@@ -82,104 +82,122 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			return;
 		}
 
-		// get the fields from config
-		$fields = $this->forms_config['fields'];
-
-		foreach ( $fields as $field_name => $field ) {
-
-			$this->start_controls_section(
-				$field_name,
-				[
-					'label' => $field['label'],
-				]
-			);
-
-			$this->add_control(
-				$field_name . '_label',
-				[
-					'label'   => $field['label'] . ' label',
-					'type'    => 'text',
-					'default' => isset( $field['placeholder'] ) ? $field['placeholder'] : ''
-				]
-			);
-
-			$this->add_control(
-				$field_name . '_requirement',
-				[
-					'label'   => esc_html__( 'Requirement' ),
-					'type'    => 'select',
-					'options' => array(
-						'required' => esc_html__( 'Required' ),
-						'optional' => esc_html__( 'Optional' ),
-						'hidden'   => esc_html__( 'Hidden' )
-					),
-					'default' => isset( $field['require'] ) ? $field['require'] : 'optional'
-				]
-			);
-
-			$this->end_controls_section();
-		}
-
-		if ( empty( $this->forms_config['controls'] ) ) {
-			return;
-		}
-
-		$controls = $this->forms_config['controls'];
-
 		$this->start_controls_section(
-			'section_settings',
+			'section_form_settings',
 			[
-				'label' => __( 'Settings', 'textdoamin' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_SETTINGS,
+				'label' => __( 'Form Settings', 'textdomain' ),
 			]
 		);
 
-		foreach ( $controls as $control_name => $control ) {
+		$controls = $this->forms_config['controls'];
 
-			switch ( $control['type'] ) {
+		foreach( $controls as $control_name => $control ) {
 
-				case 'select':
+			$control_args = [
+				'label'       => $control['label'],
+				'type'        => $control['type'],
+				'default'     => isset( $control['default'] ) ? $control['default'] : '',
+			];
 
-					if ( ! empty( $control['options'] ) ) {
-						$this->add_control(
-							$control_name,
-							[
-								'label'       => $control['label'],
-								'type'        => 'select',
-								'description' => isset( $control['description'] ) ? $control['description'] : '',
-								'options'     => $control['options']
-							]
-						);
-					}
-					break;
-
-				case 'checkbox':
-					$this->add_control(
-						$control_name,
-						[
-							'label'       => $control['label'],
-							'type'        => 'checkbox',
-							'description' => isset( $control['description'] ) ? $control['description'] : '',
-						]
-					);
-					break;
-
-				case 'text':
-				case 'email':
-				default:
-
-					$this->add_control(
-						$control_name,
-						[
-							'label'       => $control['label'],
-							'type'        => 'text',
-							'description' => isset( $control['description'] ) ? $control['description'] : '',
-						]
-					);
-
-					break;
+			if ( isset( $control['options'] ) ) {
+				$control_args['options'] = $control['options'];
 			}
+
+			$this->add_control(
+				$control_name,
+				$control_args
+			);
 		}
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			$this->form_type . '_form_fields',
+			[
+				'label' => __( 'Fields', 'textdomain' ),
+			]
+		);
+
+		$repeater = new \Elementor\Repeater();
+
+		$field_types = [
+			'text'     => __( 'Text', 'textdomain' ),
+			'tel'      => __( 'Tel', 'textdomain' ),
+			'email'    => __( 'Email', 'textdomain' ),
+			'textarea' => __( 'Textarea', 'textdomain' ),
+			'number'   => __( 'Number', 'textdomain' ),
+			'select'   => __( 'Select', 'textdomain' ),
+			'url'      => __( 'URL', 'textdomain' ),
+		];
+
+		$repeater->add_control(
+			'type',
+			[
+				'label'   => __( 'Type', 'textdomain' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => $field_types,
+				'default' => 'text',
+			]
+		);
+
+		$repeater->add_control(
+			'label',
+			[
+				'label'   => __( 'Label', 'textdomain' ),
+				'type'    => \Elementor\Controls_Manager::TEXT,
+				'default' => '',
+			]
+		);
+
+		$repeater->add_control(
+			'placeholder',
+			[
+				'label'   => __( 'Placeholder', 'textdomain' ),
+				'type'    => \Elementor\Controls_Manager::TEXT,
+				'default' => '',
+			]
+		);
+
+		$repeater->add_control(
+			'requirement',
+			[
+				'label'   => __( 'Requirement', 'textdomain' ),
+				'type'    => \Elementor\Controls_Manager::SELECT,
+				'options' => array(
+					'required' => esc_html__( 'Required' ),
+					'optional' => esc_html__( 'Optional' ),
+					'hidden'   => esc_html__( 'Hidden' )
+				),
+				'default' => 'required',
+			]
+		);
+
+		$fields = $this->forms_config['fields'];
+
+		$default_fields = [];
+
+		foreach ( $fields as $field_name => $field ) {
+			$default_fields[] = [
+				'type'        => $field['type'],
+				'label'       => $field['label'],
+				'requirement' => $field['require'],
+				'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : $field['label'],
+				'width'             => '100',
+			];
+		}
+
+		$this->add_control(
+			'form_fields',
+			[
+				'label'       => __( 'Form Fields', 'textdomain' ),
+				'type'        => \Elementor\Controls_Manager::REPEATER,
+				'show_label'  => false,
+				'separator'   => 'before',
+				'fields'      => array_values( $repeater->get_controls() ),
+				'default'     => $default_fields,
+				'title_field' => '{{{ label }}}',
+			]
+		);
 
 		$this->end_controls_section();
 	}
@@ -193,21 +211,21 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @access protected
 	 */
 	protected function render( $instance = [] ) {
-
 		$form_id  = $this->get_data( 'id' );
+		$settings = $this->get_settings();
 
 		if ( empty( $this->forms_config['fields'] ) ) {
 			return;
 		}
 
-		$fields   = $this->forms_config['fields'];
+		$fields = $settings['form_fields'];
+
 		$controls = $this->forms_config['controls'];
 
 		$this->render_form_header( $form_id );
 
-		foreach ( $fields as $field_name => $field ) {
-			$field_id = $this->form_type . '_' . $field_name;
-			$this->render_form_field( $field_name, $field );
+		foreach ( $fields as $index => $field ) {
+			$this->render_form_field( $field );
 		}
 
 		$btn_label = esc_html__( 'Submit', 'textdomain' );
@@ -235,7 +253,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		// create an url for the form's action
 		$url = admin_url( 'admin-post.php' );
 
-		echo '<form action="' . esc_url( $url ) . '" method="post" class="content-form content-form-' . $this->form_type . '">';
+		echo '<form action="' . esc_url( $url ) . '" method="post" class="content-form content-form-' . $this->form_type . ' ' . $this->get_name() . '">';
 
 		wp_nonce_field( 'content-form-' . $id, '_wpnonce' );
 
@@ -253,7 +271,46 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		echo '</form>';
 	}
 
-	public function render_form_field( $field_id, $field, $is_preview = false ) {
+	public function render_form_field($field, $is_preview = false ) {
+		$item_index = $field['_id'];
+		$required = '';
+
+		if ( $field['requirement'] === 'required' ) {
+			$required = 'required="required"';
+		}
+
+		// in case this is a preview, we need to disable the actual inputs and transform the labels in inputs
+		$disabled = '';
+		if ( $is_preview ) {
+			$disabled = 'disabled="disabled"';
+		}
+
+		$this->add_inline_editing_attributes( $item_index . '_label', 'none' ); ?>
+		<fieldset  <?php echo $this->get_render_attribute_string( 'fieldset' . $item_index ); ?> >
+
+			<label <?php echo $this->get_render_attribute_string( 'label' . $item_index ); ?>>
+				<?php echo $field['label']; ?>
+			</label>
+
+			<?php
+			switch ( $field['type'] ) {
+				case 'textarea': ?>
+					<textarea name="<?php echo $item_index ?>" id="<?php echo $item_index ?>"
+						<?php echo $required; ?> cols="30" rows="10" <?php echo $disabled; ?>></textarea>
+					<?php break;
+				default:
+					$this->add_render_attribute( 'input' . $item_index, 'class', 'elementor-field-textual' ); ?>
+					<input type="text"
+						<?php echo $this->get_render_attribute_string( 'input' . $item_index ); ?>
+						<?php echo $required; ?> <?php echo $disabled; ?>>
+					<?php
+					break;
+			} ?>
+		</fieldset>
+		<?php
+	}
+
+	public function old_render_form_field( $field_id, $field, $is_preview = false ) {
 
 		$required = 'false';
 
@@ -274,7 +331,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			<label for="<?php echo $field_id ?>" <?php echo $this->get_render_attribute_string( 'title' ); ?>>
 				<?php
 				if ( $is_preview ) { ?>
-					<p class="elementor-inline-editing" data-elementor-setting-key="<?php echo $field_id . '_label'; ?>">
+					<p class="elementor-inline-editing"
+					   data-elementor-setting-key="<?php echo $field_id . '_label'; ?>">
 						{{{settings.<?php echo $field_id . '_label'; ?>}}}
 					</p>
 				<?php } else {
@@ -313,9 +371,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 //		echo $this->get_settings( 'editor' );
 //	}
 
-	protected function content_template() {}
+	protected function content_template() {
+	}
 
-	public function render_plain_content( $instance = [] ) {}
+	public function render_plain_content( $instance = [] ) {
+	}
 
 	/**
 	 * Render content form widget output in the editor.
@@ -324,24 +384,22 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 *
 	 * @since 1.0.0
 	 * @access protected
-
-	protected function _content_template() {
-
-		$fields = $this->forms_config['fields'];
-		?>
-		<div class="elementor-content-form elementor-clearfix elementor-inline-editing"
-		     data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">
-			<?php
-			foreach ( $fields as $field_name => $field ) {
-				$field_id = $this->form_type . '_' . $field_name;
-				$this->render_form_field( $field_id, $field, true );
-			} ?>
-		</div>
-		</div>
-		<?php
-	}	 */
-
-
+	 *
+	 * protected function _content_template() {
+	 *
+	 * $fields = $this->forms_config['fields'];
+	 * ?>
+	 * <div class="elementor-content-form elementor-clearfix elementor-inline-editing"
+	 * data-elementor-setting-key="editor" data-elementor-inline-editing-toolbar="advanced">
+	 * <?php
+	 * foreach ( $fields as $field_name => $field ) {
+	 * $field_id = $this->form_type . '_' . $field_name;
+	 * $this->render_form_field( $field_id, $field, true );
+	 * } ?>
+	 * </div>
+	 * </div>
+	 * <?php
+	 * }     */
 
 	/**
 	 * Retrieve the widget name.
