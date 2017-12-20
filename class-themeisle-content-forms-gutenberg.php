@@ -2,6 +2,7 @@
 
 namespace ThemeIsle\ContentForms;
 
+
 /**
  * This class is used to create a Gutenberg block based on a ContentForms config
  * Class ContentFormsGutenbergModule
