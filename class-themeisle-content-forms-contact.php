@@ -2,40 +2,26 @@
 
 namespace ThemeIsle\ContentForms;
 
+use ThemeIsle\ContentForms\ContentFormBase as Base;
+
 /**
- * This class is responsible for creating a Contact "Content" Form
+ * This class creates a Contact Form
  * Class ContactForm
  * @package ThemeIsle\ContentForms
  */
-class ContactForm {
+class ContactForm extends Base {
 
-	private $notices = array();
-
-	public function __construct() {
+	/**
+	 * The Call To Action
+	 */
+	public function init() {
+		$this->set_type( 'contact' );
 
 		$this->notices = array(
 			'success' => esc_html__( 'Your message has been sent!', 'textdomain' ),
 			'error' => esc_html__( 'We failed to send your message!', 'textdomain' ),
 		);
 
-		// @TODO maybe get this oudside of the constructor to properly unit test it
-		$this->init();
-	}
-
-	public function init() {
-		// add the initial config for the Contact Content Form
-		add_filter( 'content_forms_config_for_contact', array( $this, 'make_form_config' ) );
-
-		$config = apply_filters( 'content_forms_config_for_contact', array() );
-
-		$this->build_form( $config );
-
-		// register the classic submission action
-		add_action( 'admin_post_nopriv_content_form_contact_submit', array( $this, 'submit_form' ) );
-		add_action( 'admin_post_content_form_contact_submit', array( $this, 'submit_form' ) );
-
-		// add a rest api callback for the `submit` route
-		add_filter( 'content_forms_submit_contact', array( $this, 'rest_submit_form' ), 10, 5 );
 	}
 
 	/**
@@ -93,21 +79,13 @@ class ContactForm {
 	}
 
 	/**
-	 * Initialize the contact form from the base class
-	 *
-	 * @param $config
-	 */
-	function build_form( $config ) {
-		$form = new ContentForm( 'contact', $config );
-	}
-
-	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
 	 * // @TODO we still have to check for the requirement with the field settings
 	 *
 	 * @param $return array
 	 * @param $data array Must contain the following keys: `email`, `name`, `message` but it can also have extra keys
-	 * @param $id string
+	 * @param $widget_id string
+	 * @param $post_id string
 	 * @param $builder string
 	 *
 	 * @return mixed
@@ -263,29 +241,5 @@ foreach ( $data as $key => $value ) { ?>
 </html>
 		<?php
 		return ob_get_clean();
-	}
-
-	/**
-	 * Get block settings depending on what builder is in use.
-	 *
-	 * @param $widget_id
-	 * @param $page_id
-	 *
-	 * @return bool
-	 */
-	private function get_widget_settings( $widget_id, $page_id, $builder ) {
-
-		if ( 'elementor' === $builder ) {
-			$path = dirname( __FILE__ );
-			require_once $path . '/class-themeisle-content-forms-elementor.php';
-			// if elementor
-			$settings = ElementorWidget::get_widget_settings( $widget_id, $page_id );
-
-			return $settings['settings'];
-		}
-
-		// if gutenberg
-
-		// if beaver
 	}
 }

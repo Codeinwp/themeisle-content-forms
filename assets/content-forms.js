@@ -53,7 +53,7 @@ and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 			error: function (e) {
 				$form.removeClass('content-form-loading');
 
-				addContentFormNotice( e, 'error' );
+				addContentFormNotice( e, 'error', $form );
 
 				console.error(e)
 			}

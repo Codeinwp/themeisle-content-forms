@@ -14,11 +14,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 	private $name;
 
-	private $form_type;
-
 	private $title;
 
 	private $icon;
+
+	private $form_type;
 
 	private $forms_config = array();
 
@@ -34,7 +34,9 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @param array|null $args Optional. Widget default arguments. Default is null.
 	 */
 	public function __construct( $data = [], $args = null ) {
+
 		parent::__construct( $data, $args );
+
 		$this->setup_attributes( $data );
 	}
 
@@ -44,13 +46,13 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @param $data array
 	 */
 	private function setup_attributes( $data ) {
-		if ( ! empty( $data['content_forms_config'] ) ) {
-			$this->forms_config = $data['content_forms_config'];
-		} else {
-			$this->form_type = $this->get_data( 'widgetType' );
-			$this->form_type = str_replace( 'content_form_', '', $this->form_type );
 
-			$this->forms_config = apply_filters( 'content_forms_config_for_' . $this->form_type, $this->forms_config );
+		$this->setFormType();
+
+		if ( ! empty( $data['content_forms_config'] ) ) {
+			$this->setFormConfig( $data['content_forms_config'] );
+		} else {
+			$this->setFormConfig( apply_filters( 'content_forms_config_for_' . $this->getFormType(), $this->forms_config ) );
 		}
 
 		if ( ! empty( $data['id'] ) ) {
@@ -350,6 +352,28 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 */
 	private function set_name( $name ) {
 		$this->name = $name;
+	}
+
+	private function setFormType(){
+		$this->form_type = $this->get_data( 'widgetType' );
+
+		if ( empty( $this->form_type) ) {
+			$this->form_type = $this->get_data('id' );
+		}
+
+		$this->form_type = str_replace(  'content_form_', '', $this->form_type );
+	}
+
+	private function setFormConfig( $config ){
+		$this->forms_config = $config;
+	}
+
+	private function getFormConfig(  ){
+		return $this->forms_config;
+	}
+
+	private function getFormType() {
+		return $this->form_type;
 	}
 
 	/**

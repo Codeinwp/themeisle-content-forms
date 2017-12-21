@@ -14,16 +14,21 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		$path = dirname( __FILE__ );
 
 		// @TODO we should autoload these
-		// get each form's class
-		 require_once $path . '/class-themeisle-content-forms-server.php';
+		// get base classes
+		require_once $path . '/class-content-form-base.php';
+		require_once $path . '/class-themeisle-content-forms-server.php';
 
 		$server = new \Themeisle\ContentForms\RestServer();
 		$server->init();
 
-		 require_once $path . '/class-themeisle-content-form.php';
+		// get builders generators
+		require_once $path . '/class-themeisle-content-forms-elementor.php';
+		require_once $path . '/class-themeisle-content-forms-gutenberg.php';
+
+		// get forms
 		 require_once $path . '/class-themeisle-content-forms-contact.php';
 		 require_once $path . '/class-themeisle-content-forms-newsletter.php';
-		 require_once $path . '/class-themeisle-content-forms-registration.php';
+//		 require_once $path . '/class-themeisle-content-forms-registration.php';
 
 		 do_action('init_themeisle_content_forms');
 	}
