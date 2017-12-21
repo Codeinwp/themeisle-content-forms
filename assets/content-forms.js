@@ -39,18 +39,50 @@ and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 			},
 			success: function (data) {
 				$form.removeClass('content-form-loading');
-				// just for development
-				$form.prepend( "<h3 style='color:green;border: 2px solid green;padding: 0 5px;' >" + data.msg + "</h3>" );
+
+				var status = 'error';
+
+				if ( typeof data.success !== "undefined" && data.success ) {
+					status = 'success';
+				}
+
+				addContentFormNotice( data.msg, status, $form );
+
 				console.log(data)
 			},
 			error: function (e) {
 				$form.removeClass('content-form-loading');
 
-				// just for development
-				$form.prepend( "<h3 style='color:red;border: 2px solid red;padding: 0 5px;' >" + data.msg + "</h3>" );
+				addContentFormNotice( e, 'error' );
 
 				console.error(e)
 			}
 		});
 	});
+
+	/**
+	 * Handle Form notices
+	 * @param notice
+	 * @param type
+	 * @param $form
+	 */
+	var addContentFormNotice = function ( notice, type, $form ) {
+		var	color = '',
+			$currentNotice = $form.children( '.content-form-notice' );
+
+		if ( 'success' === type ) {
+			color = 'green';
+		} else {
+			color = 'red';
+		}
+
+		var noticeEl = "<h3 class='content-form-notice' style='color:" + color + ";border: 2px solid " + color + ";padding: 0 5px;' >" + notice + "</h3>";
+
+		// if an notice already exist, replace it; otherwise create one
+		if ( $currentNotice.length > 0 ) {
+			$currentNotice.replaceWith( noticeEl )
+		} else {
+			$form.prepend( noticeEl );
+		}
+	}
 })(jQuery);

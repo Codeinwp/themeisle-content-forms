@@ -9,7 +9,20 @@ namespace ThemeIsle\ContentForms;
  */
 class ContactForm {
 
+	private $notices = array();
+
 	public function __construct() {
+
+		$this->notices = array(
+			'success' => esc_html__( 'Your message has been sent!', 'textdomain' ),
+			'error' => esc_html__( 'We failed to send your message!', 'textdomain' ),
+		);
+
+		// @TODO maybe get this oudside of the constructor to properly unit test it
+		$this->init();
+	}
+
+	public function init() {
 		// add the initial config for the Contact Content Form
 		add_filter( 'content_forms_config_for_contact', array( $this, 'make_form_config' ) );
 
@@ -21,12 +34,13 @@ class ContactForm {
 		add_action( 'admin_post_nopriv_content_form_contact_submit', array( $this, 'submit_form' ) );
 		add_action( 'admin_post_content_form_contact_submit', array( $this, 'submit_form' ) );
 
-		// @TODO maybe add an ajax way?
+		// add a rest api callback for the `submit` route
 		add_filter( 'content_forms_submit_contact', array( $this, 'rest_submit_form' ), 10, 5 );
 	}
 
 	/**
 	 * Create an abstract array config which should define the form.
+	 *
 	 * @param $config
 	 *
 	 * @return array
@@ -73,12 +87,6 @@ class ContactForm {
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
 					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
-				),
-				'disable_honeypot' => array(
-					'type'        => 'checkbox',
-					'default'     => 'false',
-					'label'       => esc_html__( 'Disable Spam Filter (Honeypot)', 'textdomain' ),
-					'description' => esc_html__( 'By default, the robots spam filter is enabled for every form, if for some reason you want to disable it.', 'textdomain' )
 				)
 			)
 		);
@@ -86,6 +94,7 @@ class ContactForm {
 
 	/**
 	 * Initialize the contact form from the base class
+	 *
 	 * @param $config
 	 */
 	function build_form( $config ) {
@@ -94,9 +103,10 @@ class ContactForm {
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
+	 * // @TODO we still have to check for the requirement with the field settings
 	 *
 	 * @param $return array
-	 * @param $data array
+	 * @param $data array Must contain the following keys: `email`, `name`, `message` but it can also have extra keys
 	 * @param $id string
 	 * @param $builder string
 	 *
@@ -105,35 +115,39 @@ class ContactForm {
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
-			$return['msg'] = 'invalid email';
+			$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
+
 			return $return;
 		}
 
 		$from = $data['email'];
 
 		if ( empty( $data['name'] ) ) {
-			$return['msg'] = 'Missing name';
+			$return['msg'] = esc_html__( 'Missing name.', 'textdomain' );
+
 			return $return;
 		}
 
 		$name = $data['name'];
 
 		if ( empty( $data['message'] ) ) {
-			$return['msg'] = 'Missing message';
+			$return['msg'] = esc_html__( 'Missing message.', 'textdomain' );
+
 			return $return;
 		}
 
 		$msg = $data['message'];
 
 		// prepare settings for submit
-		$settings = $this->get_widget_settings( $widget_id, $post_id );
+		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 
-		// @TODO handle extra fields
-		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $msg );
+		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $msg, $data );
 
 		if ( $result ) {
 			$return['success'] = true;
-			$return['msg'] = 'Great Success';
+			$return['msg']     = $this->notices['success'];
+		} else {
+			$return['msg'] = $result;
 		}
 
 		return $return;
@@ -142,7 +156,7 @@ class ContactForm {
 	/**
 	 * The classic submission method via the `admin_post_` hook
 	 */
-	function submit_form(  ) {
+	function submit_form() {
 		// @TODO first we need to collect data from $_POST and validate our parameters
 
 //		$ok = $this->_send_mail( $to, $subj );
@@ -159,6 +173,7 @@ class ContactForm {
 
 	/**
 	 * Mail sender method
+	 *
 	 * @param $mailto
 	 * @param $mailfrom
 	 * @param $subject
@@ -167,14 +182,14 @@ class ContactForm {
 	 *
 	 * @return bool
 	 */
-	private function _send_mail( $mailto, $mailfrom, $subject, $body, $extra_data = array() ) {
+	private function _send_mail( $mailto, $mailfrom, $name, $body, $extra_data = array() ) {
 		$success = false;
 
-		$subject = sanitize_text_field( $subject );
-		$mailto = sanitize_email( $mailto );
+		$subject  = sanitize_text_field( $name );
+		$mailto   = sanitize_email( $mailto );
 		$mailfrom = sanitize_email( $mailfrom );
 
-		$headers = array();
+		$headers   = array();
 		$headers[] = 'From: ' . $subject . ' <' . $mailfrom . '>';
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 
@@ -187,6 +202,7 @@ class ContactForm {
 
 	/**
 	 * Body template preparation
+	 *
 	 * @param string $body
 	 * @param array $data
 	 *
@@ -194,9 +210,59 @@ class ContactForm {
 	 */
 	private function prepare_body( $body, $data ) {
 
-		// @TODO process the email body tempalte here
+		$tmpl = "";
 
-		return $body;
+		ob_start(); ?>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
+		<!-- view port meta tag -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title><?php echo esc_html__( 'Mail From: ', 'textdomain') . esc_html( $data['name'] ); ?></title>
+	</head>
+	<body>
+		<table>
+			<thead>
+				<tr>
+					<th>
+						<h3>
+							<?php esc_html_e( 'Content Form submission from ', 'textdomain' ); ?>
+							<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
+						</h3>
+						<hr />
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+<?php
+/**
+ * Keep this lines unindented for a better source format. Someone might wana read it this way.
+ */
+foreach ( $data as $key => $value ) { ?>
+				<tr>
+					<td>
+						<strong><?php echo esc_html( $key ) ?> : </strong>
+						<p><?php echo esc_html( $value ); ?></p>
+					</td>
+				</tr>
+<?php } ?>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td>
+						<hr/>
+						<?php esc_html_e( 'You recieved this email because your email address is set in the content form settings on ' ) ?>
+						<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</body>
+</html>
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
@@ -207,12 +273,17 @@ class ContactForm {
 	 *
 	 * @return bool
 	 */
-	private function get_widget_settings($widget_id, $page_id) {
-		$path = dirname( __FILE__ );
-		require_once $path . '/class-themeisle-content-forms-elementor.php';
-		// if elementor
-		$settings = ElementorWidget::get_widget_settings( $widget_id, $page_id );
-		return $settings['settings'];
+	private function get_widget_settings( $widget_id, $page_id, $builder ) {
+
+		if ( 'elementor' === $builder ) {
+			$path = dirname( __FILE__ );
+			require_once $path . '/class-themeisle-content-forms-elementor.php';
+			// if elementor
+			$settings = ElementorWidget::get_widget_settings( $widget_id, $page_id );
+
+			return $settings['settings'];
+		}
+
 		// if gutenberg
 
 		// if beaver

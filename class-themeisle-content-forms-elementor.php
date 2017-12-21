@@ -143,21 +143,20 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				'type'    => \Elementor\Controls_Manager::SELECT,
 				'options' => array(
 					'required' => esc_html__( 'Required' ),
-					'optional' => esc_html__( 'Optional' ),
-					'hidden'   => esc_html__( 'Hidden' )
+					'optional' => esc_html__( 'Optional' )
 				),
-				'default' => 'required',
+				'default' => 'optional',
 			]
 		);
 
 		$field_types = [
 			'text'     => __( 'Text', 'textdomain' ),
-			'tel'      => __( 'Tel', 'textdomain' ),
+//			'tel'      => __( 'Tel', 'textdomain' ),
 			'email'    => __( 'Email', 'textdomain' ),
 			'textarea' => __( 'Textarea', 'textdomain' ),
-			'number'   => __( 'Number', 'textdomain' ),
-			'select'   => __( 'Select', 'textdomain' ),
-			'url'      => __( 'URL', 'textdomain' ),
+//			'number'   => __( 'Number', 'textdomain' ),
+//			'select'   => __( 'Select', 'textdomain' ),
+//			'url'      => __( 'URL', 'textdomain' ),
 		];
 
 		$repeater->add_control(
@@ -166,7 +165,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				'label'   => __( 'Type', 'textdomain' ),
 				'type'    => \Elementor\Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text',
+				'default' => 'text'
 			]
 		);
 
@@ -174,7 +173,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			'key',
 			[
 				'label' => __( 'Key', 'textdomain' ),
-				'type'  => \Elementor\Controls_Manager::TEXT,
+				'type'  => \Elementor\Controls_Manager::HIDDEN
 			]
 		);
 
@@ -225,6 +224,9 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			return;
 		}
 
+		// load the js file which will handle the data submission
+		wp_enqueue_script( 'content-forms' );
+
 		$fields = $settings['form_fields'];
 
 		$controls = $this->forms_config['controls'];
@@ -236,6 +238,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		}
 
 		$btn_label = esc_html__( 'Submit', 'textdomain' );
+
 		if ( ! empty( $controls['submit_label'] ) ) {
 			$btn_label = $this->get_settings( 'submit_label' );
 		} ?>
@@ -288,7 +291,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
 		$item_index = $field['_id'];
-		$key        = $field['key'];
+		$key        = ! empty( $field['key'] ) ? $field['key'] : sanitize_title( $field['label'] );
 		$required   = '';
 
 		if ( $field['requirement'] === 'required' ) {

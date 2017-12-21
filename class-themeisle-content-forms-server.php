@@ -73,7 +73,7 @@ class RestServer extends \WP_Rest_Controller {
 	public function submit_form( \WP_REST_Request $request ) {
 		$return = array(
 			'success' => false,
-			'msg'     => 'Something went wrong'
+			'msg'     => 'Something went really wrong'
 		);
 
 		$nonce   = $request->get_param( 'nonce' );
