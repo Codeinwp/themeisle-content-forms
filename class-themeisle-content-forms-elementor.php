@@ -52,7 +52,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		if ( ! empty( $data['content_forms_config'] ) ) {
 			$this->setFormConfig( $data['content_forms_config'] );
 		} else {
-			$this->setFormConfig( apply_filters( 'content_forms_config_for_' . $this->getFormType(), $this->forms_config ) );
+			$this->setFormConfig( apply_filters( 'content_forms_config_for_' . $this->getFormType(), $this->getFormConfig() ) );
 		}
 
 		if ( ! empty( $data['id'] ) ) {
@@ -368,7 +368,17 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->forms_config = $config;
 	}
 
-	private function getFormConfig(  ){
+	private function getFormConfig( $field = null ){
+
+		if ( isset( $field  ) ) {
+
+			if ( isset( $this->forms_config[ $field] ) ) {
+				return $this->forms_config[ $field];
+			}
+
+			return false;
+		}
+
 		return $this->forms_config;
 	}
 

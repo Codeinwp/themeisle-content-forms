@@ -102,36 +102,29 @@ class NewsletterForm extends Base {
 		$providerArgs['access_key'] = $settings['access_key'];
 		$providerArgs['list_id'] = $settings['list_id'];
 
-		$result = $this->_subscribe_mail( $email, $provider, $providerArgs );
-
-		if ( $result ) {
-			$return['success'] = true;
-
-			$return['msg'] = 'Awesome! Now you just need to check your mail and confirm your subscription!';
-		} else {
-			$return['msg'] = 'Something went wrong!';
-		}
+		$return = $this->_subscribe_mail( $return, $email, $provider, $providerArgs );
 
 		return $return;
 	}
 
 	/**
+	 * Subscribe the given email to the given provider; either mailchimp or sendinblue.
+	 * @param $result
 	 * @param $email
 	 * @param string $provider
 	 * @param array $provider_args
 	 *
-	 * @return bool
+	 * @return bool|array
 	 */
-	private function _subscribe_mail( $email, $provider = 'mailchimp', $provider_args = array() ) {
+	private function _subscribe_mail( $result, $email, $provider = 'mailchimp', $provider_args = array() ) {
+
+		$api_key = $provider_args['access_key'];
+		$list_id = $provider_args['list_id'];
 
 		switch ( $provider ) {
 
 			case 'mailchimp':
-
-				$api_key = $provider_args['access_key'];
-				$list_id = $provider_args['list_id'];
-
-				// shoot this off to mailchimp via api
+				// add a pending subscription for the user to confirm
 				$status = 'pending';
 
 				$args     = array(
@@ -149,20 +142,59 @@ class NewsletterForm extends Base {
 
 				$response = wp_remote_post( $url, $args );
 
-				$body = json_decode( $response['body'] );
-
-				if ( $response['response']['code'] == 200 && $body->status == $status ) {
-					return true;
-				} else {
-					return false;
+				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+					return $response;
 				}
 
+				$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+				if ( $body->status == $status ) {
+					$result['success'] = true;
+					$result['msg'] = 'Welcome to our newsletter';
+				} else {
+					$result['success'] = false;
+					$result['msgz'] = 'Something went wrong';
+				}
+
+				return $result;
 				break;
 			case 'sendinblue':
 
-				$url = 'https://api.sendinblue.com/v3/';
-				// @TODO
+				$url = 'https://api.sendinblue.com/v3/contacts';
 
+				$args     = array(
+					'method'  => 'POST',
+					'headers' => array(
+						'content-type' => 'application/json',
+						'api-key' => $api_key
+					),
+					'body'    => json_encode( array(
+						'email'            => $email,
+						'listIds'          => array( (int)$list_id ),
+						'emailBlacklisted' => false,
+						'smsBlacklisted'   => false,
+					) )
+				);
+
+				$response = wp_remote_post( $url, $args );
+
+				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+
+					$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+					if ( ! empty( $body['message'] ) ) {
+						$result['msg'] = $body['message'];
+					} else {
+						$result['msg'] = $response;
+					}
+
+					return $result;
+				}
+
+				$result['success'] = true;
+				$result['msg'] = 'Welcome to our newsletter';
+
+				return $result;
 				break;
 
 			default;
