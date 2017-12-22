@@ -28,7 +28,7 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		// get forms
 		require_once $path . '/class-themeisle-content-forms-contact.php';
 		require_once $path . '/class-themeisle-content-forms-newsletter.php';
-//		 require_once $path . '/class-themeisle-content-forms-registration.php';
+		require_once $path . '/class-themeisle-content-forms-registration.php';
 
 		do_action( 'init_themeisle_content_forms' );
 	}

@@ -30,7 +30,7 @@ class RegistrationForm extends Base {
 	 *
 	 * @return array
 	 */
-	function make_form_config( $config ) {
+	public function make_form_config( $config ) {
 
 		return array(
 			'id'    => $this->get_type(),
@@ -76,7 +76,7 @@ class RegistrationForm extends Base {
 	 * // @TODO we still have to check for the requirement with the field settings
 	 *
 	 * @param $return array
-	 * @param $data array Must contain the following keys: `email`, `name`, `message` but it can also have extra keys
+	 * @param $data array Must contain the following keys: `email`, `name` but it can also have extra keys
 	 * @param $widget_id string
 	 * @param $post_id string
 	 * @param $builder string
@@ -114,11 +114,11 @@ class RegistrationForm extends Base {
 
 		// @TODO
 
-		if ( $result ) {
+		if ( true ) {
 			$return['success'] = true;
 			$return['msg']     = $this->notices['success'];
 		} else {
-			$return['msg'] = $result;
+			$return['msg'] = 'no';
 		}
 
 		return $return;
