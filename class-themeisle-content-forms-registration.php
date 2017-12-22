@@ -18,9 +18,8 @@ class RegistrationForm extends Base {
 
 		$this->notices = array(
 			'success' => esc_html__( 'Your message has been sent!', 'textdomain' ),
-			'error' => esc_html__( 'We failed to send your message!', 'textdomain' ),
+			'error'   => esc_html__( 'We failed to send your message!', 'textdomain' ),
 		);
-
 	}
 
 	/**
@@ -62,7 +61,7 @@ class RegistrationForm extends Base {
 //					'label'       => esc_html__( 'Newsletter OptIn', 'textdomain' ),
 //					'description' => esc_html__( 'Display a checkbox which allows the user to join a newsletter', 'textdomain' )
 //				),
-				'submit_label'      => array(
+				'submit_label' => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
 					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
@@ -91,34 +90,92 @@ class RegistrationForm extends Base {
 			return $return;
 		}
 
-		$from = $data['email'];
+		$email = sanitize_email( $data['email'] );
+		unset( $data['email'] );
 
-		if ( empty( $data['name'] ) ) {
-			$return['msg'] = esc_html__( 'Missing name.', 'textdomain' );
-
-			return $return;
-		}
-
-		$name = $data['name'];
-
-		if ( empty( $data['message'] ) ) {
-			$return['msg'] = esc_html__( 'Missing message.', 'textdomain' );
+		if ( empty( $data['username'] ) ) {
+			$return['msg'] = esc_html__( 'Missing username.', 'textdomain' );
 
 			return $return;
 		}
 
-		$msg = $data['message'];
+		$username = sanitize_user( $data['username'] );
+		unset( $data['username'] );
 
-		// prepare settings for submit
-		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
+		// if there is no password we will auto-generate one
+		$password = null;
 
-		// @TODO
+		if ( ! empty( $data['password'] ) ) {
+			$password = $data['password'];
+			unset( $data['password'] );
+		}
 
-		if ( true ) {
+		$return = $this->_register_user( $return, $email, $username, $password, $data );
+
+		return $return;
+	}
+
+	/**
+	 * Add a new user for the given details
+	 *
+	 * @param array $return
+	 * @param string $user_email
+	 * @param string $user_name
+	 * @param null $password
+	 * @param array $extra_data
+	 *
+	 * @return array mixed
+	 */
+	private function _register_user( $return, $user_email, $user_name, $password = null, $extra_data = array() ) {
+
+		if ( ! get_option( 'users_can_register') ) {
+			$return['msg'] = esc_html__( 'This website does not allow registrations at this moment!' );
+			return $return;
+		}
+
+		if ( ! validate_username( $user_name ) ) {
+			$return['msg'] = esc_html__( 'Invalid user name' );
+			return $return;
+		}
+
+		if ( username_exists( $user_name ) ) {
+			$return['msg'] = esc_html__( 'Username already exists' );
+
+			return $return;
+		}
+
+		if ( email_exists( $user_email ) ) {
+			$return['msg'] = esc_html__( 'This email is already registered' );
+
+			return $return;
+		}
+
+		// no pass? ok
+		if ( empty( $password ) ) {
+			$password = wp_generate_password(
+				$length = 12,
+				$include_standard_special_chars = false
+			);
+		}
+
+		$userdata = array(
+			'user_login' => $user_name,
+			'user_email' => $user_email,
+			'user_pass'  => $password
+		);
+
+		$user_id = wp_insert_user( $userdata );
+
+		if ( ! is_wp_error( $user_id ) ) {
+
+			if ( ! empty( $extra_data ) ) {
+				foreach ( $extra_data as $key => $value ) {
+					update_user_meta( $user_id, sanitize_title( $key ), sanitize_text_field( $value ) );
+				}
+			}
+
 			$return['success'] = true;
-			$return['msg']     = $this->notices['success'];
-		} else {
-			$return['msg'] = 'no';
+			$return['msg']     = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
 		}
 
 		return $return;

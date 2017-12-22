@@ -153,6 +153,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		$field_types = [
 			'text'     => __( 'Text', 'textdomain' ),
+			'password'      => __( 'Password', 'textdomain' ),
 //			'tel'      => __( 'Tel', 'textdomain' ),
 			'email'    => __( 'Email', 'textdomain' ),
 			'textarea' => __( 'Textarea', 'textdomain' ),
