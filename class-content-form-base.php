@@ -126,8 +126,6 @@ abstract class ContentFormBase {
 					'content_forms_config' => $this->get_config()
 				)
 			);
-
-			var_dump( $module );
 		}
 	}
 
