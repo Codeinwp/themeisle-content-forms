@@ -110,14 +110,18 @@ class ContactForm extends Base {
 
 		if ( empty( $data['message'] ) ) {
 			$return['msg'] = esc_html__( 'Missing message.', 'textdomain' );
-
 			return $return;
 		}
 
 		$msg = $data['message'];
 
 		// prepare settings for submit
-		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
+		$settings = (array) $this->get_widget_settings( $widget_id, $post_id, $builder );
+
+		if ( ! isset( $settings['to_send_email'] ) || ! is_email( $settings['to_send_email'] ) ) {
+			$return['msg'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
+			return $return;
+		}
 
 		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $msg, $data );
 
@@ -125,7 +129,7 @@ class ContactForm extends Base {
 			$return['success'] = true;
 			$return['msg']     = $this->notices['success'];
 		} else {
-			$return['msg'] = $result;
+			$return['msg'] = esc_html__( 'Ops! I cannot send this email!', 'textdomain' );
 		}
 
 		return $return;
@@ -173,7 +177,13 @@ class ContactForm extends Base {
 
 		$body = $this->prepare_body( $body, $extra_data );
 
+		ob_start();
+
 		$success = wp_mail( $mailto, $subject, $body, $headers );
+
+		if ( ! $success ) {
+			return ob_get_clean();
+		}
 
 		return $success;
 	}

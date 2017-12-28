@@ -24,7 +24,7 @@ and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 				post_id: serialized['post-id'],
 				form_builder: serialized['form-builder'],
 				data: serialized.data,
-				nonce: serialized._wpnonce,
+				nonce: serialized[ '_wpnonce_' + serialized['form-type'] ],
 			};
 
 		$form.addClass('content-form-loading');

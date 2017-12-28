@@ -73,7 +73,7 @@ class RestServer extends \WP_Rest_Controller {
 	public function submit_form( \WP_REST_Request $request ) {
 		$return = array(
 			'success' => false,
-			'msg'     => 'Something went really wrong'
+			'msg'     => esc_html__( 'Something went wrong', 'textdomain' )
 		);
 
 		$nonce   = $request->get_param( 'nonce' );
@@ -89,6 +89,13 @@ class RestServer extends \WP_Rest_Controller {
 		$form_type    = $request->get_param( 'form_type' );
 		$form_builder = $request->get_param( 'form_builder' );
 		$data         = $request->get_param( 'data' );
+
+		if ( empty( $data[ $form_id ] ) ) {
+			$return['msg'] = esc_html__( 'Invalid Data ', 'textdomain' ) . $form_id;
+			return $return;
+		}
+
+		$data = $data[ $form_id ];
 
 		/**
 		 * Each form type should be able to provide its own process of submitting data.
