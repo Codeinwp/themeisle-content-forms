@@ -36,9 +36,11 @@ class NewsletterForm extends Base {
 			'title'                        => esc_html__( 'Newsletter Form' ),
 			'fields' /* or form_fields? */ => array(
 				'email' => array(
-					'type'    => 'email',
-					'label'   => esc_html__( 'Email' ),
-					'require' => 'required'
+					'type'        => 'email',
+					'label'       => esc_html__( 'Email', 'textdomain' ),
+					'default'     => esc_html__( 'Email', 'textdomain' ),
+					'placeholder' => esc_html__( 'Email', 'textdomain' ),
+					'require'     => 'required'
 				)
 			),
 
@@ -95,12 +97,22 @@ class NewsletterForm extends Base {
 		// prepare settings for submit
 		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 
-		$provider = $settings['provider'];
+		$provider = 'mailchimp';
+
+		if ( ! empty( $settings['provider'] ) ) {
+			$provider = $settings['provider'];
+		}
 
 		$providerArgs = array();
 
+		if ( empty( $settings['access_key'] ) || empty( $settings['list_id'] ) ) {
+			$return['msg'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
+
+			return $return;
+		}
+
 		$providerArgs['access_key'] = $settings['access_key'];
-		$providerArgs['list_id'] = $settings['list_id'];
+		$providerArgs['list_id']    = $settings['list_id'];
 
 		$return = $this->_subscribe_mail( $return, $email, $provider, $providerArgs );
 
@@ -109,6 +121,7 @@ class NewsletterForm extends Base {
 
 	/**
 	 * Subscribe the given email to the given provider; either mailchimp or sendinblue.
+	 *
 	 * @param $result
 	 * @param $email
 	 * @param string $provider
@@ -127,7 +140,7 @@ class NewsletterForm extends Base {
 				// add a pending subscription for the user to confirm
 				$status = 'pending';
 
-				$args     = array(
+				$args = array(
 					'method'  => 'PUT',
 					'headers' => array(
 						'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key )
@@ -150,10 +163,10 @@ class NewsletterForm extends Base {
 
 				if ( $body->status == $status ) {
 					$result['success'] = true;
-					$result['msg'] = 'Welcome to our newsletter';
+					$result['msg']     = 'Welcome to our newsletter';
 				} else {
 					$result['success'] = false;
-					$result['msgz'] = 'Something went wrong';
+					$result['msgz']    = 'Something went wrong';
 				}
 
 				return $result;
@@ -162,15 +175,15 @@ class NewsletterForm extends Base {
 
 				$url = 'https://api.sendinblue.com/v3/contacts';
 
-				$args     = array(
+				$args = array(
 					'method'  => 'POST',
 					'headers' => array(
 						'content-type' => 'application/json',
-						'api-key' => $api_key
+						'api-key'      => $api_key
 					),
 					'body'    => json_encode( array(
 						'email'            => $email,
-						'listIds'          => array( (int)$list_id ),
+						'listIds'          => array( (int) $list_id ),
 						'emailBlacklisted' => false,
 						'smsBlacklisted'   => false,
 					) )
@@ -192,7 +205,7 @@ class NewsletterForm extends Base {
 				}
 
 				$result['success'] = true;
-				$result['msg'] = 'Welcome to our newsletter';
+				$result['msg']     = 'Welcome to our newsletter';
 
 				return $result;
 				break;

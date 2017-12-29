@@ -37,7 +37,7 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		do_action( 'init_themeisle_content_forms' );
 	}
 endif;
-add_action( 'init', 'themeisle_content_forms_load', 1 );
+add_action( 'init', 'themeisle_content_forms_load', 9 );
 
 
 if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :

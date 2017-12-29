@@ -109,9 +109,11 @@ abstract class ContentFormBase {
 		}
 	}
 
+	/**
+	 * Register a Beaver module
+	 * https://www.wpbeaverbuilder.com/custom-module-documentation
+	 */
 	public function register_beaver_module() {
-
-		// TODO https://www.wpbeaverbuilder.com/custom-module-documentation/
 		if ( class_exists( '\FLBuilderModel' ) ) {
 
 			$classname = __NAMESPACE__ . '\\BeaverModule' . ucfirst( $this->get_type() );
@@ -180,7 +182,7 @@ abstract class ContentFormBase {
 
 		if ( isset( $post_data[$node_id] ) ) {
 			$module = $post_data[$node_id];
-			return $module->settings;
+			return (array)$module->settings;
 		}
 
 		return false;

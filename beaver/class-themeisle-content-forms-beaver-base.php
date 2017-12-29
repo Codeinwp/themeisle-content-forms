@@ -32,10 +32,21 @@ abstract class BeaverModule extends \FLBuilderModule {
 		foreach ( $this->forms_config['fields'] as $key => $field ) {
 
 			$fields[ $key . '_label' ] = array(
-				'type'    => 'text',
-				'label'   => $field['label'],
-				'default' => '',
+				'type'        => 'text',
+				'label'       => $field['label'] . ' Label',
+				'default'     => isset( $field['default'] ) ? $field['default'] : ''
 			);
+
+			$fields[ $key . '_requirement' ] = array(
+				'type'        => 'select',
+				'label'       => __( 'Requirement', 'textdomain' ),
+				'options'     => array(
+					'required' => esc_html__( 'Required' ),
+					'optional' => esc_html__( 'Optional' )
+				),
+				'default'     => $field['require']
+			);
+
 		}
 
 		$controls = array();
@@ -43,9 +54,10 @@ abstract class BeaverModule extends \FLBuilderModule {
 		if ( ! empty( $this->forms_config['controls'] ) ) {
 			foreach ( $this->forms_config['controls'] as $key => $control ) {
 				$control_settings = array(
-					'type'    => $control['type'],
-					'label'   => $control['label'],
-					'default' => '',
+					'type'        => $control['type'],
+					'label'       => $control['label'],
+					'description' => isset( $control['description'] ) ? $control['description'] : '',
+					'default'     => isset( $control['default'] ) ? $control['default'] : '',
 				);
 
 				if ( isset( $control['options'] ) ) {
@@ -58,16 +70,17 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 		$args = array(
 			'general' => array( // Tab
-				'title'    => $this->get_title(), //__( 'General', 'textdomain' ), // Tab title
-				'sections' => array( // Tab Sections
+				'title'       => $this->get_title(),
+				'description' => isset( $this->forms_config['description'] ) ? $this->forms_config['description'] : '',
+				'sections'    => array( // Tab Sections
+					'controls' => array( // Section
+						'title'  => 'Form Settings', // Section Title
+						'fields' => $controls
+					),
 					'settings' => array( // Section
 						'title'  => 'Labels', // Section Title
 						'fields' => $fields
 					),
-					'controls' => array( // Section
-						'title'  => 'Form Settings', // Section Title
-						'fields' => $controls
-					)
 				),
 			)
 		);
@@ -101,6 +114,10 @@ abstract class BeaverModule extends \FLBuilderModule {
 		}
 	}
 
+	/**
+	 * Each inherited class will need to define it's type be returning it trough this method
+	 * @return mixed
+	 */
 	abstract public function get_type();
 
 	/**
@@ -166,6 +183,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 	/**
 	 * Render the header of the form based on the block id(for JS identification)
+	 *
 	 * @param $id
 	 */
 	public function render_form_header( $id ) {
@@ -184,22 +202,16 @@ abstract class BeaverModule extends \FLBuilderModule {
 	}
 
 	public function render_form_field( $name, $field ) {
-//		$item_index = $field['_id'];
 		$key      = ! empty( $field['key'] ) ? $field['key'] : $name;
 		$required = '';
 		$form_id  = $this->node;
 
-//		if ( $field['requirement'] === 'required' ) {
-//			$required = 'required="required"';
-//		}
 
-		// in case this is a preview, we need to disable the actual inputs and transform the labels in inputs
-		$disabled = '';
-//		if ( $is_preview ) {
-//			$disabled = 'disabled="disabled"';
-//		}
+		if ( $this->get_setting( $key . '_requirement' ) === 'required' ) {
+			$required = 'required="required"';
+		}
 
-		$field_name = 'data[' . $form_id . '][' . $key . ']';; ?>
+		$field_name = 'data[' . $form_id . '][' . $key . ']'; ?>
 		<fieldset class="content-form-field-<?php echo $field['type'] ?>">
 
 			<label for="<?php echo $field_name ?>">
@@ -210,17 +222,16 @@ abstract class BeaverModule extends \FLBuilderModule {
 			switch ( $field['type'] ) {
 				case 'textarea': ?>
 					<textarea name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
-						<?php echo $disabled; ?>
 						<?php echo $required; ?>
 						      cols="30" rows="10"></textarea>
 					<?php break;
 				case 'password': ?>
 					<input type="password" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
-						<?php echo $required; ?> <?php echo $disabled; ?>>
+						<?php echo $required; ?>>
 					<?php break;
 				default: ?>
 					<input type="text" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
-						<?php echo $required; ?> <?php echo $disabled; ?>>
+						<?php echo $required; ?>>
 					<?php
 					break;
 			} ?>
@@ -234,6 +245,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 	/**
 	 * Retrieve a setting value for a given key
+	 *
 	 * @param $key
 	 *
 	 * @return bool|mixed
