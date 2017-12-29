@@ -50,6 +50,7 @@ abstract class ContentFormBase {
 	/**
 	 * Create an abstract array config which should define the form.
 	 * This method's body will be passed to a filter
+	 *
 	 * @param $config
 	 *
 	 * @return mixed
@@ -62,7 +63,7 @@ abstract class ContentFormBase {
 	public function add_base_hooks() {
 
 		// add the initial config for the Contact Content Form
-		add_filter( 'content_forms_config_for_' . $this->get_type() , array( $this, 'make_form_config' ) );
+		add_filter( 'content_forms_config_for_' . $this->get_type(), array( $this, 'make_form_config' ) );
 
 		$config = apply_filters( 'content_forms_config_for_' . $this->get_type(), array() );
 		$this->set_config( $config );
@@ -79,7 +80,8 @@ abstract class ContentFormBase {
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 
 		// Register the Beaver Module
-		// @TODO
+//		$this->register_beaver_module();
+		add_action( 'init', array( $this, 'register_beaver_module' ) );
 
 		// Register the Gutenberg Block
 		$this->register_gutenberg_block();
@@ -107,8 +109,25 @@ abstract class ContentFormBase {
 		}
 	}
 
+	/**
+	 * Register a Beaver module
+	 * https://www.wpbeaverbuilder.com/custom-module-documentation
+	 */
 	public function register_beaver_module() {
-		// TODO https://www.wpbeaverbuilder.com/custom-module-documentation/
+		if ( class_exists( '\FLBuilderModel' ) ) {
+
+			$classname = __NAMESPACE__ . '\\BeaverModule' . ucfirst( $this->get_type() );
+
+			$module = new $classname(
+				array(
+					'id'                   => 'content_form_' . $this->get_type(),
+					'type'                 => $this->get_type(),
+					'content_forms_config' => $this->get_config()
+				)
+			);
+
+			$module->register_widget();
+		}
 	}
 
 	/**
@@ -119,7 +138,7 @@ abstract class ContentFormBase {
 		if ( in_array( 'gutenberg/gutenberg.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 			require_once( __DIR__ . '/class-themeisle-content-forms-gutenberg.php' );
 
-			$module = new \ThemeIsle\ContentForms\GutenbergModule(
+			$block = new \ThemeIsle\ContentForms\GutenbergModule(
 				array(
 					'id'                   => 'content_form_' . $this->get_type(),
 					'type'                 => $this->get_type(),
@@ -131,31 +150,47 @@ abstract class ContentFormBase {
 
 	/**
 	 * Get block settings depending on what builder is in use.
-	 *
 	 * @param $widget_id
-	 * @param $page_id
+	 * @param $post_id
+	 * @param $builder
 	 *
 	 * @return bool
 	 */
-	protected function get_widget_settings( $widget_id, $page_id, $builder ) {
-
+	protected function get_widget_settings( $widget_id, $post_id, $builder ) {
 		if ( 'elementor' === $builder ) {
-
-			// if elementor
-			$settings = ElementorWidget::get_widget_settings( $widget_id, $page_id );
-
+			$settings = ElementorWidget::get_widget_settings( $widget_id, $post_id );
 			return $settings['settings'];
+		} elseif ( 'beaver' === $builder ) {
+			return $this->get_beaver_module_settings_by_id( $widget_id, $post_id );
 		}
 
 		// if gutenberg
 
-		// if beaver
+		return false;
+	}
+
+	/**
+	 * Each beaver module has data saved in the post metadata, and we need to extract it by its id.
+	 *
+	 * @param $node_id
+	 * @param $post_id
+	 *
+	 * @return array|bool
+	 */
+	private function get_beaver_module_settings_by_id( $node_id, $post_id ) {
+		$post_data = \FLBuilderModel::get_layout_data( null, $post_id );
+
+		if ( isset( $post_data[$node_id] ) ) {
+			$module = $post_data[$node_id];
+			return (array)$module->settings;
+		}
 
 		return false;
 	}
 
 	/**
 	 * Setter method for the form type
+	 *
 	 * @param $type
 	 */
 	protected function set_type( $type ) {
@@ -173,6 +208,7 @@ abstract class ContentFormBase {
 
 	/**
 	 * Setter method for the config property
+	 *
 	 * @param $config
 	 */
 	protected function set_config( $config ) {

@@ -38,20 +38,26 @@ class RegistrationForm extends Base {
 
 			'fields' /* or form_fields? */ => array(
 				'username' => array(
-					'type'       => 'text',
-					'label'      => esc_html__( 'User Name' ),
-					'require'    => 'required',
-					'validation' => ''// name a function which should allow only letters and numbers
+					'type'        => 'text',
+					'label'       => esc_html__( 'User Name', 'textdomain' ),
+					'default'     => esc_html__( 'User Name', 'textdomain' ),
+					'placeholder' => esc_html__( 'User Name', 'textdomain' ),
+					'require'     => 'required',
+					'validation'  => ''// name a function which should allow only letters and numbers
 				),
 				'email'    => array(
-					'type'    => 'email',
-					'label'   => esc_html__( 'Email' ),
-					'require' => 'required'
+					'type'        => 'email',
+					'label'       => esc_html__( 'Email', 'textdomain' ),
+					'default'     => esc_html__( 'Email', 'textdomain' ),
+					'placeholder' => esc_html__( 'Email', 'textdomain' ),
+					'require'     => 'required'
 				),
 				'password' => array(
-					'type'    => 'password',
-					'label'   => esc_html__( 'Password' ),
-					'require' => 'required'
+					'type'        => 'password',
+					'label'       => esc_html__( 'Password', 'textdomain' ),
+					'default'     => esc_html__( 'Password', 'textdomain' ),
+					'placeholder' => esc_html__( 'Password', 'textdomain' ),
+					'require'     => 'required'
 				)
 			),
 
@@ -128,13 +134,15 @@ class RegistrationForm extends Base {
 	 */
 	private function _register_user( $return, $user_email, $user_name, $password = null, $extra_data = array() ) {
 
-		if ( ! get_option( 'users_can_register') ) {
+		if ( ! get_option( 'users_can_register' ) ) {
 			$return['msg'] = esc_html__( 'This website does not allow registrations at this moment!' );
+
 			return $return;
 		}
 
 		if ( ! validate_username( $user_name ) ) {
 			$return['msg'] = esc_html__( 'Invalid user name' );
+
 			return $return;
 		}
 

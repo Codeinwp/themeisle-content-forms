@@ -19,7 +19,7 @@ class ContactForm extends Base {
 
 		$this->notices = array(
 			'success' => esc_html__( 'Your message has been sent!', 'textdomain' ),
-			'error' => esc_html__( 'We failed to send your message!', 'textdomain' ),
+			'error'   => esc_html__( 'We failed to send your message!', 'textdomain' ),
 		);
 
 	}
@@ -40,36 +40,40 @@ class ContactForm extends Base {
 				'name'    => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Name' ),
+					'default'     => esc_html__( 'Name' ),
 					'placeholder' => esc_html__( 'Your Name' ),
 					'require'     => 'required'
 				),
 				'email'   => array(
 					'type'        => 'email',
 					'label'       => esc_html__( 'Email' ),
+					'default'     => esc_html__( 'Email' ),
 					'placeholder' => esc_html__( 'Email address' ),
 					'require'     => 'required'
 				),
 				'phone'   => array(
 					'type'        => 'number',
 					'label'       => esc_html__( 'Phone' ),
+					'default'     => esc_html__( 'Phone' ),
 					'placeholder' => esc_html__( 'Phone Nr' ),
 					'require'     => 'optional'
 				),
 				'message' => array(
 					'type'        => 'textarea',
 					'label'       => esc_html__( 'Message' ),
+					'default'       => esc_html__( 'Message' ),
 					'placeholder' => esc_html__( 'Your message' ),
 					'require'     => 'required'
 				)
 			),
 
 			'controls' /* or settings? */ => array(
-				'to_send_email'    => array(
+				'to_send_email' => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Email', 'textdomain' ),
 					'description' => esc_html__( 'Where to send the email?', 'textdomain' )
 				),
-				'submit_label'     => array(
+				'submit_label'  => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
 					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
@@ -119,13 +123,19 @@ class ContactForm extends Base {
 		// prepare settings for submit
 		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 
+		if ( ! isset( $settings['to_send_email'] ) || ! is_email( $settings['to_send_email'] ) ) {
+			$return['msg'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
+
+			return $return;
+		}
+
 		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $msg, $data );
 
 		if ( $result ) {
 			$return['success'] = true;
 			$return['msg']     = $this->notices['success'];
 		} else {
-			$return['msg'] = $result;
+			$return['msg'] = esc_html__( 'Ops! I cannot send this email!', 'textdomain' );
 		}
 
 		return $return;
@@ -173,7 +183,13 @@ class ContactForm extends Base {
 
 		$body = $this->prepare_body( $body, $extra_data );
 
+		ob_start();
+
 		$success = wp_mail( $mailto, $subject, $body, $headers );
+
+		if ( ! $success ) {
+			return ob_get_clean();
+		}
 
 		return $success;
 	}
@@ -191,54 +207,54 @@ class ContactForm extends Base {
 		$tmpl = "";
 
 		ob_start(); ?>
-<!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;" charset="utf-8" />
-		<!-- view port meta tag -->
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title><?php echo esc_html__( 'Mail From: ', 'textdomain') . esc_html( $data['name'] ); ?></title>
-	</head>
-	<body>
+		<!doctype html>
+		<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<meta http-equiv="Content-Type" content="text/html;" charset="utf-8"/>
+			<!-- view port meta tag -->
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+			<title><?php echo esc_html__( 'Mail From: ', 'textdomain' ) . esc_html( $data['name'] ); ?></title>
+		</head>
+		<body>
 		<table>
 			<thead>
-				<tr>
-					<th>
-						<h3>
-							<?php esc_html_e( 'Content Form submission from ', 'textdomain' ); ?>
-							<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
-						</h3>
-						<hr />
-					</th>
-				</tr>
+			<tr>
+				<th>
+					<h3>
+						<?php esc_html_e( 'Content Form submission from ', 'textdomain' ); ?>
+						<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
+					</h3>
+					<hr/>
+				</th>
+			</tr>
 			</thead>
 			<tbody>
-<?php
-/**
- * Keep this lines unindented for a better source format. Someone might wana read it this way.
- */
-foreach ( $data as $key => $value ) { ?>
+			<?php
+			/**
+			 * Keep this lines unindented for a better source format. Someone might wana read it this way.
+			 */
+			foreach ( $data as $key => $value ) { ?>
 				<tr>
 					<td>
 						<strong><?php echo esc_html( $key ) ?> : </strong>
 						<p><?php echo esc_html( $value ); ?></p>
 					</td>
 				</tr>
-<?php } ?>
+			<?php } ?>
 			</tbody>
 			<tfoot>
-				<tr>
-					<td>
-						<hr/>
-						<?php esc_html_e( 'You recieved this email because your email address is set in the content form settings on ' ) ?>
-						<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
-					</td>
-				</tr>
+			<tr>
+				<td>
+					<hr/>
+					<?php esc_html_e( 'You recieved this email because your email address is set in the content form settings on ' ) ?>
+					<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
+				</td>
+			</tr>
 			</tfoot>
 		</table>
-	</body>
-</html>
+		</body>
+		</html>
 		<?php
 		return ob_get_clean();
 	}

@@ -23,6 +23,10 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 
 		// get builders generators
 		require_once $path . '/class-themeisle-content-forms-elementor.php';
+		require_once $path . '/beaver/class-themeisle-content-forms-beaver-base.php';
+		require_once $path . '/beaver/class-themeisle-content-forms-beaver-contact.php';
+		require_once $path . '/beaver/class-themeisle-content-forms-beaver-newsletter.php';
+		require_once $path . '/beaver/class-themeisle-content-forms-beaver-registration.php';
 		require_once $path . '/class-themeisle-content-forms-gutenberg.php';
 
 		// get forms
@@ -33,7 +37,7 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		do_action( 'init_themeisle_content_forms' );
 	}
 endif;
-add_action( 'init', 'themeisle_content_forms_load' );
+add_action( 'init', 'themeisle_content_forms_load', 9 );
 
 
 if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
