@@ -76,6 +76,7 @@ class ContactForm extends Base {
 				'submit_label'  => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
+					'default'     => esc_html__( 'Submit', 'textdomain' ),
 					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
 				)
 			)

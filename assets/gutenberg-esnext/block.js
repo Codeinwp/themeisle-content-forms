@@ -1,19 +1,8 @@
 const {
 	registerBlockType,
-	// Editable,
-	// BlockDescription,
-	// BlockControls,
-	// InspectorControls,
-	source: {
-		attr,
-		children
-	}
 } = wp.blocks;
-
-import { ContentForm } from './components/Forms.js'
-import { ContentFormControls } from './components/Controls.js'
-
-const submitAction = '/wp-admin/admin-post.php';
+const { __ } = wp.i18n;
+import { ContentFormEditor } from './components/FormEditor.js'
 
 // @TODO think about a method to magically create this list
 const content_forms = [
@@ -29,56 +18,28 @@ const content_forms = [
  */
 content_forms.forEach(function (form, index) {
 	let config = window['content_forms_config_for_' + form];
-	let block_attributes = {};
-
-	/**
-	 * Create an label attribute for each field
-	 * @TODO Maybe add a prefix for this like `label_` since we probably need a `require_` att too
-	 */
-	_.each(config.fields, function (args, key) {
-		block_attributes[key] = {
-			type: 'array',
-			source: 'children',
-			selector: 'label'
-		}
-	});
 
 	registerBlockType('content-forms/' + form, {
 		title: config.title,
 		icon: 'index-card',
-
-		category: 'layout',
-
-		supports: {
-			html: false,
-		},
-
-		attributes: block_attributes,
-
-		edit: props => {
-			const focusedEditable = props.focus ? props.focus.editable || 'title' : null;
-			const {attributes} = props;
-			const {setAttributes} = props;
-
-			let elements = [];
-
-			// @TODO call the fields component
-
-			/**
-			 * @TODO For sure we will need to register a set of settings from config.controls
-			 */
-
-			// Add a submit button; @TODO Make a setting for this;
-			// elements.push(<button disabled key="submit_btn">Submit</button>);
-
-			return [
-				<ContentFormControls key="inspector"/>,
-				<ContentForm key="content-form"/>,
-			]
-		},
+		category: 'common',
+		keywords: [ __( 'forms' ), __( 'fields' ) ],
+		edit: ContentFormEditor,
 		save: props => {
-			return JSON.stringify(props.attributes)
-			//return null
+			const component = this
+			const {attributes} = props
+			const {fields} = attributes
+			let fieldsEl = []
+
+			_.each(fields, function (args, key) {
+				let label = args.label
+
+				fieldsEl.push(<span key={key} className="content-form-field-label" label={label}></span>)
+			})
+
+			return (<div key="fields" className="fields">
+				{fieldsEl}
+			</div>)
 		}
 
 		// @TODO Maybe return to the old way of saving a plain html

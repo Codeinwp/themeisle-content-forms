@@ -69,19 +69,11 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Forms_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Controls_js__ = __webpack_require__(2);
-var _wp$blocks = wp.blocks,
-    registerBlockType = _wp$blocks.registerBlockType,
-    _wp$blocks$source = _wp$blocks.source,
-    attr = _wp$blocks$source.attr,
-    children = _wp$blocks$source.children;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__ = __webpack_require__(1);
+var registerBlockType = wp.blocks.registerBlockType;
+var __ = wp.i18n.__;
 
 
-
-
-
-var submitAction = '/wp-admin/admin-post.php';
 
 // @TODO think about a method to magically create this list
 var content_forms = ['contact', 'newsletter', 'registration'];
@@ -92,55 +84,34 @@ var content_forms = ['contact', 'newsletter', 'registration'];
  *
  */
 content_forms.forEach(function (form, index) {
-	var config = window['content_forms_config_for_' + form];
-	var block_attributes = {};
+	var _this = this;
 
-	/**
-  * Create an label attribute for each field
-  * @TODO Maybe add a prefix for this like `label_` since we probably need a `require_` att too
-  */
-	_.each(config.fields, function (args, key) {
-		block_attributes[key] = {
-			type: 'array',
-			source: 'children',
-			selector: 'label'
-		};
-	});
+	var config = window['content_forms_config_for_' + form];
 
 	registerBlockType('content-forms/' + form, {
 		title: config.title,
 		icon: 'index-card',
-
-		category: 'layout',
-
-		supports: {
-			html: false
-		},
-
-		attributes: block_attributes,
-
-		edit: function edit(props) {
-			var focusedEditable = props.focus ? props.focus.editable || 'title' : null;
-			var attributes = props.attributes;
-			var setAttributes = props.setAttributes;
-
-
-			var elements = [];
-
-			// @TODO call the fields component
-
-			/**
-    * @TODO For sure we will need to register a set of settings from config.controls
-    */
-
-			// Add a submit button; @TODO Make a setting for this;
-			// elements.push(<button disabled key="submit_btn">Submit</button>);
-
-			return [wp.element.createElement(__WEBPACK_IMPORTED_MODULE_1__components_Controls_js__["a" /* ContentFormControls */], { key: 'inspector' }), wp.element.createElement(__WEBPACK_IMPORTED_MODULE_0__components_Forms_js__["a" /* ContentForm */], { key: 'content-form' })];
-		},
+		category: 'common',
+		keywords: [__('forms'), __('fields')],
+		edit: __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__["a" /* ContentFormEditor */],
 		save: function save(props) {
-			return JSON.stringify(props.attributes);
-			//return null
+			var component = _this;
+			var attributes = props.attributes;
+			var fields = attributes.fields;
+
+			var fieldsEl = [];
+
+			_.each(fields, function (args, key) {
+				var label = args.label;
+
+				fieldsEl.push(wp.element.createElement('span', { key: key, className: 'content-form-field-label', label: label }));
+			});
+
+			return wp.element.createElement(
+				'div',
+				{ key: 'fields', className: 'fields' },
+				fieldsEl
+			);
 		}
 
 		// @TODO Maybe return to the old way of saving a plain html
@@ -177,7 +148,9 @@ content_forms.forEach(function (form, index) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentForm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentFormEditor; });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -189,95 +162,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /**
  * WordPress dependencies
  */
-var Component = wp.element.Component;
-var _wp$components = wp.components,
-    Placeholder = _wp$components.Placeholder,
-    Spinner = _wp$components.Spinner,
-    withAPIData = _wp$components.withAPIData;
-var __ = wp.i18n.__;
-
-var ContentForms = function (_Component) {
-	_inherits(ContentForms, _Component);
-
-	function ContentForms() {
-		_classCallCheck(this, ContentForms);
-
-		var _this = _possibleConstructorReturn(this, (ContentForms.__proto__ || Object.getPrototypeOf(ContentForms)).apply(this, arguments));
-
-		console.log(_this.props);
-		return _this;
-	}
-
-	_createClass(ContentForms, [{
-		key: "render",
-		value: function render() {
-			var setAttributes = this.props.setAttributes;
-			//
-			// <form className={ props.className } method="post" action={submitAction}>
-			// 	{elements}
-			// </form>
-
-			//
-			// _.each(config.fields, function (args, key) {
-			// 	const onChangeLabel = value => {
-			// 		let newAtts = {};
-			// 		newAtts[key] = value;
-			// 		setAttributes( newAtts );
-			// 	};
-			//
-			// 	console.log(args)
-			//
-			// 	let fieldset_element = <fieldset key={key}>
-			// 		<Editable
-			// 			tagName="label"
-			// 			placeholder={ __( 'Write ' + args.label + ' title…' ) }
-			// 			value={ attributes[key] }
-			// 			onChange={ onChangeLabel }
-			// 		/>
-			// 		<input type="text" name={key} disabled="disabled" placeholder={args.placeholder} />
-			// 	</fieldset>;
-			// 	elements.push(fieldset_element)
-			// });
-			//
-
-			return wp.element.createElement(
-				Placeholder,
-				{
-					key: "form",
-					icon: "admin-post",
-					label: __('Form')
-				},
-				wp.element.createElement(Spinner, null)
-			);
-		}
-	}]);
-
-	return ContentForms;
-}(Component);
-
-var ContentForm = withAPIData(function () {
-	return {
-		ContentForm: '/content-forms/v1/forms'
-	};
-})(ContentForms);
-
-/***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ContentFormControls; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * WordPress dependencies
- */
+// import { map } from 'lodash';
 var Component = wp.element.Component;
 var _wp$components = wp.components,
     Placeholder = _wp$components.Placeholder,
@@ -286,112 +171,122 @@ var _wp$components = wp.components,
 var __ = wp.i18n.__;
 var _wp$blocks = wp.blocks,
     Editable = _wp$blocks.Editable,
-    BlockDescription = _wp$blocks.BlockDescription,
-    BlockControls = _wp$blocks.BlockControls,
+    BlockEdit = _wp$blocks.BlockEdit,
     InspectorControls = _wp$blocks.InspectorControls;
 
-var ContentFormControlss = function (_Component) {
-	_inherits(ContentFormControlss, _Component);
+var FormEditor = function (_Component) {
+	_inherits(FormEditor, _Component);
 
-	function ContentFormControlss() {
-		_classCallCheck(this, ContentFormControlss);
+	function FormEditor() {
+		_classCallCheck(this, FormEditor);
 
-		var _this = _possibleConstructorReturn(this, (ContentFormControlss.__proto__ || Object.getPrototypeOf(ContentFormControlss)).apply(this, arguments));
+		var _this = _possibleConstructorReturn(this, (FormEditor.__proto__ || Object.getPrototypeOf(FormEditor)).apply(this, arguments));
 
-		_this.consoleValue = _this.consoleValue.bind(_this);
+		var form = 'contact';
+
+		_this.config = window['content_forms_config_for_' + form];
 		return _this;
 	}
 
-	_createClass(ContentFormControlss, [{
-		key: 'consoleValue',
-		value: function consoleValue(v) {
-			console.log(v);
-		}
-	}, {
+	_createClass(FormEditor, [{
 		key: 'render',
 		value: function render() {
-			var setAttributes = this.props.setAttributes;
+			var component = this;
+			var _props = this.props,
+			    attributes = _props.attributes,
+			    setAttributes = _props.setAttributes,
+			    focus = _props.focus,
+			    setFocus = _props.setFocus,
+			    className = _props.className;
+			var fields = attributes.fields;
 
-			// let inspectorControls = null;
-			//
-			// if ( typeof config.controls !== "undefined" ) {
-			//
-			// 	let blockControls = []
-			//
-			// 	_.each(config.controls, function (args, key) {
-			//
-			// 		blockControls.push(<fieldset>
-			// 			<BlockEdit key={ 'block-edit-custom-' + key } />
-			// 			<InspectorControls.TextControl
-			// 				key={key}
-			// 				label={  args.label }
-			// 				value={ props.attributes[key] || '' }
-			// 				onChange={ ( nextValue ) => {
-			//
-			// 					let newValues = {}
-			//
-			// 					newValues[key] = nextValue
-			//
-			// 					setAttributes( newValues );
-			// 				} }
-			// 			/></fieldset>
-			// 		)
-			// 	})
-			//
-			// 	inspectorControls = props.focus && (
-			// 		<InspectorControls key="inspector-content-forms">
-			// 			<BlockDescription>
-			// 				<p>{ __( 'Form Settings' ) }</p>
-			// 			</BlockDescription>
-			// 			{blockControls}
-			// 		</InspectorControls>
-			// 	);
-			// }
+			var placeholderEl = wp.element.createElement(
+				Placeholder,
+				{
+					key: 'form-loader',
+					icon: 'admin-post',
+					label: __('Form') },
+				wp.element.createElement(Spinner, null)
+			);
 
-			return wp.element.createElement(
+			var controlsEl = [];
+			var fieldsEl = [];
+			_.each(component.config.controls, function (args, key) {
+				controlsEl.push(wp.element.createElement(
+					'fieldset',
+					{ key: key },
+					wp.element.createElement(BlockEdit, { key: 'block-edit-custom-' + key }),
+					wp.element.createElement(InspectorControls.TextControl, {
+						key: key,
+						label: args.label,
+						value: attributes[key] || '',
+						onChange: function onChange(nextValue) {
+							var newValues = {};
+							newValues[key] = nextValue;
+							component.props.setAttributes(newValues);
+						}
+					})
+				));
+			});
+
+			if (fields.length === 0) {
+				fieldsEl.push(wp.element.createElement(Placeholder, {
+					key: 'placeholder',
+					label: __('Content Forms') }));
+			} else {
+				_.each(fields, function (args, key) {
+					var val = '';
+
+					if (_typeof(args.label) === "object") {
+						val = args.label[0];
+					} else if (typeof args.label === "string") {
+						val = args.label;
+					}
+
+					fieldsEl.push(wp.element.createElement(
+						'div',
+						{ key: key },
+						wp.element.createElement(Editable, {
+							value: val,
+							tagName: 'div',
+							placeholder: 'Label',
+							className: 'content-form-field-label',
+							onChange: function onChange(nextValue) {
+								var newValues = attributes.fields;
+								newValues[key]['label'] = nextValue;
+								setAttributes({ fields: newValues });
+							}
+						}),
+						wp.element.createElement('input', { type: 'text', disabled: 'disabled' })
+					));
+				});
+			}
+
+			return [wp.element.createElement(
 				InspectorControls,
 				{ key: 'inspector' },
 				wp.element.createElement(
-					BlockDescription,
-					null,
-					wp.element.createElement(
-						'p',
-						null,
-						__('Shows a list of your site\'s categories.')
-					)
-				),
-				wp.element.createElement(
 					'h3',
 					null,
-					__('Categories Settings')
+					__('Form Settings')
 				),
-				wp.element.createElement(InspectorControls.ToggleControl, {
-					label: __('Display as dropdown'),
-					checked: 1,
-					onChange: this.consoleValue
-				}),
-				wp.element.createElement(InspectorControls.ToggleControl, {
-					label: __('Show post counts'),
-					checked: 1,
-					onChange: this.consoleValue
-				}),
-				wp.element.createElement(InspectorControls.ToggleControl, {
-					label: __('Show hierarchy'),
-					checked: 1,
-					onChange: this.consoleValue
-				})
-			);
+				controlsEl
+			), wp.element.createElement(
+				'div',
+				{ key: 'fields' },
+				fieldsEl === [] ? placeholderEl : fieldsEl
+			)];
 		}
 	}]);
 
-	return ContentFormControlss;
+	return FormEditor;
 }(Component);
 
-var ContentFormControls = withAPIData(function (props) {
+var ContentFormEditor = withAPIData(function () {
 	return {
-		contentForms: '/content-forms/v1/forms'
+		ContentForm: '/content-forms/v1/forms'
 	};
-})(ContentFormControlss);
+})(FormEditor);
 
 /***/ })
 /******/ ]);

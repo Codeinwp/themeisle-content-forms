@@ -23,6 +23,7 @@ class GutenbergModule {
 	public function __construct( $data ) {
 
 		$this->setup_attributes( $data );
+		$this->gutenberg_register_attributes();
 		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_enqueue_block_editor_assets' ) );
 //		add_action( 'enqueue_block_assets', array( $this, 'gutenberg_enqueue_block_assets' ) );
 	}
@@ -84,6 +85,70 @@ class GutenbergModule {
 			array( 'wp-blocks' ),
 			filemtime( plugin_dir_path( __FILE__ ) . 'style.css' )
 		);
+	}
+
+	function gutenberg_render_block_core_latest_posts( $attributes, $content ) {
+		$elements = '';
+		$fields   = $attributes['fields'];
+
+		foreach ( $fields as $key => $field ) {
+			ob_start(); ?>
+			<fields>
+				<label for="<?php echo $key; ?>"><?php echo $field['label']; ?></label>
+				<input type="text" name="<?php echo $key; ?>">
+			</fields>
+			<?php
+			$elements .= ob_get_clean();
+		}
+
+		$block_content = sprintf(
+			'<div class="%1$s">%2$s</div>',
+			'fields',
+			$elements
+		);
+
+		return $block_content;
+	}
+
+	function gutenberg_register_attributes() {
+		$gutenberg_args = array(
+			'attributes'      => array(
+				'fields'        => array(
+					'type'     => 'array',
+					'source' => 'query',
+					'selector' => '.content-form-field-label',
+					'query'   => array(
+						'label' => array(
+							'source' => 'attribute',
+							'attribute' => 'label'
+						),
+						'requirement' => array(
+							'source' => 'attribute',
+							'attribute' => 'requirement'
+						),
+					),
+					'default' => array(),
+				),
+			),
+			'render_callback' => array( $this, 'gutenberg_render_block_core_latest_posts' ),
+		);
+
+		// Create form settings
+		foreach ( $this->forms_config['controls'] as $name => $control ) {
+			$gutenberg_args['attributes'][ $name ] = array(
+				'type'    => 'string',
+				'default' => isset( $control['default'] ) ? $control['default'] : '',
+			);
+		}
+
+		foreach ( $this->forms_config['fields'] as $name => $field ) {
+			$gutenberg_args['attributes']['fields']['default'][ $name ] = array(
+				'key'   => $name,
+				'label' => '',
+			);
+		}
+
+		register_block_type( 'content-forms/' . $this->form_type, $gutenberg_args );
 	}
 
 	/**
