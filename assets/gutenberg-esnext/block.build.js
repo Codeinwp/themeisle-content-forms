@@ -60,16 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 276);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 276:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__ = __webpack_require__(277);
 var registerBlockType = wp.blocks.registerBlockType;
 var __ = wp.i18n.__;
 
@@ -92,8 +93,10 @@ content_forms.forEach(function (form, index) {
 		title: config.title,
 		icon: 'index-card',
 		category: 'common',
+		type: form,
 		keywords: [__('forms'), __('fields')],
 		edit: __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__["a" /* ContentFormEditor */],
+		// save: props => {return null}
 		save: function save(props) {
 			var component = _this;
 			var attributes = props.attributes;
@@ -101,15 +104,27 @@ content_forms.forEach(function (form, index) {
 
 			var fieldsEl = [];
 
-			_.each(fields, function (args, key) {
-				var label = args.label;
+			console.debug(component);
 
-				fieldsEl.push(wp.element.createElement('span', { key: key, className: 'content-form-field-label', label: label }));
+			if (typeof attributes.uid === "undefined") {
+				attributes.uid = props.id;
+			}
+
+			_.each(fields, function (args, key) {
+
+				fieldsEl.push(wp.element.createElement('p', {
+					key: key,
+					className: 'content-form-field-label',
+					'data-field_id': args.field_id,
+					'data-label': args.label,
+					'data-field_type': args.type,
+					'data-requirement': args.requirement ? "true" : "false"
+				}));
 			});
 
 			return wp.element.createElement(
 				'div',
-				{ key: 'fields', className: 'fields' },
+				{ key: 'content-form-fields', className: "content-form-fields content-form-" + form, 'data-uid': props.id },
 				fieldsEl
 			);
 		}
@@ -144,7 +159,8 @@ content_forms.forEach(function (form, index) {
 });
 
 /***/ }),
-/* 1 */
+
+/***/ 277:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -167,12 +183,25 @@ var Component = wp.element.Component;
 var _wp$components = wp.components,
     Placeholder = _wp$components.Placeholder,
     Spinner = _wp$components.Spinner,
-    withAPIData = _wp$components.withAPIData;
+    withAPIData = _wp$components.withAPIData,
+    FormToggle = _wp$components.FormToggle;
 var __ = wp.i18n.__;
 var _wp$blocks = wp.blocks,
     Editable = _wp$blocks.Editable,
     BlockEdit = _wp$blocks.BlockEdit,
     InspectorControls = _wp$blocks.InspectorControls;
+
+
+var fieldStyle = {
+	width: '40%',
+	display: 'inline-block'
+};
+
+var fieldStyleR = {
+	width: '10%',
+	display: 'inline-block',
+	textAlign: 'right'
+};
 
 var FormEditor = function (_Component) {
 	_inherits(FormEditor, _Component);
@@ -182,9 +211,8 @@ var FormEditor = function (_Component) {
 
 		var _this = _possibleConstructorReturn(this, (FormEditor.__proto__ || Object.getPrototypeOf(FormEditor)).apply(this, arguments));
 
-		var form = 'contact';
-
-		_this.config = window['content_forms_config_for_' + form];
+		_this.form_type = _this.props.name.replace('content-forms/', '');
+		_this.config = window['content_forms_config_for_' + _this.form_type];
 		return _this;
 	}
 
@@ -195,72 +223,128 @@ var FormEditor = function (_Component) {
 			var _props = this.props,
 			    attributes = _props.attributes,
 			    setAttributes = _props.setAttributes,
-			    focus = _props.focus,
-			    setFocus = _props.setFocus,
 			    className = _props.className;
 			var fields = attributes.fields;
 
 			var placeholderEl = wp.element.createElement(
 				Placeholder,
-				{
-					key: 'form-loader',
-					icon: 'admin-post',
-					label: __('Form') },
+				{ key: 'form-loader', icon: 'admin-post', label: __('Form') },
 				wp.element.createElement(Spinner, null)
 			);
-
 			var controlsEl = [];
 			var fieldsEl = [];
+
 			_.each(component.config.controls, function (args, key) {
 				controlsEl.push(wp.element.createElement(
-					'fieldset',
+					'div',
 					{ key: key },
 					wp.element.createElement(BlockEdit, { key: 'block-edit-custom-' + key }),
 					wp.element.createElement(InspectorControls.TextControl, {
 						key: key,
 						label: args.label,
 						value: attributes[key] || '',
-						onChange: function onChange(nextValue) {
+						onChange: function onChange(value) {
 							var newValues = {};
-							newValues[key] = nextValue;
-							component.props.setAttributes(newValues);
+							newValues[key] = value;
+							setAttributes(newValues);
 						}
 					})
 				));
 			});
 
-			if (fields.length === 0) {
-				fieldsEl.push(wp.element.createElement(Placeholder, {
-					key: 'placeholder',
-					label: __('Content Forms') }));
-			} else {
-				_.each(fields, function (args, key) {
-					var val = '';
+			_.each(fields, function (args, key) {
+				var val = '';
+				var field_id = args.field_id;
+				var field_config = component.config.fields[field_id];
+				var isRequired = false;
 
-					if (_typeof(args.label) === "object") {
-						val = args.label[0];
-					} else if (typeof args.label === "string") {
-						val = args.label;
-					}
+				if (_typeof(args.label) === "object") {
+					val = args.label[0];
+				} else if (typeof args.label === "string") {
+					val = [args.label];
+				}
 
-					fieldsEl.push(wp.element.createElement(
-						'div',
-						{ key: key },
+				if (typeof args.requirement !== "undefined") {
+					isRequired = args.requirement;
+				}
+
+				var focusOn = 'field-' + field_id;
+
+				fieldsEl.push(wp.element.createElement(
+					'div',
+					{ key: key, style: { border: '1px solid #333', padding: '5px', margin: '5px', borderRadius: '8px' }, className: 'content-form-field' },
+					wp.element.createElement(
+						'fieldset',
+						{ style: fieldStyle },
 						wp.element.createElement(Editable, {
 							value: val,
-							tagName: 'div',
-							placeholder: 'Label',
+							tagName: 'label',
+							placeholder: __('Label for ') + field_id,
 							className: 'content-form-field-label',
-							onChange: function onChange(nextValue) {
+							onChange: function onChange(value) {
 								var newValues = attributes.fields;
-								newValues[key]['label'] = nextValue;
+								newValues[key]['label'] = value;
 								setAttributes({ fields: newValues });
+								component.forceUpdate();
+							} })
+					),
+					wp.element.createElement(
+						'fieldset',
+						{ style: fieldStyle },
+						wp.element.createElement(
+							'select',
+							{
+								name: 'field-type-select',
+								value: typeof args['type'] !== "undefined" ? args['type'] : 'text',
+								onChange: function onChange(event) {
+									var newValues = attributes.fields;
+									newValues[key]['type'] = event.target.selected;
+									setAttributes({ fields: newValues });
+									component.forceUpdate();
+								} },
+							wp.element.createElement(
+								'option',
+								{ value: 'text', key: 'text' },
+								'text'
+							),
+							wp.element.createElement(
+								'option',
+								{ value: 'textarea', key: 'textarea' },
+								'textarea'
+							),
+							wp.element.createElement(
+								'option',
+								{ value: 'password', key: 'password' },
+								'password'
+							),
+							wp.element.createElement(
+								'option',
+								{ value: 'email', key: 'email' },
+								'email'
+							),
+							wp.element.createElement(
+								'option',
+								{ value: 'number', key: 'number' },
+								'number'
+							)
+						)
+					),
+					wp.element.createElement(
+						'fieldset',
+						{ style: fieldStyleR },
+						wp.element.createElement(FormToggle, {
+							checked: isRequired,
+							showHint: false,
+							onChange: function onChange(event) {
+								var newValues = attributes.fields;
+								newValues[key]['requirement'] = event.target.checked;
+								setAttributes({ fields: newValues });
+								component.forceUpdate();
 							}
-						}),
-						wp.element.createElement('input', { type: 'text', disabled: 'disabled' })
-					));
-				});
-			}
+						})
+					)
+				));
+			});
 
 			return [wp.element.createElement(
 				InspectorControls,
@@ -273,7 +357,7 @@ var FormEditor = function (_Component) {
 				controlsEl
 			), wp.element.createElement(
 				'div',
-				{ key: 'fields' },
+				{ key: 'fields', className: 'fields ' + component.props.className, 'data-uid': attributes.uid },
 				fieldsEl === [] ? placeholderEl : fieldsEl
 			)];
 		}
@@ -289,4 +373,5 @@ var ContentFormEditor = withAPIData(function () {
 })(FormEditor);
 
 /***/ })
-/******/ ]);
+
+/******/ });

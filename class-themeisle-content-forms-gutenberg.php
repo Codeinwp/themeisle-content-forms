@@ -25,7 +25,6 @@ class GutenbergModule {
 		$this->setup_attributes( $data );
 		$this->gutenberg_register_attributes();
 		add_action( 'enqueue_block_editor_assets', array( $this, 'gutenberg_enqueue_block_editor_assets' ) );
-//		add_action( 'enqueue_block_assets', array( $this, 'gutenberg_enqueue_block_assets' ) );
 	}
 
 	/**
@@ -34,7 +33,6 @@ class GutenbergModule {
 	 * @param $data array
 	 */
 	private function setup_attributes( $data ) {
-
 		$this->form_type = $data['type'];
 
 		if ( ! empty( $data['content_forms_config'] ) ) {
@@ -87,9 +85,32 @@ class GutenbergModule {
 		);
 	}
 
-	function gutenberg_render_block_core_latest_posts( $attributes, $content ) {
-		$elements = '';
-		$fields   = $attributes['fields'];
+	function render_block( $attributes, $content ) {
+		$form_content = '';
+		$uid          = $attributes['uid'];
+		$fields       = $attributes['fields'];
+		wp_enqueue_script( 'content-forms' );
+
+//		var_dump( $content );
+//		var_dump( $attributes );
+
+		$form_header = $this->render_form_header( $uid );
+		$form_footer = $this->render_form_footer();
+
+
+		$btn_label = esc_html__( 'Submit', 'textdomain' );
+		ob_start();
+		if ( ! empty( $attributes['submit_label'] ) ) {
+			$btn_label = $attributes['submit_label'];
+		} ?>
+		<fieldset>
+			<button type="submit" name="submit" value="submit-<?php echo $this->getFormType(); ?>-<?php echo $uid; ?>">
+				<?php echo $btn_label; ?>
+			</button>
+		</fieldset>
+		<?php
+
+		$form_submit = ob_get_clean();
 
 		foreach ( $fields as $key => $field ) {
 			ob_start(); ?>
@@ -98,39 +119,91 @@ class GutenbergModule {
 				<input type="text" name="<?php echo $key; ?>">
 			</fields>
 			<?php
-			$elements .= ob_get_clean();
+			$form_content .= ob_get_clean();
 		}
 
 		$block_content = sprintf(
-			'<div class="%1$s">%2$s</div>',
-			'fields',
-			$elements
+			'<div class="content-form-fields" data-uid="%1$s">
+<h3>%1$s</h3>
+%2$s
+%3$s
+%4$s
+%5$s
+</div>',
+			$uid,
+			$form_header,
+			$form_content,
+			$form_submit,
+			$form_footer
 		);
 
 		return $block_content;
 	}
 
+	public function render_form_header( $id ) {
+		// create an url for the form's action
+		$url = admin_url( 'admin-post.php' );
+
+		ob_start();
+
+		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . $id . '" id="content-form-' . $id . '" class="content-form content-form-' . $this->getFormType() . ' ' . $this->get_name() . '">';
+
+		wp_nonce_field( 'content-form-' . $id, '_wpnonce_' . $this->getFormType() );
+
+		echo '<input type="hidden" name="action" value="content_form_submit" />';
+		// there could be also the possibility to submit by type
+		// echo '<input type="hidden" name="action" value="content_form_{type}_submit" />';
+		echo '<input type="hidden" name="form-type" value="' . $this->getFormType() . '" />';
+		echo '<input type="hidden" name="form-builder" value="gutenberg" />';
+		echo '<input type="hidden" name="post-id" value="' . get_the_ID() . '" />';
+		echo '<input type="hidden" name="form-id" value="' . $id . '" />';
+
+		return ob_get_clean();
+	}
+
+	public function render_form_footer() {
+		return '</form>';
+	}
+
 	function gutenberg_register_attributes() {
 		$gutenberg_args = array(
 			'attributes'      => array(
-				'fields'        => array(
+				'uid'    => array(
+					'type'      => 'string',
+					'selector'  => '.content-form-fields',
+					'source'    => 'attribute',
+					'attribute' => 'data-uid'
+				),
+				'fields' => array(
 					'type'     => 'array',
-					'source' => 'query',
+					'source'   => 'query',
 					'selector' => '.content-form-field-label',
-					'query'   => array(
-						'label' => array(
-							'source' => 'attribute',
-							'attribute' => 'label'
+					'query'    => array(
+						'field_id'    => array(
+							'type'      => 'string',
+							'source'    => 'attribute',
+							'attribute' => 'data-field_id'
+						),
+						'label'       => array(
+							'type'      => 'string',
+							'source'    => 'attribute',
+							'attribute' => 'data-label'
 						),
 						'requirement' => array(
-							'source' => 'attribute',
-							'attribute' => 'requirement'
+							'type'      => 'string',
+							'source'    => 'attribute',
+							'attribute' => 'data-requirement'
+						),
+						'type'        => array(
+							'type'      => 'string',
+							'source'    => 'attribute',
+							'attribute' => 'data-field_type'
 						),
 					),
-					'default' => array(),
+					'default'  => array(),
 				),
 			),
-			'render_callback' => array( $this, 'gutenberg_render_block_core_latest_posts' ),
+			'render_callback' => array( $this, 'render_block' ),
 		);
 
 		// Create form settings
@@ -143,8 +216,10 @@ class GutenbergModule {
 
 		foreach ( $this->forms_config['fields'] as $name => $field ) {
 			$gutenberg_args['attributes']['fields']['default'][ $name ] = array(
-				'key'   => $name,
-				'label' => '',
+				'field_id'    => $name,
+				'label'       => $field['label'],
+				'type'        => $field['type'],
+				'requirement' => ( $field['require'] === 'required' ) ? 'true' : 'false',
 			);
 		}
 
@@ -206,5 +281,9 @@ class GutenbergModule {
 	 */
 	private function set_icon( $icon ) {
 		$this->icon = $icon;
+	}
+
+	private function getFormType() {
+		return $this->form_type;
 	}
 }

@@ -23,21 +23,33 @@ content_forms.forEach(function (form, index) {
 		title: config.title,
 		icon: 'index-card',
 		category: 'common',
+		type: form,
 		keywords: [ __( 'forms' ), __( 'fields' ) ],
 		edit: ContentFormEditor,
+		// save: props => {return null}
 		save: props => {
 			const component = this
 			const {attributes} = props
 			const {fields} = attributes
 			let fieldsEl = []
 
-			_.each(fields, function (args, key) {
-				let label = args.label
+			if ( typeof attributes.uid === "undefined" ) {
+				attributes.uid = props.id
+			}
 
-				fieldsEl.push(<span key={key} className="content-form-field-label" label={label}></span>)
+			_.each(fields, function (args, key) {
+
+				fieldsEl.push(<p
+						key={key}
+						className="content-form-field-label"
+						data-field_id={args.field_id}
+						data-label={args.label}
+						data-field_type={args.type}
+						data-requirement={args.requirement ? "true": "false"}
+					/>)
 			})
 
-			return (<div key="fields" className="fields">
+			return (<div key="content-form-fields" className={"content-form-fields content-form-" + form} data-uid={props.id}>
 				{fieldsEl}
 			</div>)
 		}
