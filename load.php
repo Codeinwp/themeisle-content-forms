@@ -5,7 +5,7 @@
  * @package     ThemeIsle\ContentForms
  * @copyright   Copyright (c) 2017, Andrei Lupu
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.1.0
+ * @since       1.0.0
  */
 
 if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
@@ -18,16 +18,22 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		require_once $path . '/class-content-form-base.php';
 		require_once $path . '/class-themeisle-content-forms-server.php';
 
-		$server = new \Themeisle\ContentForms\RestServer();
-		$server->init();
+		\Themeisle\ContentForms\RestServer::instance();
 
-		// get builders generators
-		require_once $path . '/class-themeisle-content-forms-elementor.php';
-		require_once $path . '/beaver/class-themeisle-content-forms-beaver-base.php';
-		require_once $path . '/beaver/class-themeisle-content-forms-beaver-contact.php';
-		require_once $path . '/beaver/class-themeisle-content-forms-beaver-newsletter.php';
-		require_once $path . '/beaver/class-themeisle-content-forms-beaver-registration.php';
-		require_once $path . '/class-themeisle-content-forms-gutenberg.php';
+		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
+			// get builders generators
+			require_once $path . '/class-themeisle-content-forms-elementor.php';
+		}
+
+		if ( class_exists( '\FLBuilderModel' ) ) {
+			require_once $path . '/beaver/class-themeisle-content-forms-beaver-base.php';
+			require_once $path . '/beaver/class-themeisle-content-forms-beaver-contact.php';
+			require_once $path . '/beaver/class-themeisle-content-forms-beaver-newsletter.php';
+			require_once $path . '/beaver/class-themeisle-content-forms-beaver-registration.php';
+		}
+
+		// @TODO Gutenberg is not working yet
+		//require_once $path . '/class-themeisle-content-forms-gutenberg.php';
 
 		// get forms
 		require_once $path . '/class-themeisle-content-forms-contact.php';
@@ -38,7 +44,6 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 	}
 endif;
 add_action( 'init', 'themeisle_content_forms_load', 9 );
-
 
 if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 	function themeisle_content_forms_register_public_assets() {

@@ -31,7 +31,7 @@ class FormEditor extends Component {
 
 	render() {
 		const component = this
-		const {attributes, setAttributes, className} = this.props
+		const { attributes, setAttributes, focus } = this.props
 		const {fields} = attributes
 		const placeholderEl = <Placeholder key="form-loader" icon="admin-post" label={__('Form')}>
 			<Spinner/>
@@ -40,12 +40,16 @@ class FormEditor extends Component {
 		let fieldsEl = []
 
 		_.each(component.config.controls, function (args, key) {
+
 			controlsEl.push(<div key={key}>
 				<BlockEdit key={'block-edit-custom-' + key}/>
 				<InspectorControls.TextControl
 					key={key}
 					label={args.label}
 					value={attributes[key] || ''}
+					onFocus={ f => {
+						console.log(f)
+					}}
 					onChange={value => {
 						let newValues = {}
 						newValues[key] = value
@@ -124,7 +128,7 @@ class FormEditor extends Component {
 		})
 
 		return [
-			(<InspectorControls key="inspector">
+			focus && (<InspectorControls key="inspector">
 				<h3>{__('Form Settings')}</h3>
 				{controlsEl}
 			</InspectorControls>),

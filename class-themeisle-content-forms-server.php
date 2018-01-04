@@ -8,6 +8,11 @@ namespace ThemeIsle\ContentForms;
  */
 class RestServer extends \WP_Rest_Controller {
 
+	/**
+	 * @var RestServer
+	 */
+	public static $instance = null;
+
 	public $namespace = 'content-forms/';
 	public $version = 'v1';
 
@@ -62,7 +67,7 @@ class RestServer extends \WP_Rest_Controller {
 	}
 
 	public function rest_check( \WP_REST_Request $request ) {
-		return rest_ensure_response( 'success' );
+			return rest_ensure_response( 'success' );
 	}
 
 	/**
@@ -70,7 +75,7 @@ class RestServer extends \WP_Rest_Controller {
 	 *
 	 * @return mixed|\WP_REST_Response
 	 */
-	public function submit_form( \WP_REST_Request $request ) {
+	public function submit_form( $request ) {
 		$return = array(
 			'success' => false,
 			'msg'     => esc_html__( 'Something went wrong', 'textdomain' )
@@ -82,8 +87,7 @@ class RestServer extends \WP_Rest_Controller {
 
 		if ( ! wp_verify_nonce( $nonce, 'content-form-' . $form_id ) ) {
 			$return['msg'] = 'Invalid nonce';
-			rest_ensure_response( $return );
-			exit;
+			return rest_ensure_response( $return );
 		}
 
 		$form_type    = $request->get_param( 'form_type' );
@@ -108,5 +112,47 @@ class RestServer extends \WP_Rest_Controller {
 
 	public function submit_forms_permissions_check() {
 		return 1;
+	}
+
+	/**
+	 * @static
+	 * @since 1.0.0
+	 * @access public
+	 * @return RestServer
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+			self::$instance->init();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Throw error on object clone
+	 *
+	 * The whole idea of the singleton design pattern is that there is a single
+	 * object therefore, we don't want the object to be cloned.
+	 *
+	 * @access public
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function __clone() {
+		// Cloning instances of the class is forbidden.
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+	}
+
+	/**
+	 * Disable unserializing of the class
+	 *
+	 * @access public
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function __wakeup() {
+		// Unserializing instances of the class is forbidden.
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
 	}
 }

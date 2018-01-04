@@ -60,17 +60,16 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 276);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 276:
+/******/ ([
+/* 0 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_FormEditor_js__ = __webpack_require__(1);
 var registerBlockType = wp.blocks.registerBlockType;
 var __ = wp.i18n.__;
 
@@ -103,8 +102,6 @@ content_forms.forEach(function (form, index) {
 			var fields = attributes.fields;
 
 			var fieldsEl = [];
-
-			console.debug(component);
 
 			if (typeof attributes.uid === "undefined") {
 				attributes.uid = props.id;
@@ -159,8 +156,7 @@ content_forms.forEach(function (form, index) {
 });
 
 /***/ }),
-
-/***/ 277:
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -223,7 +219,7 @@ var FormEditor = function (_Component) {
 			var _props = this.props,
 			    attributes = _props.attributes,
 			    setAttributes = _props.setAttributes,
-			    className = _props.className;
+			    focus = _props.focus;
 			var fields = attributes.fields;
 
 			var placeholderEl = wp.element.createElement(
@@ -235,6 +231,7 @@ var FormEditor = function (_Component) {
 			var fieldsEl = [];
 
 			_.each(component.config.controls, function (args, key) {
+
 				controlsEl.push(wp.element.createElement(
 					'div',
 					{ key: key },
@@ -243,6 +240,9 @@ var FormEditor = function (_Component) {
 						key: key,
 						label: args.label,
 						value: attributes[key] || '',
+						onFocus: function onFocus(f) {
+							console.log(f);
+						},
 						onChange: function onChange(value) {
 							var newValues = {};
 							newValues[key] = value;
@@ -346,7 +346,7 @@ var FormEditor = function (_Component) {
 				));
 			});
 
-			return [wp.element.createElement(
+			return [focus && wp.element.createElement(
 				InspectorControls,
 				{ key: 'inspector' },
 				wp.element.createElement(
@@ -373,5 +373,4 @@ var ContentFormEditor = withAPIData(function () {
 })(FormEditor);
 
 /***/ })
-
-/******/ });
+/******/ ]);

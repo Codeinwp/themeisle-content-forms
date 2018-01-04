@@ -204,7 +204,6 @@ class ContactForm extends Base {
 	 * @return string
 	 */
 	private function prepare_body( $body, $data ) {
-
 		$tmpl = "";
 
 		ob_start(); ?>
