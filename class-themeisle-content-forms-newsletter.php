@@ -17,8 +17,8 @@ class NewsletterForm extends Base {
 		$this->set_type( 'newsletter' );
 
 		$this->notices = array(
-			'success' => esc_html__( 'Your message has been sent!', 'textdomain' ),
-			'error'   => esc_html__( 'We failed to send your message!', 'textdomain' ),
+			'success' => esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
+			'error'   => esc_html__( 'Action failed!', 'textdomain' ),
 		);
 	}
 
@@ -163,10 +163,10 @@ class NewsletterForm extends Base {
 
 				if ( $body->status == $status ) {
 					$result['success'] = true;
-					$result['msg']     = 'Welcome to our newsletter';
+					$result['msg']     = $this->notices['success'];
 				} else {
 					$result['success'] = false;
-					$result['msgz']    = 'Something went wrong';
+					$result['msg']    = $this->notices['error'];
 				}
 
 				return $result;
@@ -205,7 +205,7 @@ class NewsletterForm extends Base {
 				}
 
 				$result['success'] = true;
-				$result['msg']     = 'Welcome to our newsletter';
+				$result['msg']     = $this->notices['success'];
 
 				return $result;
 				break;

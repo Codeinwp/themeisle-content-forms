@@ -143,24 +143,6 @@ class ContactForm extends Base {
 	}
 
 	/**
-	 * The classic submission method via the `admin_post_` hook
-	 */
-	function submit_form() {
-		// @TODO first we need to collect data from $_POST and validate our parameters
-
-//		$ok = $this->_send_mail( $to, $subj );
-
-		// @TODO we need to inform the user if the mail was sent or not;
-
-		if ( ! wp_get_referer() ) {
-			return;
-		}
-
-		wp_safe_redirect( wp_get_referer() );
-		exit;
-	}
-
-	/**
 	 * Mail sender method
 	 *
 	 * @param $mailto
@@ -257,5 +239,22 @@ class ContactForm extends Base {
 		</html>
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * The classic submission method via the `admin_post_` hook
+	 * @TODO not used at this moment.
+	 */
+	function submit_form() {
+		// @TODO first we need to collect data from $_POST and validate our parameters
+		//$ok = $this->_send_mail( $to, $subj );
+		// @TODO we need to inform the user if the mail was sent or not;
+
+		if ( ! wp_get_referer() ) {
+			return;
+		}
+
+		wp_safe_redirect( wp_get_referer() );
+		exit;
 	}
 }

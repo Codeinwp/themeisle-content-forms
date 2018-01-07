@@ -91,9 +91,6 @@ class GutenbergModule {
 		$fields       = $attributes['fields'];
 		wp_enqueue_script( 'content-forms' );
 
-//		var_dump( $content );
-//		var_dump( $attributes );
-
 		$form_header = $this->render_form_header( $uid );
 		$form_footer = $this->render_form_footer();
 

@@ -13,7 +13,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 	protected $title;
 
-	protected $icon;
+	public $icon;
 
 	protected $forms_config = array();
 
@@ -168,9 +168,9 @@ abstract class BeaverModule extends \FLBuilderModule {
 	 *
 	 * @return string Widget icon.
 	 */
-	public function get_icon() {
-		return $this->icon;
-	}
+//	public function get_icon() {
+//		return $this->icon;
+//	}
 
 	/**
 	 * Set the widget title property

@@ -10,6 +10,9 @@
 
 if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 
+	/**
+	 * Load the necessary resource for this library
+	 */
 	function themeisle_content_forms_load() {
 		$path = dirname( __FILE__ );
 
@@ -40,12 +43,18 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		require_once $path . '/class-themeisle-content-forms-newsletter.php';
 		require_once $path . '/class-themeisle-content-forms-registration.php';
 
+		/**
+		 * At this point all the PHP classes are available and the forms can be loaded
+		 */
 		do_action( 'init_themeisle_content_forms' );
 	}
 endif;
-add_action( 'init', 'themeisle_content_forms_load', 9 );
 
 if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
+	/**
+	 * Register the library assets, they will be enqueue later by builders.
+	 * Also, localize REST params
+	 */
 	function themeisle_content_forms_register_public_assets() {
 		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', __FILE__ ), array( 'jquery' ) );
 
@@ -63,4 +72,9 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 		}
 	}
 endif;
-add_action( 'wp_enqueue_scripts', 'themeisle_content_forms_register_public_assets' );
+
+// Run the show only for PHP 5.3 or highier
+if ( ! version_compare( PHP_VERSION, '5.3', '>=' ) ) {
+	add_action( 'init', 'themeisle_content_forms_load', 9 );
+	add_action( 'wp_enqueue_scripts', 'themeisle_content_forms_register_public_assets' );
+}

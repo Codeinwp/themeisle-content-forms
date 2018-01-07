@@ -33,4 +33,14 @@ class NewsletterFormTest extends WP_UnitTestCase {
 		$this->assertTrue( method_exists( $this->form, 'make_form_config' ) );
 	}
 
+	/**
+	 * Every config must have a these keys
+	 */
+	function test_if_config_is_valid() {
+		$this->assertArrayHasKey( 'id', $this->form );
+		$this->assertArrayHasKey( 'title', $this->form );
+		$this->assertArrayHasKey( 'icon', $this->form );
+		$this->assertArrayHasKey( 'fields', $this->form );
+		$this->assertArrayHasKey( 'controls', $this->form );
+	}
 }
