@@ -34,9 +34,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @param array|null $args Optional. Widget default arguments. Default is null.
 	 */
 	public function __construct( $data = array(), $args = null ) {
-
 		parent::__construct( $data, $args );
-
 		$this->setup_attributes( $data );
 	}
 
@@ -227,8 +225,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		// load the js file which will handle the data submission
 		wp_enqueue_script( 'content-forms' );
-
-//		var_dump($settings);
 
 		$fields = $settings['form_fields'];
 

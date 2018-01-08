@@ -96,6 +96,8 @@ abstract class ContentFormBase {
 		// We check if the Elementor plugin has been installed / activated.
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 
+			$this->maybe_register_elementor_category();
+
 			\Elementor\Plugin::instance()->widgets_manager->register_widget_type(
 				new \ThemeIsle\ContentForms\ElementorWidget(
 					array(
@@ -150,7 +152,27 @@ abstract class ContentFormBase {
 	}
 
 	/**
+	 * Themeisle Companion may register an Elementor widgets category.
+	 * But if not, we need to register it ourselfs.
+	 */
+	public function maybe_register_elementor_category() {
+		$categories = \Elementor\Plugin::instance()->elements_manager->get_categories();
+
+		if ( ! isset( $categories['obfx-elementor-widgets'] ) ) {
+			\Elementor\Plugin::instance()->elements_manager->add_category(
+				'obfx-elementor-widgets',
+				array(
+					'title' => __( 'Orbit Fox Addons', 'themeisle-companion' ),
+					'icon'  => 'fa fa-plug',
+				),
+				1
+			);
+		}
+	}
+
+	/**
 	 * Get block settings depending on what builder is in use.
+	 *
 	 * @param $widget_id
 	 * @param $post_id
 	 * @param $builder
@@ -160,13 +182,13 @@ abstract class ContentFormBase {
 	protected function get_widget_settings( $widget_id, $post_id, $builder ) {
 		if ( 'elementor' === $builder ) {
 			$settings = ElementorWidget::get_widget_settings( $widget_id, $post_id );
+
 			return $settings['settings'];
 		} elseif ( 'beaver' === $builder ) {
 			return $this->get_beaver_module_settings_by_id( $widget_id, $post_id );
 		}
 
 		// if gutenberg
-
 		return false;
 	}
 
@@ -181,9 +203,10 @@ abstract class ContentFormBase {
 	private function get_beaver_module_settings_by_id( $node_id, $post_id ) {
 		$post_data = \FLBuilderModel::get_layout_data( null, $post_id );
 
-		if ( isset( $post_data[$node_id] ) ) {
-			$module = $post_data[$node_id];
-			return (array)$module->settings;
+		if ( isset( $post_data[ $node_id ] ) ) {
+			$module = $post_data[ $node_id ];
+
+			return (array) $module->settings;
 		}
 
 		return false;

@@ -189,54 +189,51 @@ class ContactForm extends Base {
 		$tmpl = "";
 
 		ob_start(); ?>
-		<!doctype html>
-		<html xmlns="http://www.w3.org/1999/xhtml">
-		<head>
-			<meta http-equiv="Content-Type" content="text/html;" charset="utf-8"/>
-			<!-- view port meta tag -->
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-			<title><?php echo esc_html__( 'Mail From: ', 'textdomain' ) . esc_html( $data['name'] ); ?></title>
-		</head>
-		<body>
-		<table>
-			<thead>
-			<tr>
-				<th>
-					<h3>
-						<?php esc_html_e( 'Content Form submission from ', 'textdomain' ); ?>
-						<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
-					</h3>
-					<hr/>
-				</th>
-			</tr>
-			</thead>
-			<tbody>
-			<?php
-			/**
-			 * Keep this lines unindented for a better source format. Someone might wana read it this way.
-			 */
-			foreach ( $data as $key => $value ) { ?>
-				<tr>
-					<td>
-						<strong><?php echo esc_html( $key ) ?> : </strong>
-						<p><?php echo esc_html( $value ); ?></p>
-					</td>
-				</tr>
-			<?php } ?>
-			</tbody>
-			<tfoot>
-			<tr>
-				<td>
-					<hr/>
-					<?php esc_html_e( 'You recieved this email because your email address is set in the content form settings on ' ) ?>
-					<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
-				</td>
-			</tr>
-			</tfoot>
-		</table>
-		</body>
-		</html>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;" charset="utf-8"/>
+	<!-- view port meta tag -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<title><?php echo esc_html__( 'Mail From: ', 'textdomain' ) . esc_html( $data['name'] ); ?></title>
+</head>
+<body>
+<table>
+	<thead>
+	<tr>
+		<th>
+			<h3>
+				<?php esc_html_e( 'Content Form submission from ', 'textdomain' ); ?>
+				<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
+			</h3>
+			<hr/>
+		</th>
+	</tr>
+	</thead>
+	<tbody>
+	<?php
+	foreach ( $data as $key => $value ) { ?>
+		<tr>
+			<td>
+				<strong><?php echo esc_html( $key ) ?> : </strong>
+				<p><?php echo esc_html( $value ); ?></p>
+			</td>
+		</tr>
+	<?php } ?>
+	</tbody>
+	<tfoot>
+	<tr>
+		<td>
+			<hr/>
+			<?php esc_html_e( 'You recieved this email because your email address is set in the content form settings on ' ) ?>
+			<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
+		</td>
+	</tr>
+	</tfoot>
+</table>
+</body>
+</html>
 		<?php
 		return ob_get_clean();
 	}
