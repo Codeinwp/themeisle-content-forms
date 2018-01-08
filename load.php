@@ -74,7 +74,7 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 endif;
 
 // Run the show only for PHP 5.3 or highier
-if ( ! version_compare( PHP_VERSION, '5.3', '>=' ) ) {
+if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 	add_action( 'init', 'themeisle_content_forms_load', 9 );
 	add_action( 'wp_enqueue_scripts', 'themeisle_content_forms_register_public_assets' );
 }
