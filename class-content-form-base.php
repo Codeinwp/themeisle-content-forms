@@ -76,6 +76,8 @@ abstract class ContentFormBase {
 		// add a rest api callback for the `submit` route
 		add_filter( 'content_forms_submit_' . $this->get_type(), array( $this, 'rest_submit_form' ), 10, 5 );
 
+		$this->maybe_register_elementor_category();
+
 		// Register the Elementor Widget
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 
@@ -95,8 +97,6 @@ abstract class ContentFormBase {
 
 		// We check if the Elementor plugin has been installed / activated.
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-
-			$this->maybe_register_elementor_category();
 
 			\Elementor\Plugin::instance()->widgets_manager->register_widget_type(
 				new \ThemeIsle\ContentForms\ElementorWidget(
