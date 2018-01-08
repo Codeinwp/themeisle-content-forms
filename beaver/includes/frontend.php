@@ -7,6 +7,23 @@
  */
 $form_settings = apply_filters( 'content_forms_config_for_' . $module->get_type(), array() );
 
+/** == Fields Validation == */
+$controls = $form_settings['controls'];
+
+foreach ( $controls as $control_name => $control ) {
+	$control_value = $module->get_setting( $control_name );
+	if ( isset( $control['required'] ) && $control['required'] && empty( $control_value ) ) { ?>
+		<div class="content-forms-required">
+			<?php
+			printf(
+				esc_html__( 'The %s setting is required!', 'textdomain' ),
+				'<strong>' . $control['label'] . '</strong>'
+			); ?>
+		</div>
+		<?php return;
+	}
+}
+
 /** == FORM HEADER == */
 $module->render_form_header( $module->node );
 

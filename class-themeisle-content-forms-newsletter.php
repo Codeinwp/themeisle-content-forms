@@ -57,16 +57,19 @@ class NewsletterForm extends Base {
 				'access_key'   => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Access Key', 'textdomain' ),
-					'description' => esc_html__( 'If a subscription service is selected, please provide an access key', 'textdomain' )
+					'description' => esc_html__( 'Provide an access key for the selected service', 'textdomain' ),
+					'required' => true
 				),
 				'list_id'      => array(
 					'type'  => 'text',
 					'label' => esc_html__( 'List ID', 'textdomain' ),
+					'description' => esc_html__( 'The List ID (based on the seleced service) where we should subscribe the user', 'textdomain' ),
+					'required' => true
 				),
 				'submit_label' => array(
 					'type'    => 'text',
 					'label'   => esc_html__( 'Submit Label', 'textdomain' ),
-					'default' => esc_html__( 'Join our Newsletter', 'textdomain' ),
+					'default' => esc_html__( 'Join Newsletter', 'textdomain' ),
 				),
 
 			)

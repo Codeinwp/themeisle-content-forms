@@ -149,7 +149,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		$field_types = array(
 			'text'     => __( 'Text', 'textdomain' ),
-			'password'      => __( 'Password', 'textdomain' ),
+			'password' => __( 'Password', 'textdomain' ),
 //			'tel'      => __( 'Tel', 'textdomain' ),
 			'email'    => __( 'Email', 'textdomain' ),
 			'textarea' => __( 'Textarea', 'textdomain' ),
@@ -230,6 +230,20 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		$controls = $this->forms_config['controls'];
 
+		foreach ( $controls as $control_name => $control ) {
+			$control_value = $settings[ $control_name ];
+			if ( isset( $control['required'] ) && $control['required'] && empty( $control_value ) ) { ?>
+				<div class="content-forms-required">
+					<?php
+					printf(
+						esc_html__( 'The %s setting is required!', 'textdomain' ),
+						'<strong>' . $control['label'] . '</strong>'
+					); ?>
+				</div>
+				<?php return;
+			}
+		}
+
 		$this->render_form_header( $form_id );
 
 		foreach ( $fields as $index => $field ) {
@@ -292,7 +306,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$item_index = $field['_id'];
 		$key        = ! empty( $field['key'] ) ? $field['key'] : sanitize_title( $field['label'] );
 		$required   = '';
-		$form_id = $this->get_data( 'id' );
+		$form_id    = $this->get_data( 'id' );
 
 		if ( $field['requirement'] === 'required' ) {
 			$required = 'required="required"';
@@ -356,26 +370,26 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->name = $name;
 	}
 
-	private function setFormType(){
+	private function setFormType() {
 		$this->form_type = $this->get_data( 'widgetType' );
 
-		if ( empty( $this->form_type) ) {
-			$this->form_type = $this->get_data('id' );
+		if ( empty( $this->form_type ) ) {
+			$this->form_type = $this->get_data( 'id' );
 		}
 
-		$this->form_type = str_replace(  'content_form_', '', $this->form_type );
+		$this->form_type = str_replace( 'content_form_', '', $this->form_type );
 	}
 
-	private function setFormConfig( $config ){
+	private function setFormConfig( $config ) {
 		$this->forms_config = $config;
 	}
 
-	private function getFormConfig( $field = null ){
+	private function getFormConfig( $field = null ) {
 
-		if ( isset( $field  ) ) {
+		if ( isset( $field ) ) {
 
-			if ( isset( $this->forms_config[ $field] ) ) {
-				return $this->forms_config[ $field];
+			if ( isset( $this->forms_config[ $field ] ) ) {
+				return $this->forms_config[ $field ];
 			}
 
 			return false;
