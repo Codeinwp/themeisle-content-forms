@@ -17,10 +17,10 @@ class BeaverModuleNewsletter extends BeaverModule {
 		parent::__construct(
 			array(
 				'name'        => esc_html__( 'Newsletter', 'textdomain' ),
-				'description'   => __( 'A simple newsletter form.', 'textdomain' ),
-				'category'      => __( 'OrbitFox Modules', 'textdomain' ),
-				'dir'           => dirname( __FILE__ ),
-				'url'           => plugin_dir_url( __FILE__ )
+				'description' => esc_html__( 'A simple newsletter form.', 'textdomain' ),
+				'category'    => esc_html__( 'OrbitFox Modules', 'textdomain' ),
+				'dir'         => dirname( __FILE__ ),
+				'url'         => plugin_dir_url( __FILE__ )
 			)
 		);
 	}

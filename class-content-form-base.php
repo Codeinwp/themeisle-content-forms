@@ -156,6 +156,11 @@ abstract class ContentFormBase {
 	 * But if not, we need to register it ourselfs.
 	 */
 	public function maybe_register_elementor_category() {
+
+		if ( ! defined( 'ELEMENTOR_PATH' ) || ! class_exists( 'Elementor\Widget_Base' ) ) {
+			return;
+		}
+
 		$categories = \Elementor\Plugin::instance()->elements_manager->get_categories();
 
 		if ( ! isset( $categories['obfx-elementor-widgets'] ) ) {

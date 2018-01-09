@@ -70,6 +70,7 @@ class RegistrationForm extends Base {
 				'submit_label' => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
+					'default'     => esc_html__( 'Register', 'textdomain' ),
 					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
 				)
 			)
@@ -97,6 +98,7 @@ class RegistrationForm extends Base {
 		}
 
 		$email = sanitize_email( $data['email'] );
+
 		unset( $data['email'] );
 
 		if ( empty( $data['username'] ) ) {
@@ -154,7 +156,6 @@ class RegistrationForm extends Base {
 
 		if ( email_exists( $user_email ) ) {
 			$return['msg'] = esc_html__( 'This email is already registered' );
-
 			return $return;
 		}
 

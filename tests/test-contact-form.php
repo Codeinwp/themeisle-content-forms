@@ -34,13 +34,80 @@ class ContactFormTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The `rest_submit_form` form is required.
+	 */
+	function test_if_rest_callback_exists() {
+		$this->assertTrue( method_exists( $this->form, 'rest_submit_form' ) );
+	}
+
+	/**
 	 * Every config must have a these keys
 	 */
 	function test_if_config_is_valid() {
-		$this->assertArrayHasKey( 'id', $this->form );
-		$this->assertArrayHasKey( 'title', $this->form );
-		$this->assertArrayHasKey( 'icon', $this->form );
-		$this->assertArrayHasKey( 'fields', $this->form );
-		$this->assertArrayHasKey( 'controls', $this->form );
+		$config = $this->form->get_config();
+
+		$this->assertArrayHasKey( 'id', $config );
+		$this->assertArrayHasKey( 'title', $config );
+		$this->assertArrayHasKey( 'icon', $config );
+		$this->assertArrayHasKey( 'fields', $config );
+		$this->assertArrayHasKey( 'controls', $config );
+	}
+
+
+	/**
+	 * If a request to `rest_submit_form` lacks data the method should warn about email.
+	 */
+	function test_an_empty_submit() {
+
+		$return = $this->form->rest_submit_form(
+			array(),
+			array(),
+			1,
+			1,
+			'builder'
+		);
+
+		$this->assertEquals( $return, array(
+			'msg' => 'Invalid email.'
+		) );
+	}
+
+	/**
+	 * If a request to `rest_submit_form` lacks the name from data should trigger a warning
+	 */
+	function test_name_warning() {
+
+		$return = $this->form->rest_submit_form(
+			array(),
+			array( 'email' => 'admin@admin.com' ),
+			1,
+			1,
+			'builder'
+		);
+
+		$this->assertEquals( $return, array(
+			'msg' => 'Missing name.'
+		) );
+	}
+
+	/**
+	 * If a request to `rest_submit_form` lacks the message from data should trigger a warning.
+	 */
+	function test_message_warning() {
+
+		$return = $this->form->rest_submit_form(
+			array(),
+			array(
+				'email' => 'admin@admin.com',
+				'name'  => 'My name',
+			),
+			1,
+			1,
+			'builder'
+		);
+
+		$this->assertEquals( $return, array(
+			'msg' => 'Missing message.'
+		) );
 	}
 }
