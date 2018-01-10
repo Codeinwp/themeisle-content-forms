@@ -16,7 +16,7 @@ class NewsletterFormTest extends WP_UnitTestCase {
 		parent::setUp();
 		wp_set_current_user( $this->factory->user->create( [ 'role' => 'administrator' ] ) );
 
-		$this->form = new \ThemeIsle\ContentForms\NewsletterForm();
+		$this->form = \ThemeIsle\ContentForms\NewsletterForm::instance();
 	}
 
 	/**

@@ -11,6 +11,11 @@ use ThemeIsle\ContentForms\ContentFormBase as Base;
 class RegistrationForm extends Base {
 
 	/**
+	 * @var RegistrationForm
+	 */
+	public static $instance = null;
+
+	/**
 	 * The Call To Action
 	 */
 	public function init() {
@@ -184,4 +189,46 @@ class RegistrationForm extends Base {
 		return $return;
 	}
 
+
+	/**
+	 * @static
+	 * @since 1.0.0
+	 * @access public
+	 * @return RegistrationForm
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+			self::$instance->init();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Throw error on object clone
+	 *
+	 * The whole idea of the singleton design pattern is that there is a single
+	 * object therefore, we don't want the object to be cloned.
+	 *
+	 * @access public
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function __clone() {
+		// Cloning instances of the class is forbidden.
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+	}
+
+	/**
+	 * Disable unserializing of the class
+	 *
+	 * @access public
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function __wakeup() {
+		// Unserializing instances of the class is forbidden.
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+	}
 }
