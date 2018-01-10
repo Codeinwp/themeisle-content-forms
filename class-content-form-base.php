@@ -83,7 +83,7 @@ abstract class ContentFormBase {
 
 		// Register the Beaver Module
 //		$this->register_beaver_module();
-		add_action( 'init', array( $this, 'register_beaver_module' ) );
+//		add_action( 'init', array( $this, 'register_beaver_module' ) );
 
 		// Register the Gutenberg Block
 		// @TODO This is not fully working at this moment
