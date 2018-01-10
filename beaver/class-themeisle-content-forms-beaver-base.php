@@ -30,23 +30,12 @@ abstract class BeaverModule extends \FLBuilderModule {
 		$fields = array();
 
 		foreach ( $this->forms_config['fields'] as $key => $field ) {
-
-			$fields[ $key . '_label' ] = array(
-				'type'        => 'text',
-				'label'       => $field['label'] . ' Label',
-				'default'     => isset( $field['default'] ) ? $field['default'] : ''
+			$fields[] = array(
+				'key'      => $key,
+				'label'    => isset( $field['default'] ) ? $field['default'] : '',
+				'type'     => $field['type'],
+				'required' => $field['require'],
 			);
-
-			$fields[ $key . '_requirement' ] = array(
-				'type'        => 'select',
-				'label'       => __( 'Requirement', 'textdomain' ),
-				'options'     => array(
-					'required' => esc_html__( 'Required' ),
-					'optional' => esc_html__( 'Optional' )
-				),
-				'default'     => $field['require']
-			);
-
 		}
 
 		$controls = array();
@@ -72,20 +61,76 @@ abstract class BeaverModule extends \FLBuilderModule {
 			'general' => array( // Tab
 				'title'       => $this->get_title(),
 				'description' => isset( $this->forms_config['description'] ) ? $this->forms_config['description'] : '',
-				'sections'    => array( // Tab Sections
-					'controls' => array( // Section
-						'title'  => 'Form Settings', // Section Title
-						'fields' => $controls
+				'sections'    => array(),
+			)
+		);
+
+		// is important to keep the order of fields from the main config
+		foreach ( $this->forms_config as $key => $val ) {
+			if ( 'fields' === $key ) {
+				$args['general']['sections']['settings'] = array(
+					'title'  => esc_html__( 'Fields', 'textdomain' ),
+					'fields' => array(
+						'fields' => array(
+							'multiple'     => true,
+							'type'         => 'form',
+							'label'        => esc_html__( 'Field', 'textdomain' ),
+							'form'         => 'field',
+							'preview_text' => 'label',
+							'default'      => $fields
+						),
 					),
-					'settings' => array( // Section
-						'title'  => 'Labels', // Section Title
-						'fields' => $fields
+				);
+				continue;
+			} elseif ( 'controls' === $key ) {
+				$args['general']['sections']['controls'] = array(
+					'title'  => esc_html__( 'Form Settings', 'textdomain' ),
+					'fields' => $controls
+				);
+			}
+		}
+
+		\FLBuilder::register_module( get_called_class(), $args );
+
+		\FLBuilder::register_settings_form(
+			'field', array(
+				'title' => esc_html__( 'Field', 'textdomain' ),
+				'tabs'  => array(
+					'general' => array(
+						'title'    => esc_html__( 'Field', 'textdomain' ),
+						'sections' => array(
+							'fields' => array(
+								'title'  => esc_html__( 'Field', 'textdomain' ),
+								'fields' => array(
+									'label'    => array(
+										'type'  => 'text',
+										'label' => esc_html__( 'Label', 'textdomain' ),
+									),
+									'type'     => array(
+										'type'    => 'select',
+										'label'   => esc_html__( 'Type', 'textdomain' ),
+										'options' => array(
+											'text'     => esc_html__( 'Text' ),
+											'text'     => esc_html__( 'Email' ),
+											'textarea' => esc_html__( 'Textarea', 'textdomain' ),
+											'password' => esc_html__( 'Password', 'textdomain' ),
+										)
+									),
+									'required' => array(
+										'type'    => 'select',
+										'label'   => esc_html__( 'Is required?', 'textdomain' ),
+										'options' => array(
+											'required' => esc_html__( 'Required', 'textdomain' ),
+											'optional' => esc_html__( 'Optional', 'textdomain' )
+										)
+									)
+								),
+							),
+						),
 					),
 				),
 			)
 		);
-
-		\FLBuilder::register_module( get_called_class(), $args );
 	}
 
 	/**
@@ -201,13 +246,13 @@ abstract class BeaverModule extends \FLBuilderModule {
 		echo '<input type="hidden" name="form-id" value="' . $id . '" />';
 	}
 
-	public function render_form_field( $name, $field ) {
-		$key      = ! empty( $field['key'] ) ? $field['key'] : $name;
+	public function render_form_field( $field ) {
+		$key      = ! empty( $field['key'] ) ? $field['key'] : sanitize_title( $field['label'] );
 		$required = '';
 		$form_id  = $this->node;
 
 
-		if ( $this->get_setting( $key . '_requirement' ) === 'required' ) {
+		if ( $field['required'] === 'required' ) {
 			$required = 'required="required"';
 		}
 
@@ -215,7 +260,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 		<fieldset class="content-form-field-<?php echo $field['type'] ?>">
 
 			<label for="<?php echo $field_name ?>">
-				<?php echo $this->get_setting( $key . '_label' ); ?>
+				<?php echo $field['label']; ?>
 			</label>
 
 			<?php

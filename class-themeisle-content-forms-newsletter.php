@@ -34,17 +34,8 @@ class NewsletterForm extends Base {
 			'id'                           => 'newsletter',
 			'icon'                         => 'eicon-align-left',
 			'title'                        => esc_html__( 'Newsletter Form' ),
-			'fields' /* or form_fields? */ => array(
-				'email' => array(
-					'type'        => 'email',
-					'label'       => esc_html__( 'Email', 'textdomain' ),
-					'default'     => esc_html__( 'Email', 'textdomain' ),
-					'placeholder' => esc_html__( 'Email', 'textdomain' ),
-					'require'     => 'required'
-				)
-			),
 
-			'controls' /* or settings? */ => array(
+			'controls' => array(
 				'provider'     => array(
 					'type'        => 'select',
 					'label'       => esc_html__( 'Subscribe to', 'textdomain' ),
@@ -70,9 +61,19 @@ class NewsletterForm extends Base {
 					'type'    => 'text',
 					'label'   => esc_html__( 'Submit Label', 'textdomain' ),
 					'default' => esc_html__( 'Join Newsletter', 'textdomain' ),
-				),
+				)
+			),
 
-			)
+			'fields' => array(
+				'email' => array(
+					'type'        => 'email',
+					'label'       => esc_html__( 'Email', 'textdomain' ),
+					'default'     => esc_html__( 'Email', 'textdomain' ),
+					'placeholder' => esc_html__( 'Email', 'textdomain' ),
+					'require'     => 'required'
+				)
+			),
+
 		);
 	}
 

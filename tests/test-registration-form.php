@@ -72,9 +72,11 @@ class RegistrationFormTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * If a request to `rest_submit_form` lacks the username from data should trigger a warning
+	 * Test the case when the username is not present in the request
 	 */
-	function test_username_warning() {
+	function test_username_missing() {
+
+		update_option( 'users_can_register', 1 );
 
 		$return = $this->form->rest_submit_form(
 			array(),
@@ -84,8 +86,10 @@ class RegistrationFormTest extends WP_UnitTestCase {
 			'builder'
 		);
 
+		// if the username is not serverd, the email should be used instead
 		$this->assertEquals( $return, array(
-			'msg' => 'Missing username.'
+			'success' => true,
+			'msg' => 'Welcome, admin@admin.com'
 		) );
 	}
 

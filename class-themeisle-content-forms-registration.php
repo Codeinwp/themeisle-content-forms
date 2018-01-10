@@ -36,7 +36,7 @@ class RegistrationForm extends Base {
 			'icon'  => 'eicon-align-left',
 			'title' => esc_html__( 'User Registration Form' ),
 
-			'fields' /* or form_fields? */ => array(
+			'fields' => array(
 				'username' => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'User Name', 'textdomain' ),
@@ -61,12 +61,7 @@ class RegistrationForm extends Base {
 				)
 			),
 
-			'controls' /* or settings? */ => array(
-//				'option_newsletter' => array(
-//					'type'        => 'checkbox',
-//					'label'       => esc_html__( 'Newsletter OptIn', 'textdomain' ),
-//					'description' => esc_html__( 'Display a checkbox which allows the user to join a newsletter', 'textdomain' )
-//				),
+			'controls' => array(
 				'submit_label' => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
@@ -102,12 +97,11 @@ class RegistrationForm extends Base {
 		unset( $data['email'] );
 
 		if ( empty( $data['username'] ) ) {
-			$return['msg'] = esc_html__( 'Missing username.', 'textdomain' );
-
-			return $return;
+			$username = $email;
+		} else {
+			$username = sanitize_user( $data['username'] );
 		}
 
-		$username = sanitize_user( $data['username'] );
 		unset( $data['username'] );
 
 		// if there is no password we will auto-generate one

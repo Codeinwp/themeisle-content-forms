@@ -20,7 +20,7 @@ foreach ( $controls as $control_name => $control ) {
 				'<strong>' . $control['label'] . '</strong>'
 			); ?>
 		</div>
-		<?php return;
+		<?php
 	}
 }
 
@@ -28,10 +28,10 @@ foreach ( $controls as $control_name => $control ) {
 $module->render_form_header( $module->node );
 
 /** == FORM FIELDS == */
-$fields = $form_settings['fields'];
+$fields = $module->get_setting( 'fields' );
 
-foreach ( $fields as $field_name => $field ) {
-	$module->render_form_field( $field_name, $field );
+foreach ( $fields as $key => $field ) {
+	$module->render_form_field( (array)$field );
 }
 
 $controls = $form_settings['controls'];

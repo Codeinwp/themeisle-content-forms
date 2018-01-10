@@ -80,6 +80,19 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			return;
 		}
 
+		// is important to keep the order of fields from the main config
+		foreach ( $this->forms_config as $key => $val ) {
+			if ( 'fields' === $key ) {
+				$this->_register_fields_controls();
+				continue;
+			} elseif ( 'controls' === $key ) {
+				$this->_register_settings_controls();
+			}
+		}
+
+	}
+
+	protected function _register_settings_controls() {
 		$this->start_controls_section(
 			'section_form_settings',
 			array(
@@ -108,6 +121,9 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		}
 
 		$this->end_controls_section();
+	}
+
+	protected function _register_fields_controls() {
 
 		$this->start_controls_section(
 			$this->form_type . '_form_fields',
@@ -240,7 +256,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 						'<strong>' . $control['label'] . '</strong>'
 					); ?>
 				</div>
-				<?php return;
+				<?php
 			}
 		}
 
