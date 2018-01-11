@@ -351,7 +351,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 					<textarea name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
 						<?php echo $disabled; ?>
 						<?php echo $required; ?>
-						      cols="30" rows="10"></textarea>
+						      cols="30" rows="5"></textarea>
 					<?php break;
 				case 'password': ?>
 					<input type="password" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"

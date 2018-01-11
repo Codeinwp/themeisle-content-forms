@@ -60,23 +60,23 @@ and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 		});
 	});
 
-	/**
-	 * Handle Form notices
-	 * @param notice
-	 * @param type
-	 * @param $form
-	 */
-	var addContentFormNotice = function ( notice, type, $form ) {
-		var	color = '',
+/**
+ * Handle Form notices
+ * @param notice
+ * @param type
+ * @param $form
+ */
+var addContentFormNotice = function ( notice, type, $form ) {
+		var	noticeStatus = '',
 			$currentNotice = $form.children( '.content-form-notice' );
 
 		if ( 'success' === type ) {
-			color = 'green';
+			noticeStatus = 'content-form-success';
 		} else {
-			color = 'red';
+			noticeStatus = 'content-form-error';
 		}
 
-		var noticeEl = "<h3 class='content-form-notice' style='color:" + color + ";border: 2px solid " + color + ";padding: 0 5px;' >" + notice + "</h3>";
+		var noticeEl = "<h3 class='content-form-notice " + noticeStatus + "' >" + notice + "</h3>";
 
 		// if an notice already exist, replace it; otherwise create one
 		if ( $currentNotice.length > 0 ) {
