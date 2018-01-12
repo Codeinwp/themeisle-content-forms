@@ -241,6 +241,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		// load the js file which will handle the data submission
 		wp_enqueue_script( 'content-forms' );
+		wp_enqueue_style( 'content-forms' );
 
 		$fields = $settings['form_fields'];
 

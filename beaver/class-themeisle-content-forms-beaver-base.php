@@ -24,6 +24,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 		parent::__construct( $data );
 
 		wp_enqueue_script( 'content-forms' );
+		wp_enqueue_style( 'content-forms' );
 	}
 
 	public function register_widget() {

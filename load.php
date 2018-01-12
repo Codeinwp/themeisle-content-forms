@@ -70,6 +70,14 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 		if ( apply_filters( 'themeisle_content_forms_force_js_enqueue', false ) ) {
 			wp_enqueue_script( 'content-forms' );
 		}
+
+		/**
+		 * Every theme with a better form style can disable the default content forms styles by returning a false
+		 * to this filter `themeisle_content_forms_register_default_style`.
+		 */
+		if ( true === apply_filters( 'themeisle_content_forms_register_default_style', true ) ) {
+			wp_register_style( 'content-forms', plugins_url( '/assets/content-forms.css', __FILE__ ), array() );
+		}
 	}
 endif;
 
