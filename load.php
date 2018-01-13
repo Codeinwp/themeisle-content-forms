@@ -47,6 +47,9 @@ if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 		 * At this point all the PHP classes are available and the forms can be loaded
 		 */
 		do_action( 'init_themeisle_content_forms' );
+
+		// Register CSS & JS assets + localizations
+		add_action( 'wp_enqueue_scripts', 'themeisle_content_forms_register_public_assets' );
 	}
 endif;
 
@@ -84,5 +87,4 @@ endif;
 // Run the show only for PHP 5.3 or highier
 if ( version_compare( PHP_VERSION, '5.3', '>=' ) ) {
 	add_action( 'init', 'themeisle_content_forms_load', 9 );
-	add_action( 'wp_enqueue_scripts', 'themeisle_content_forms_register_public_assets' );
 }
