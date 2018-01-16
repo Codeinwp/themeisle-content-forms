@@ -235,13 +235,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$form_id  = $this->get_data( 'id' );
 		$settings = $this->get_settings();
 
+		$this->maybe_load_widget_style();
+
 		if ( empty( $this->forms_config['fields'] ) ) {
 			return;
 		}
-
-		// load the js file which will handle the data submission
-		wp_enqueue_script( 'content-forms' );
-		wp_enqueue_style( 'content-forms' );
 
 		$fields = $settings['form_fields'];
 
@@ -284,6 +282,23 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		<?php
 
 		$this->render_form_footer();
+	}
+
+	/**
+	 * Either enqueue the widget style registered by the library
+	 * or load an inline version for the preview only
+	 */
+	protected function maybe_load_widget_style() {
+		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() === true && apply_filters( 'themeisle_content_forms_register_default_style', true ) ) { ?>
+			<style>
+				<?php echo file_get_contents( plugin_dir_path( __FILE__ ) . '/assets/content-forms.css' ) ?>
+			</style>
+			<?php
+		} else {
+			// if `themeisle_content_forms_register_default_style` is false, the style won't be registered anyway
+			wp_enqueue_script( 'content-forms' );
+			wp_enqueue_style( 'content-forms' );
+		}
 	}
 
 	/**
