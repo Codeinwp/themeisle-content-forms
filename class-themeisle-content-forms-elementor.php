@@ -248,7 +248,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$controls = $this->forms_config['controls'];
 
 		foreach ( $controls as $control_name => $control ) {
-			$control_value = $settings[ $control_name ];
+			$control_value = '';
+
+			if ( isset( $settings[ $control_name ] ) ) {
+				$control_value = $settings[ $control_name ];
+			}
 			if ( isset( $control['required'] ) && $control['required'] && empty( $control_value ) ) { ?>
 				<div class="content-forms-required">
 					<?php

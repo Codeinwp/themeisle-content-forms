@@ -56,7 +56,15 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 	 * Also, localize REST params
 	 */
 	function themeisle_content_forms_register_public_assets() {
-		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', __FILE__ ), array( 'jquery' ) );
+		$version = null; // a null version will go for a WordPress core version
+
+		$package = json_decode( file_get_contents( dirname( __FILE__ ) . '/composer.json' ) );
+
+		if ( isset( $package->version ) ) {
+			$version = $package->version;
+		}
+
+		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', __FILE__ ), array( 'jquery' ), $version );
 
 		wp_localize_script( 'content-forms', 'contentFormsSettings', array(
 			'restUrl' => esc_url_raw( rest_url() . 'content-forms/v1/' ),
@@ -76,7 +84,7 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 		 * to this filter `themeisle_content_forms_register_default_style`.
 		 */
 		if ( true === apply_filters( 'themeisle_content_forms_register_default_style', true ) ) {
-			wp_register_style( 'content-forms', plugins_url( '/assets/content-forms.css', __FILE__ ), array() );
+			wp_register_style( 'content-forms', plugins_url( '/assets/content-forms.css', __FILE__ ), array(), $version );
 		}
 	}
 endif;
