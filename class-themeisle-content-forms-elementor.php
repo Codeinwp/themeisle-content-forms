@@ -305,7 +305,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * Display method for the form's header
 	 * It is also takes care about the form attributes and the regular hidden fields
 	 *
-	 * @param $type
 	 * @param $id
 	 */
 	private function render_form_header( $id ) {

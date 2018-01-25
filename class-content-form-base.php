@@ -164,11 +164,18 @@ abstract class ContentFormBase {
 		$categories = \Elementor\Plugin::instance()->elements_manager->get_categories();
 
 		if ( ! isset( $categories['obfx-elementor-widgets'] ) ) {
+
+			$category_args = apply_filters( 'content_forms_category_args', array(
+				'slug' => 'obfx-elementor-widgets',
+				'title' => __( 'Orbit Fox Addons', 'textdomain' ),
+				'icon'  => 'fa fa-plug',
+			) );
+
 			\Elementor\Plugin::instance()->elements_manager->add_category(
-				'obfx-elementor-widgets',
+				$category_args['slug'],
 				array(
-					'title' => __( 'Orbit Fox Addons', 'themeisle-companion' ),
-					'icon'  => 'fa fa-plug',
+					'title' => $category_args['title'],
+					'icon'  => $category_args['slug'],
 				),
 				1
 			);
