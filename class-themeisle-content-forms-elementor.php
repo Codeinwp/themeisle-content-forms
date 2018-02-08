@@ -481,7 +481,9 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @return array
 	 */
 	public function get_categories() {
-		return array( 'obfx-elementor-widgets' );
+		$category_args = apply_filters( 'content_forms_category_args', array() );
+		$slug = isset( $category_args['slug'] ) ?  $category_args['slug'] : 'obfx-elementor-widgets';
+		return [ $slug ];
 	}
 
 	/**
