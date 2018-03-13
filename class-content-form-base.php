@@ -82,8 +82,8 @@ abstract class ContentFormBase {
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 
 		// Register the Beaver Module
-//		$this->register_beaver_module();
-//		add_action( 'init', array( $this, 'register_beaver_module' ) );
+		$this->register_beaver_module();
+		add_action( 'init', array( $this, 'register_beaver_module' ) );
 
 		// Register the Gutenberg Block
 		// @TODO This is not fully working at this moment

@@ -112,7 +112,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 										'label'   => esc_html__( 'Type', 'textdomain' ),
 										'options' => array(
 											'text'     => esc_html__( 'Text' ),
-											'text'     => esc_html__( 'Email' ),
+											'email'     => esc_html__( 'Email' ),
 											'textarea' => esc_html__( 'Textarea', 'textdomain' ),
 											'password' => esc_html__( 'Password', 'textdomain' ),
 										)
