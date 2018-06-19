@@ -202,7 +202,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				'type'        => $field['type'],
 				'label'       => $field['label'],
 				'requirement' => $field['require'],
-//				'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : $field['label'],
+				'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : $field['label'],
 				'width'       => '100',
 			);
 		}
@@ -340,6 +340,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	private function render_form_field( $field, $is_preview = false ) {
 		$item_index = $field['_id'];
 		$key        = ! empty( $field['key'] ) ? $field['key'] : sanitize_title( $field['label'] );
+		$placeholder        = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
+
 		$required   = '';
 		$form_id    = $this->get_data( 'id' );
 
@@ -347,7 +349,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			$required = 'required="required"';
 		}
 
-		// in case this is a preview, we need to disable the actual inputs and transform the labels in inputs
+//		 in case this is a preview, we need to disable the actual inputs and transform the labels in inputs
 		$disabled = '';
 		if ( $is_preview ) {
 			$disabled = 'disabled="disabled"';
@@ -370,6 +372,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 					<textarea name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
 						<?php echo $disabled; ?>
 						<?php echo $required; ?>
+                        placeholder="<?php echo esc_attr ( $placeholder ); ?>"
 						      cols="30" rows="5"></textarea>
 					<?php break;
 				case 'password': ?>
@@ -378,7 +381,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 					<?php break;
 				default: ?>
 					<input type="text" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
-						<?php echo $required; ?> <?php echo $disabled; ?>>
+						<?php echo $required; ?> <?php echo $disabled; ?> placeholder="<?php echo esc_attr ( $placeholder ); ?>">
 					<?php
 					break;
 			} ?>
