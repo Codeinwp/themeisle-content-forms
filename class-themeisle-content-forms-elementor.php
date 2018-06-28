@@ -90,6 +90,39 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			}
 		}
 
+
+	}
+
+	/**
+	 * Add alignment control for button
+	 */
+	protected function add_submit_button_align() {
+		$this->add_responsive_control(
+			'align_submit',
+			[
+				'label' => __( 'Alignment', 'textdomain' ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'toggle' => false,
+				'default' => 'left',
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'textdomain' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'textdomain' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'textdomain' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
+				],
+			]
+		);
 	}
 
 	protected function _register_settings_controls() {
@@ -119,6 +152,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				$control_args
 			);
 		}
+
+		$this->add_submit_button_align();
 
 		$this->end_controls_section();
 	}
@@ -252,13 +287,13 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				$control_value = $settings[ $control_name ];
 			}
 			if ( isset( $control['required'] ) && $control['required'] && empty( $control_value ) ) { ?>
-				<div class="content-forms-required">
+                <div class="content-forms-required">
 					<?php
 					printf(
 						esc_html__( 'The %s setting is required!', 'textdomain' ),
 						'<strong>' . $control['label'] . '</strong>'
 					); ?>
-				</div>
+                </div>
 				<?php
 			}
 		}
@@ -274,11 +309,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		if ( ! empty( $controls['submit_label'] ) ) {
 			$btn_label = $this->get_settings( 'submit_label' );
 		} ?>
-		<fieldset>
-			<button type="submit" name="submit" value="submit-<?php echo $this->form_type; ?>-<?php echo $form_id; ?>">
+        <fieldset class="submit-form">
+            <button type="submit" name="submit" value="submit-<?php echo $this->form_type; ?>-<?php echo $form_id; ?>">
 				<?php echo $btn_label; ?>
-			</button>
-		</fieldset>
+            </button>
+        </fieldset>
 		<?php
 
 		$this->render_form_footer();
@@ -290,9 +325,9 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 */
 	protected function maybe_load_widget_style() {
 		if ( \Elementor\Plugin::$instance->editor->is_edit_mode() === true && apply_filters( 'themeisle_content_forms_register_default_style', true ) ) { ?>
-			<style>
-				<?php echo file_get_contents( plugin_dir_path( __FILE__ ) . '/assets/content-forms.css' ) ?>
-			</style>
+            <style>
+                <?php echo file_get_contents( plugin_dir_path( __FILE__ ) . '/assets/content-forms.css' ) ?>
+            </style>
 			<?php
 		} else {
 			// if `themeisle_content_forms_register_default_style` is false, the style won't be registered anyway
@@ -358,34 +393,34 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$field_name = 'data[' . $form_id . '][' . $key . ']';
 
 		$this->add_inline_editing_attributes( $item_index . '_label', 'none' ); ?>
-		<fieldset class="content-form-field-<?php echo $field['type'] ?>"
+        <fieldset class="content-form-field-<?php echo $field['type'] ?>"
 			<?php echo $this->get_render_attribute_string( 'fieldset' . $item_index ); ?> >
 
-			<label for="<?php echo $field_name ?>"
+            <label for="<?php echo $field_name ?>"
 				<?php echo $this->get_render_attribute_string( 'label' . $item_index ); ?>>
 				<?php echo $field['label']; ?>
-			</label>
+            </label>
 
 			<?php
 			switch ( $field['type'] ) {
 				case 'textarea': ?>
-					<textarea name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
+                    <textarea name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
 						<?php echo $disabled; ?>
 						<?php echo $required; ?>
-                        placeholder="<?php echo esc_attr ( $placeholder ); ?>"
-						      cols="30" rows="5"></textarea>
+                              placeholder="<?php echo esc_attr ( $placeholder ); ?>"
+                              cols="30" rows="5"></textarea>
 					<?php break;
 				case 'password': ?>
-					<input type="password" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
+                    <input type="password" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
 						<?php echo $required; ?> <?php echo $disabled; ?>>
 					<?php break;
 				default: ?>
-					<input type="text" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
+                    <input type="text" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
 						<?php echo $required; ?> <?php echo $disabled; ?> placeholder="<?php echo esc_attr ( $placeholder ); ?>">
 					<?php
 					break;
 			} ?>
-		</fieldset>
+        </fieldset>
 		<?php
 	}
 
