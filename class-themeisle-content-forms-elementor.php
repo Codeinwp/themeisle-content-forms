@@ -6,6 +6,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+
+use \Elementor\Controls_Manager as Controls_Manager;
+use \Elementor\Scheme_Typography as Scheme_Typography;
+use \Elementor\Scheme_Color as Scheme_Color;
+use \Elementor\Group_Control_Typography as Group_Control_Typography;
+use Elementor\Group_Control_Border as Group_Control_Border;
 /**
  * This class is used to create an Elementor widget based on a ContentForms config.
  * @package ThemeIsle\ContentForms
@@ -91,6 +97,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		}
 
 
+
+
 	}
 
 	/**
@@ -125,6 +133,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		);
 	}
 
+	// Style section
 	protected function _register_settings_controls() {
 		$this->start_controls_section(
 			'section_form_settings',
@@ -156,8 +165,526 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_submit_button_align();
 
 		$this->end_controls_section();
+
+		$this->add_style_controls();
 	}
 
+	protected function add_style_controls() {
+		$this->start_controls_section(
+			'section_form_style',
+			[
+				'label' => __( 'Form', 'textdomain' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			'column_gap',
+			[
+				'label' => __( 'Columns Gap', 'textdomain' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => 10,
+				],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 60,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-column' => 'padding-right: calc( {{SIZE}}{{UNIT}}/2 ); padding-left: calc( {{SIZE}}{{UNIT}}/2 );',
+					'{{WRAPPER}} .content-form .submit-form' => 'padding-right: calc( {{SIZE}}{{UNIT}}/2 ); padding-left: calc( {{SIZE}}{{UNIT}}/2 );',
+				],
+			]
+		);
+
+		$this->add_control(
+			'row_gap',
+			[
+				'label' => __( 'Rows Gap', 'textdomain' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => 10,
+				],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 60,
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-column' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .content-form .submit-form' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'heading_label',
+			[
+				'label' => __( 'Label', 'textdomain' ),
+				'type' => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'label_spacing',
+			[
+				'label' => __( 'Spacing', 'textdomain' ),
+				'type' => Controls_Manager::SLIDER,
+				'default' => [
+					'size' => 0,
+				],
+				'range' => [
+					'px' => [
+						'min' => 0,
+						'max' => 60,
+					],
+				],
+				'selectors' => [
+					'body.rtl {{WRAPPER}} fieldset > label' => 'padding-left: {{SIZE}}{{UNIT}};',
+					// for the label position = inline option
+					'body:not(.rtl) {{WRAPPER}} fieldset > label' => 'padding-right: {{SIZE}}{{UNIT}};',
+					// for the label position = inline option
+					'body {{WRAPPER}} fieldset > label' => 'padding-bottom: {{SIZE}}{{UNIT}};',
+					// for the label position = above option
+				],
+			]
+		);
+
+		$this->add_control(
+			'label_color',
+			[
+				'label' => __( 'Text Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > label, {{WRAPPER}} .elementor-field-subgroup label' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_3,
+				],
+			]
+		);
+
+		$this->add_control(
+			'mark_required_color',
+			[
+				'label' => __( 'Mark Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .required-mark' => 'color: {{COLOR}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'label_typography',
+				'selector' => '{{WRAPPER}} fieldset > label',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+			]
+		);
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_field_style',
+			[
+				'label' => __( 'Field', 'textdomain' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'field_typography',
+				'selector' => '{{WRAPPER}} fieldset > input, {{WRAPPER}} fieldset > textarea, {{WRAPPER}} fieldset > button',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+			]
+		);
+
+		$this->add_responsive_control(
+			'align_field_text',
+			[
+				'label' => __( 'Text alignment', 'textdomain' ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'toggle' => false,
+				'default' => 'left',
+				'options' => [
+					'left' => [
+						'title' => __( 'Left', 'textdomain' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'textdomain' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'right' => [
+						'title' => __( 'Right', 'textdomain' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'text-align: {{VALUE}}',
+					'{{WRAPPER}} fieldset > textarea' => 'text-align: {{VALUE}}'
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'tabs_field_style' );
+
+		$this->start_controls_tab(
+			'tab_field_normal',
+			[
+				'label' => __( 'Normal', 'textdomain' ),
+			]
+		);
+
+		$this->add_control(
+			'field_text_color',
+			[
+				'label' => __( 'Text Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input::placeholder' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} fieldset > textarea' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea::placeholder' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_3,
+				],
+			]
+		);
+
+
+
+		$this->add_control(
+			'field_background_color',
+			[
+				'label' => __( 'Background Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#ffffff',
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea' => 'background-color: {{VALUE}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'field_border_color',
+			[
+				'label' => __( 'Border Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea' => 'border-color: {{VALUE}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+		        'field_border_style',
+            [
+				'label' => _x( 'Border Type', 'Border Control', 'textdomain' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'' => __( 'None', 'textdomain' ),
+					'solid' => _x( 'Solid', 'Border Control', 'textdomain' ),
+					'double' => _x( 'Double', 'Border Control', 'textdomain' ),
+					'dotted' => _x( 'Dotted', 'Border Control', 'textdomain' ),
+					'dashed' => _x( 'Dashed', 'Border Control', 'textdomain' ),
+					'groove' => _x( 'Groove', 'Border Control', 'textdomain' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea' => 'border-style: {{VALUE}};'
+				],
+            ]
+        );
+
+		$this->add_control(
+			'field_border_width',
+			[
+				'label' => __( 'Border Width', 'textdomain' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'placeholder' => '',
+				'size_units' => [ 'px' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > textarea' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'field_border_radius',
+			[
+				'label' => __( 'Border Radius', 'textdomain' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > textarea' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_field_focus',
+			[
+				'label' => __( 'Focus', 'textdomain' ),
+			]
+		);
+
+		$this->add_control(
+			'field_focus_text_color',
+			[
+				'label' => __( 'Text Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input::placeholder:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea::placeholder:focus' => 'color: {{VALUE}};',
+				],
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_3,
+				],
+			]
+		);
+
+		$this->add_control(
+			'field_focus_background_color',
+			[
+				'label' => __( 'Background Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '#ffffff',
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input:focus' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'background-color: {{VALUE}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'field_focus_border_color',
+			[
+				'label' => __( 'Border Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input:focus' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'border-color: {{VALUE}};',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'field_focus_border_style',
+			[
+				'label' => _x( 'Border Type', 'Border Control', 'textdomain' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'' => __( 'None', 'textdomain' ),
+					'solid' => _x( 'Solid', 'Border Control', 'textdomain' ),
+					'double' => _x( 'Double', 'Border Control', 'textdomain' ),
+					'dotted' => _x( 'Dotted', 'Border Control', 'textdomain' ),
+					'dashed' => _x( 'Dashed', 'Border Control', 'textdomain' ),
+					'groove' => _x( 'Groove', 'Border Control', 'textdomain' ),
+				],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input:focus' => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'border-style: {{VALUE}};'
+				],
+			]
+		);
+
+		$this->add_control(
+			'field_focus_border_width',
+			[
+				'label' => __( 'Border Width', 'textdomain' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'placeholder' => '',
+				'size_units' => [ 'px' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input:focus' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'field_focus_border_radius',
+			[
+				'label' => __( 'Border Radius', 'textdomain' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input:focus' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'section_button_style',
+			[
+				'label' => __( 'Button', 'textdomain' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->start_controls_tabs( 'tabs_button_style' );
+
+		$this->start_controls_tab(
+			'tab_button_normal',
+			[
+				'label' => __( 'Normal', 'textdomain' ),
+			]
+		);
+
+		$this->add_control(
+			'button_background_color',
+			[
+				'label' => __( 'Background Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'scheme' => [
+					'type' => Scheme_Color::get_type(),
+					'value' => Scheme_Color::COLOR_4,
+				],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_text_color',
+			[
+				'label' => __( 'Text Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name' => 'button_typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
+				'selector' => '{{WRAPPER}} fieldset > button',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(), [
+				'name' => 'button_border',
+				'placeholder' => '1px',
+				'default' => '1px',
+				'selector' => '{{WRAPPER}} fieldset > button',
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'button_border_radius',
+			[
+				'label' => __( 'Border Radius', 'textdomain' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_text_padding',
+			[
+				'label' => __( 'Text Padding', 'textdomain' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_button_hover',
+			[
+				'label' => __( 'Hover', 'textdomain' ),
+			]
+		);
+
+		$this->add_control(
+			'button_background_hover_color',
+			[
+				'label' => __( 'Background Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button:hover' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_hover_color',
+			[
+				'label' => __( 'Text Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button:hover' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'button_hover_border_color',
+			[
+				'label' => __( 'Border Color', 'textdomain' ),
+				'type' => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} fieldset > button:hover' => 'border-color: {{VALUE}};',
+				],
+				'condition' => [
+					'button_border_border!' => '',
+				],
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+	}
+//End style section
 	protected function _register_fields_controls() {
 
 		$this->start_controls_section(
@@ -188,13 +715,10 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'requirement',
 			array(
-				'label'   => __( 'Requirement', 'textdomain' ),
-				'type'    => \Elementor\Controls_Manager::SELECT,
-				'options' => array(
-					'required' => esc_html__( 'Required' ),
-					'optional' => esc_html__( 'Optional' )
-				),
-				'default' => 'optional',
+				'label'   => __( 'Required', 'textdomain' ),
+				'type'    => \Elementor\Controls_Manager::SWITCHER,
+				'return_value' => 'required',
+				'default' => '',
 			)
 		);
 
@@ -225,6 +749,24 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				'label' => __( 'Key', 'textdomain' ),
 				'type'  => \Elementor\Controls_Manager::HIDDEN
 			)
+		);
+
+		$repeater->add_responsive_control(
+			'field-width',
+			[
+				'label' => __( 'Column Width', 'textdomain' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'' => __( 'Default', 'textdomain' ),
+					'100' => '100%',
+					'75' => '75%',
+					'66' => '66%',
+					'50' => '50%',
+					'33' => '33%',
+					'25' => '25%',
+				],
+				'default' => '100',
+			]
 		);
 
 		$fields = $this->forms_config['fields'];
@@ -392,13 +934,21 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		$field_name = 'data[' . $form_id . '][' . $key . ']';
 
-		$this->add_inline_editing_attributes( $item_index . '_label', 'none' ); ?>
-        <fieldset class="content-form-field-<?php echo $field['type'] ?>"
-			<?php echo $this->get_render_attribute_string( 'fieldset' . $item_index ); ?> >
+		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class',  'content-form-field-' . $field['type'] );
+		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'elementor-column elementor-col-' . $field['field-width'] );
+		$this->add_inline_editing_attributes( $item_index . '_label', 'none' );
+		?>
+
+
+        <fieldset <?php $this->print_render_attribute_string( 'fieldset' . $field['_id'] ); ?>>
 
             <label for="<?php echo $field_name ?>"
 				<?php echo $this->get_render_attribute_string( 'label' . $item_index ); ?>>
-				<?php echo $field['label']; ?>
+				<?php echo $field['label'];
+				if ($field['requirement']==='required'){
+				    echo '<span class="required-mark"> *</span>';
+                }
+				?>
             </label>
 
 			<?php
