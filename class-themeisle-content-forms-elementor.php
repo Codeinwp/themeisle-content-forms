@@ -938,7 +938,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		?>
 
 
-        <fieldset <?php $this->print_render_attribute_string( 'fieldset' . $field['_id'] ); ?>>
+        <fieldset <?php echo $this->get_render_attribute_string( 'fieldset' . $field['_id'] ); ?>>
 
             <label for="<?php echo $field_name ?>"
 				<?php echo $this->get_render_attribute_string( 'label' . $item_index ); ?>>
