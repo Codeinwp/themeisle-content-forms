@@ -752,12 +752,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		);
 
 		$repeater->add_responsive_control(
-			'field-width',
+			'field_width',
 			[
-				'label' => __( 'Column Width', 'textdomain' ),
+				'label' => __( 'Field Width', 'textdomain' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'' => __( 'Default', 'textdomain' ),
 					'100' => '100%',
 					'75' => '75%',
 					'66' => '66%',
@@ -780,7 +779,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				'label'       => $field['label'],
 				'requirement' => $field['require'],
 				'placeholder' => isset( $field['placeholder'] ) ? $field['placeholder'] : $field['label'],
-				'width'       => '100',
+				'field_width' => '100',
 			);
 		}
 
@@ -841,7 +840,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		}
 
 		$this->render_form_header( $form_id );
-
 		foreach ( $fields as $index => $field ) {
 			$this->render_form_field( $field );
 		}
@@ -935,7 +933,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$field_name = 'data[' . $form_id . '][' . $key . ']';
 
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class',  'content-form-field-' . $field['type'] );
-		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'elementor-column elementor-col-' . $field['field-width'] );
+		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'elementor-column elementor-col-' . $field['field_width'] );
 		$this->add_inline_editing_attributes( $item_index . '_label', 'none' );
 		?>
 
@@ -958,7 +956,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 						<?php echo $disabled; ?>
 						<?php echo $required; ?>
                               placeholder="<?php echo esc_attr ( $placeholder ); ?>"
-                              cols="30" rows="5"></textarea>
+                              cols="30" rows="5">
+					</textarea>
 					<?php break;
 				case 'password': ?>
                     <input type="password" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
