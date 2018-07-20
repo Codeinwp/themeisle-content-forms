@@ -47,3 +47,24 @@ fieldset {
 .form-control {
     height: auto;
 }
+
+.content-form-newsletter {
+    align-items: flex-end;
+}
+
+.newsletter button {
+    margin: 0;
+}
+
+.content-form-newsletter fieldset {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#elementor .content-form-newsletter fieldset > input {
+    margin-bottom: 0;
+
+}
+.content-form-newsletter .elementor-column:not(.elementor-col-100) + .submit-form {
+    display: flex; width: auto;
+}

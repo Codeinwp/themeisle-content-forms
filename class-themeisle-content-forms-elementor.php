@@ -95,10 +95,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				$this->_register_settings_controls();
 			}
 		}
-
-
-
-
 	}
 
 	/**
@@ -108,21 +104,21 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'align_submit',
 			[
-				'label' => __( 'Alignment', 'textdomain' ),
+				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
 				'type' => \Elementor\Controls_Manager::CHOOSE,
 				'toggle' => false,
 				'default' => 'left',
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'textdomain' ),
+						'title' => __( 'Left', 'elementor-addon-widgets' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'textdomain' ),
+						'title' => __( 'Center', 'elementor-addon-widgets' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'textdomain' ),
+						'title' => __( 'Right', 'elementor-addon-widgets' ),
 						'icon' => 'fa fa-align-right',
 					],
 				],
@@ -138,7 +134,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_form_settings',
 			array(
-				'label' => __( 'Form Settings', 'textdomain' ),
+				'label' => __( 'Form Settings', 'elementor-addon-widgets' ),
 			)
 		);
 
@@ -173,7 +169,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_form_style',
 			[
-				'label' => __( 'Form', 'textdomain' ),
+				'label' => __( 'Form', 'elementor-addon-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -181,7 +177,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'column_gap',
 			[
-				'label' => __( 'Columns Gap', 'textdomain' ),
+				'label' => __( 'Columns Gap', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 10,
@@ -202,7 +198,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'row_gap',
 			[
-				'label' => __( 'Rows Gap', 'textdomain' ),
+				'label' => __( 'Rows Gap', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 10,
@@ -223,7 +219,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'heading_label',
 			[
-				'label' => __( 'Label', 'textdomain' ),
+				'label' => __( 'Label', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -232,7 +228,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'label_spacing',
 			[
-				'label' => __( 'Spacing', 'textdomain' ),
+				'label' => __( 'Spacing', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 0,
@@ -257,7 +253,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'label_color',
 			[
-				'label' => __( 'Text Color', 'textdomain' ),
+				'label' => __( 'Text Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > label, {{WRAPPER}} .elementor-field-subgroup label' => 'color: {{VALUE}};',
@@ -272,7 +268,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'mark_required_color',
 			[
-				'label' => __( 'Mark Color', 'textdomain' ),
+				'label' => __( 'Mark Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -294,7 +290,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_field_style',
 			[
-				'label' => __( 'Field', 'textdomain' ),
+				'label' => __( 'Field', 'elementor-addon-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -311,21 +307,21 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_responsive_control(
 			'align_field_text',
 			[
-				'label' => __( 'Text alignment', 'textdomain' ),
+				'label' => __( 'Text alignment', 'elementor-addon-widgets' ),
 				'type' => \Elementor\Controls_Manager::CHOOSE,
 				'toggle' => false,
 				'default' => 'left',
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'textdomain' ),
+						'title' => __( 'Left', 'elementor-addon-widgets' ),
 						'icon' => 'fa fa-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'textdomain' ),
+						'title' => __( 'Center', 'elementor-addon-widgets' ),
 						'icon' => 'fa fa-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'textdomain' ),
+						'title' => __( 'Right', 'elementor-addon-widgets' ),
 						'icon' => 'fa fa-align-right',
 					],
 				],
@@ -336,19 +332,31 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			]
 		);
 
+		$this->add_responsive_control(
+		        'field-text-padding', [
+				'label' => __( 'Text Padding', 'elementor-addon-widgets' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors' => [
+					'{{WRAPPER}} fieldset > input' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > textarea' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+        );
+
 		$this->start_controls_tabs( 'tabs_field_style' );
 
 		$this->start_controls_tab(
 			'tab_field_normal',
 			[
-				'label' => __( 'Normal', 'textdomain' ),
+				'label' => __( 'Normal', 'elementor-addon-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'field_text_color',
 			[
-				'label' => __( 'Text Color', 'textdomain' ),
+				'label' => __( 'Text Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input' => 'color: {{VALUE}};',
@@ -368,7 +376,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_background_color',
 			[
-				'label' => __( 'Background Color', 'textdomain' ),
+				'label' => __( 'Background Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
@@ -382,7 +390,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_border_color',
 			[
-				'label' => __( 'Border Color', 'textdomain' ),
+				'label' => __( 'Border Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input' => 'border-color: {{VALUE}};',
@@ -395,15 +403,15 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 		        'field_border_style',
             [
-				'label' => _x( 'Border Type', 'Border Control', 'textdomain' ),
+				'label' => _x( 'Border Type', 'Border Control', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'' => __( 'None', 'textdomain' ),
-					'solid' => _x( 'Solid', 'Border Control', 'textdomain' ),
-					'double' => _x( 'Double', 'Border Control', 'textdomain' ),
-					'dotted' => _x( 'Dotted', 'Border Control', 'textdomain' ),
-					'dashed' => _x( 'Dashed', 'Border Control', 'textdomain' ),
-					'groove' => _x( 'Groove', 'Border Control', 'textdomain' ),
+					'' => __( 'None', 'elementor-addon-widgets' ),
+					'solid' => _x( 'Solid', 'Border Control', 'elementor-addon-widgets' ),
+					'double' => _x( 'Double', 'Border Control', 'elementor-addon-widgets' ),
+					'dotted' => _x( 'Dotted', 'Border Control', 'elementor-addon-widgets' ),
+					'dashed' => _x( 'Dashed', 'Border Control', 'elementor-addon-widgets' ),
+					'groove' => _x( 'Groove', 'Border Control', 'elementor-addon-widgets' ),
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input' => 'border-style: {{VALUE}};',
@@ -415,7 +423,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_border_width',
 			[
-				'label' => __( 'Border Width', 'textdomain' ),
+				'label' => __( 'Border Width', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'placeholder' => '',
 				'size_units' => [ 'px' ],
@@ -429,7 +437,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_border_radius',
 			[
-				'label' => __( 'Border Radius', 'textdomain' ),
+				'label' => __( 'Border Radius', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -444,14 +452,14 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_field_focus',
 			[
-				'label' => __( 'Focus', 'textdomain' ),
+				'label' => __( 'Focus', 'elementor-addon-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'field_focus_text_color',
 			[
-				'label' => __( 'Text Color', 'textdomain' ),
+				'label' => __( 'Text Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus' => 'color: {{VALUE}};',
@@ -469,7 +477,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_focus_background_color',
 			[
-				'label' => __( 'Background Color', 'textdomain' ),
+				'label' => __( 'Background Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
@@ -483,7 +491,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_focus_border_color',
 			[
-				'label' => __( 'Border Color', 'textdomain' ),
+				'label' => __( 'Border Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus' => 'border-color: {{VALUE}};',
@@ -496,15 +504,15 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_focus_border_style',
 			[
-				'label' => _x( 'Border Type', 'Border Control', 'textdomain' ),
+				'label' => _x( 'Border Type', 'Border Control', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'' => __( 'None', 'textdomain' ),
-					'solid' => _x( 'Solid', 'Border Control', 'textdomain' ),
-					'double' => _x( 'Double', 'Border Control', 'textdomain' ),
-					'dotted' => _x( 'Dotted', 'Border Control', 'textdomain' ),
-					'dashed' => _x( 'Dashed', 'Border Control', 'textdomain' ),
-					'groove' => _x( 'Groove', 'Border Control', 'textdomain' ),
+					'' => __( 'None', 'elementor-addon-widgets' ),
+					'solid' => _x( 'Solid', 'Border Control', 'elementor-addon-widgets' ),
+					'double' => _x( 'Double', 'Border Control', 'elementor-addon-widgets' ),
+					'dotted' => _x( 'Dotted', 'Border Control', 'elementor-addon-widgets' ),
+					'dashed' => _x( 'Dashed', 'Border Control', 'elementor-addon-widgets' ),
+					'groove' => _x( 'Groove', 'Border Control', 'elementor-addon-widgets' ),
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus' => 'border-style: {{VALUE}};',
@@ -516,7 +524,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_focus_border_width',
 			[
-				'label' => __( 'Border Width', 'textdomain' ),
+				'label' => __( 'Border Width', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'placeholder' => '',
 				'size_units' => [ 'px' ],
@@ -530,7 +538,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'field_focus_border_radius',
 			[
-				'label' => __( 'Border Radius', 'textdomain' ),
+				'label' => __( 'Border Radius', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -549,7 +557,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_section(
 			'section_button_style',
 			[
-				'label' => __( 'Button', 'textdomain' ),
+				'label' => __( 'Button', 'elementor-addon-widgets' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -559,14 +567,14 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => __( 'Normal', 'textdomain' ),
+				'label' => __( 'Normal', 'elementor-addon-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'button_background_color',
 			[
-				'label' => __( 'Background Color', 'textdomain' ),
+				'label' => __( 'Background Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'scheme' => [
 					'type' => Scheme_Color::get_type(),
@@ -581,7 +589,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_text_color',
 			[
-				'label' => __( 'Text Color', 'textdomain' ),
+				'label' => __( 'Text Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
@@ -612,7 +620,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_border_radius',
 			[
-				'label' => __( 'Border Radius', 'textdomain' ),
+				'label' => __( 'Border Radius', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -624,7 +632,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_text_padding',
 			[
-				'label' => __( 'Text Padding', 'textdomain' ),
+				'label' => __( 'Text Padding', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -638,14 +646,14 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_hover',
 			[
-				'label' => __( 'Hover', 'textdomain' ),
+				'label' => __( 'Hover', 'elementor-addon-widgets' ),
 			]
 		);
 
 		$this->add_control(
 			'button_background_hover_color',
 			[
-				'label' => __( 'Background Color', 'textdomain' ),
+				'label' => __( 'Background Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > button:hover' => 'background-color: {{VALUE}};',
@@ -656,7 +664,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_hover_color',
 			[
-				'label' => __( 'Text Color', 'textdomain' ),
+				'label' => __( 'Text Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > button:hover' => 'color: {{VALUE}};',
@@ -667,7 +675,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'button_hover_border_color',
 			[
-				'label' => __( 'Border Color', 'textdomain' ),
+				'label' => __( 'Border Color', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > button:hover' => 'border-color: {{VALUE}};',
@@ -689,7 +697,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		$this->start_controls_section(
 			$this->form_type . '_form_fields',
-			array( 'label' => __( 'Fields', 'textdomain' ) )
+			array( 'label' => __( 'Fields', 'elementor-addon-widgets' ) )
 		);
 
 		$repeater = new \Elementor\Repeater();
@@ -697,7 +705,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'label',
 			array(
-				'label'   => __( 'Label', 'textdomain' ),
+				'label'   => __( 'Label', 'elementor-addon-widgets' ),
 				'type'    => \Elementor\Controls_Manager::TEXT,
 				'default' => '',
 			)
@@ -706,7 +714,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'placeholder',
 			array(
-				'label'   => __( 'Placeholder', 'textdomain' ),
+				'label'   => __( 'Placeholder', 'elementor-addon-widgets' ),
 				'type'    => \Elementor\Controls_Manager::TEXT,
 				'default' => '',
 			)
@@ -715,7 +723,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'requirement',
 			array(
-				'label'   => __( 'Required', 'textdomain' ),
+				'label'   => __( 'Required', 'elementor-addon-widgets' ),
 				'type'    => \Elementor\Controls_Manager::SWITCHER,
 				'return_value' => 'required',
 				'default' => '',
@@ -723,11 +731,11 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		);
 
 		$field_types = array(
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
+			'text'     => __( 'Text', 'elementor-addon-widgets' ),
+			'password' => __( 'Password', 'elementor-addon-widgets' ),
 //			'tel'      => __( 'Tel', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
+			'email'    => __( 'Email', 'elementor-addon-widgets' ),
+			'textarea' => __( 'Textarea', 'elementor-addon-widgets' ),
 //			'number'   => __( 'Number', 'textdomain' ),
 //			'select'   => __( 'Select', 'textdomain' ),
 //			'url'      => __( 'URL', 'textdomain' ),
@@ -736,7 +744,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'type',
 			array(
-				'label'   => __( 'Type', 'textdomain' ),
+				'label'   => __( 'Type', 'elementor-addon-widgets' ),
 				'type'    => \Elementor\Controls_Manager::SELECT,
 				'options' => $field_types,
 				'default' => 'text'
@@ -746,7 +754,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_control(
 			'key',
 			array(
-				'label' => __( 'Key', 'textdomain' ),
+				'label' => __( 'Key', 'elementor-addon-widgets' ),
 				'type'  => \Elementor\Controls_Manager::HIDDEN
 			)
 		);
@@ -754,7 +762,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$repeater->add_responsive_control(
 			'field_width',
 			[
-				'label' => __( 'Field Width', 'textdomain' ),
+				'label' => __( 'Field Width', 'elementor-addon-widgets' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'100' => '100%',
@@ -786,7 +794,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		$this->add_control(
 			'form_fields',
 			array(
-				'label'       => __( 'Form Fields', 'textdomain' ),
+				'label'       => __( 'Form Fields', 'elementor-addon-widgets' ),
 				'type'        => \Elementor\Controls_Manager::REPEATER,
 				'show_label'  => false,
 				'separator'   => 'before',
@@ -795,6 +803,40 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				'title_field' => '{{{ label }}}',
 			)
 		);
+
+		if( $this->form_type === 'newsletter') {
+
+			$this->add_control(
+				'button_icon',
+				[
+					'label' => __( 'Submit Icon', 'elementor-pro' ),
+					'type' => Controls_Manager::ICON,
+					'label_block' => true,
+					'default' => '',
+				]
+			);
+
+			$this->add_control(
+				'button_icon_indent',
+				[
+					'label' => __( 'Icon Spacing', 'elementor-pro' ),
+					'type' => Controls_Manager::SLIDER,
+					'range' => [
+						'px' => [
+							'max' => 100,
+						],
+					],
+					'condition' => [
+						'button_icon!' => '',
+					],
+					'selectors' => [
+						'{{WRAPPER}} .elementor-button-icon' => 'margin-right: {{SIZE}}{{UNIT}}; margin-left: {{SIZE}}{{UNIT}};',
+					],
+				]
+			);
+
+		}
+
 
 		$this->end_controls_section();
 	}
@@ -810,6 +852,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	protected function render( $instance = array() ) {
 		$form_id  = $this->get_data( 'id' );
 		$settings = $this->get_settings();
+		$instance = $this->get_settings();
 
 		$this->maybe_load_widget_style();
 
@@ -831,7 +874,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
                 <div class="content-forms-required">
 					<?php
 					printf(
-						esc_html__( 'The %s setting is required!', 'textdomain' ),
+						esc_html__( 'The %s setting is required!', 'elementor-addon-widgets' ),
 						'<strong>' . $control['label'] . '</strong>'
 					); ?>
                 </div>
@@ -844,14 +887,22 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			$this->render_form_field( $field );
 		}
 
-		$btn_label = esc_html__( 'Submit', 'textdomain' );
+		$btn_label = esc_html__( 'Submit', 'elementor-addon-widgets' );
 
 		if ( ! empty( $controls['submit_label'] ) ) {
 			$btn_label = $this->get_settings( 'submit_label' );
 		} ?>
-        <fieldset class="submit-form">
-            <button type="submit" name="submit" value="submit-<?php echo $this->form_type; ?>-<?php echo $form_id; ?>">
-				<?php echo $btn_label; ?>
+        <fieldset class="submit-form <?php echo $this->form_type; ?>">
+            <button type="submit" name="submit" value="submit-<?php echo $this->form_type; ?>-<?php echo $form_id;
+            ?>" class="<?php $this->get_render_attribute_string( 'button' ); ?>">
+	            <?php echo $btn_label; ?>
+                <?php if ( ! empty( $instance['button_icon'] ) ){ ?><span <?php echo
+                $this->get_render_attribute_string( 'content-wrapper' ); // TODO: what to do about content-wrapper ?>
+
+                                <span <?php echo $this->get_render_attribute_string( 'icon-align' ); ?>>
+									<i class="<?php echo esc_attr( $instance['button_icon'] ); ?>"></i>
+								</span>
+							<?php }; ?>
             </button>
         </fieldset>
 		<?php
@@ -934,6 +985,14 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class',  'content-form-field-' . $field['type'] );
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'elementor-column elementor-col-' . $field['field_width'] );
+		$this->add_render_attribute( ['icon-align' => [
+			'class' => [
+				empty( $instance['button_icon_align'] ) ? '' :
+					'elementor-align-icon-' . $instance['button_icon_align'],
+				'elementor-button-icon',
+			],
+		]] );
+
 		$this->add_inline_editing_attributes( $item_index . '_label', 'none' );
 		?>
 
