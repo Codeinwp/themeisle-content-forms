@@ -61,7 +61,7 @@ fieldset {
     padding-bottom: 0;
 }
 
-#elementor .content-form-newsletter fieldset > input {
+.content-form-newsletter > .form-group .form-control {
     margin-bottom: 0;
 
 }
