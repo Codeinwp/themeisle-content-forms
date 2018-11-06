@@ -98,6 +98,43 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	}
 
 	/**
+	 * Add alignment control for newsletter form
+	 */
+	protected function add_newsletter_form_alignment() {
+
+		if ( $this->getFormType() !== 'newsletter' ) {
+			return;
+		}
+
+		$this->add_responsive_control(
+			'align_submit',
+			[
+				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
+				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'toggle' => false,
+				'default' => 'flex-start',
+				'options' => [
+					'flex-start' => [
+						'title' => __( 'Left', 'elementor-addon-widgets' ),
+						'icon' => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'elementor-addon-widgets' ),
+						'icon' => 'fa fa-align-center',
+					],
+					'flex-end' => [
+						'title' => __( 'Right', 'elementor-addon-widgets' ),
+						'icon' => 'fa fa-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .content-form.content-form-newsletter' => 'justify-content: {{VALUE}};',
+				],
+			]
+		);
+	}
+
+	/**
 	 * Add alignment control for button
 	 */
 	protected function add_submit_button_align() {
@@ -157,6 +194,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 				$control_args
 			);
 		}
+
+		$this->add_newsletter_form_alignment();
 
 		$this->add_submit_button_align();
 
