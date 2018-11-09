@@ -162,12 +162,15 @@ class ContactForm extends Base {
 	private function _send_mail( $mailto, $mailfrom, $name, $body, $extra_data = array() ) {
 		$success = false;
 
-		$subject  = sanitize_text_field( $name );
+		$name = sanitize_text_field( $name );
+		$subject  = 'Website inquiry from ' . $name;
 		$mailto   = sanitize_email( $mailto );
 		$mailfrom = sanitize_email( $mailfrom );
 
 		$headers   = array();
-		$headers[] = 'From: ' . $subject . ' <' . $mailfrom . '>';
+		// use admin email assuming the Server is allowed to send as admin email
+		$headers[] = 'From: Admin <' . get_option( 'admin_email' ) . '>';
+		$headers[] = 'Reply-To: ' . $name . ' <' . $mailfrom . '>';
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 
 		$body = $this->prepare_body( $body, $extra_data );
