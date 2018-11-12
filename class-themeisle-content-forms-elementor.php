@@ -138,6 +138,10 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * Add alignment control for button
 	 */
 	protected function add_submit_button_align() {
+		if ( $this->getFormType() === 'newsletter' ) {
+			return;
+		}
+
 		$this->add_responsive_control(
 			'align_submit',
 			[
