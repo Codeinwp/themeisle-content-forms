@@ -17,11 +17,18 @@ fieldset {
     pointer-events: none;
 }
 .content-form-notice {
-    font-size: 21px;
+    font-size: 18px;
     padding: 5px;
 }
+
+.content-form-notice-wrapper {
+	display: flex;
+	width: 100%;
+	padding-left: 5px;
+}
+
 .content-form-success {
-    color: #53a813;
+	color: #53a813;
     border: 2px solid #53a813;
 }
 .content-form-error {

@@ -76,7 +76,7 @@ var addContentFormNotice = function ( notice, type, $form ) {
 			noticeStatus = 'content-form-error';
 		}
 
-		var noticeEl = "<h3 class='content-form-notice " + noticeStatus + "' >" + notice + "</h3>";
+		var noticeEl = "<div class='content-form-notice-wrapper'><h3 class='content-form-notice " + noticeStatus + "' >" + notice + "</h3></div>";
 
 		// if an notice already exist, replace it; otherwise create one
 		if ( $currentNotice.length > 0 ) {
