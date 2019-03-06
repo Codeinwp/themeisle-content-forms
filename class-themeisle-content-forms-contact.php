@@ -102,30 +102,35 @@ class ContactForm extends Base {
 	 * @return mixed
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
-
+		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
+		$required = array();
+		foreach( $settings['form_fields'] as $field ) {
+			if ( 'required' === $field['requirement'] ) {
+				$key = $field['key'];
+				if ( empty( $key ) ) {
+					$key = $field['label'];
+				}
+				$required[] = $key;
+				if ( empty( $data[ $key ] ) ) {
+					$return['msg'] = esc_html( sprintf( 'Missing %s', $field['label']), 'textdomain' );
+					return $return;
+				}
+			}
+		}
+		
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
 			$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
-
 			return $return;
 		}
 
 		$from = $data['email'];
-
-		if ( empty( $data['name'] ) ) {
-			$return['msg'] = esc_html__( 'Missing name.', 'textdomain' );
-
-			return $return;
-		}
-
 		$name = $data['name'];
 
-		if ( empty( $data['message'] ) ) {
-			$return['msg'] = esc_html__( 'Missing message.', 'textdomain' );
-
-			return $return;
+		// Empty message does not make much sense!
+		$msg = '';
+		if ( ! empty( $data['message'] ) ) {
+			$msg = $data['message'];
 		}
-
-		$msg = $data['message'];
 
 		// prepare settings for submit
 		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
@@ -142,7 +147,7 @@ class ContactForm extends Base {
 			$return['success'] = true;
 			$return['msg']     = $this->notices['success'];
 		} else {
-			$return['msg'] = esc_html__( 'Ops! I cannot send this email!', 'textdomain' );
+			$return['msg'] = esc_html__( 'Oops! I cannot send this email!', 'textdomain' );
 		}
 
 		return $return;
