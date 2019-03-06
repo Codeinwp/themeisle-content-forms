@@ -68,7 +68,7 @@ and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  */
 var addContentFormNotice = function ( notice, type, $form ) {
 		var	noticeStatus = '',
-			$currentNotice = $form.children( '.content-form-notice' );
+			$currentNotice = $form.find( '.content-form-notice' );
 
 		if ( 'success' === type ) {
 			noticeStatus = 'content-form-success';
