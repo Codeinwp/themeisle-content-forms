@@ -102,30 +102,33 @@ class ContactForm extends Base {
 	 * @return mixed
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
-
-		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
-			$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
-
-			return $return;
+		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
+		$required = array();
+		foreach( $settings['form_fields'] as $field ) {
+			if ( 'required' === $field['requirement'] ) {
+				$key = $field['key'];
+				if ( empty( $key ) ) {
+					$key = $field['label'];
+				}
+				$required[] = $key;
+				if ( empty( $data[ $key ] ) ) {
+					$return['msg'] = esc_html( sprintf( 'Missing %s', $field['label']), 'textdomain' );
+					return $return;
+				} else {
+					if ( $key === 'email' && ! is_email( $data['email'] ) ) {
+						$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
+						return $return;
+					}
+				}
+			}
 		}
+		
+		// Empty email does not make much sense!
+		$from = isset( $data['email'] ) ? $data['email'] : null;
+		$name = isset( $data['name'] ) ? $data['name'] : null;
 
-		$from = $data['email'];
-
-		if ( empty( $data['name'] ) ) {
-			$return['msg'] = esc_html__( 'Missing name.', 'textdomain' );
-
-			return $return;
-		}
-
-		$name = $data['name'];
-
-		if ( empty( $data['message'] ) ) {
-			$return['msg'] = esc_html__( 'Missing message.', 'textdomain' );
-
-			return $return;
-		}
-
-		$msg = $data['message'];
+		// Empty message does not make much sense!
+		$msg = isset( $data['message'] ) ? $data['message'] : null;
 
 		// prepare settings for submit
 		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
@@ -142,7 +145,7 @@ class ContactForm extends Base {
 			$return['success'] = true;
 			$return['msg']     = $this->notices['success'];
 		} else {
-			$return['msg'] = esc_html__( 'Ops! I cannot send this email!', 'textdomain' );
+			$return['msg'] = esc_html__( 'Oops! I cannot send this email!', 'textdomain' );
 		}
 
 		return $return;
@@ -163,14 +166,16 @@ class ContactForm extends Base {
 		$success = false;
 
 		$name = sanitize_text_field( $name );
-		$subject  = 'Website inquiry from ' . $name;
+		$subject  = 'Website inquiry from ' . ( ! empty( $name ) ? $name : 'N/A' );
 		$mailto   = sanitize_email( $mailto );
 		$mailfrom = sanitize_email( $mailfrom );
 
 		$headers   = array();
 		// use admin email assuming the Server is allowed to send as admin email
 		$headers[] = 'From: Admin <' . get_option( 'admin_email' ) . '>';
-		$headers[] = 'Reply-To: ' . $name . ' <' . $mailfrom . '>';
+		if ( ! empty( $mailfrom ) ) {
+			$headers[] = 'Reply-To: ' . $name . ' <' . $mailfrom . '>';
+		}
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 
 		$body = $this->prepare_body( $body, $extra_data );
@@ -205,7 +210,7 @@ class ContactForm extends Base {
 			<!-- view port meta tag -->
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-			<title><?php echo esc_html__( 'Mail From: ', 'textdomain' ) . esc_html( $data['name'] ); ?></title>
+			<title><?php echo esc_html__( 'Mail From: ', 'textdomain' ) . isset( $data['name'] ) ? esc_html( $data['name'] ) : 'N/A'; ?></title>
 		</head>
 		<body>
 		<table>

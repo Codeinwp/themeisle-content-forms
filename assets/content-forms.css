@@ -11,6 +11,7 @@ input, textarea {
 fieldset {
     border: none;
     margin: 0;
+    flex-wrap: wrap;
 }
 .content-form-loading {
     opacity: .5;

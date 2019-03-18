@@ -163,14 +163,16 @@ class NewsletterForm extends Base {
 				$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
 
 				$response = wp_remote_post( $url, $args );
-
-				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-					return $response;
-				}
-
 				$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
-				if ( $body->status == $status ) {
+				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+					$result['success'] = false;
+					$result['msg']    = $body['detail'];
+					return $result;
+				}
+
+
+				if ( $body['status'] == $status ) {
 					$result['success'] = true;
 					$result['msg']     = $this->notices['success'];
 				} else {
