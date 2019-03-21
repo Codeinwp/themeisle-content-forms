@@ -240,7 +240,7 @@ class ContactForm extends Base {
 			<tr>
 				<td>
 					<hr/>
-					<?php esc_html_e( 'You recieved this email because your email address is set in the content form settings on ' ) ?>
+					<?php esc_html_e( 'You received this email because your email address is set in the content form settings on ' ) ?>
 					<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
 				</td>
 			</tr>
