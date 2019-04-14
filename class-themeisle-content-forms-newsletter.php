@@ -209,7 +209,7 @@ class NewsletterForm extends Base {
 					if ( ! empty( $body['message'] ) ) {
 						$result['msg'] = $body['message'];
 					} else {
-						$result['msg'] = $response;
+						$result['msg'] = $this->notices['success'];
 					}
 
 					return $result;
