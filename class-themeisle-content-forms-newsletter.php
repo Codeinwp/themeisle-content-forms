@@ -186,6 +186,7 @@ class NewsletterForm extends Base {
 
 				$url = 'https://api.sendinblue.com/v3/contacts';
 
+				// https://developers.sendinblue.com/reference#createcontact
 				$args = array(
 					'method'  => 'POST',
 					'headers' => array(
@@ -202,22 +203,19 @@ class NewsletterForm extends Base {
 
 				$response = wp_remote_post( $url, $args );
 
-				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-
-					$body = json_decode( wp_remote_retrieve_body( $response ), true );
-
-					if ( ! empty( $body['message'] ) ) {
-						$result['msg'] = $body['message'];
-					} else {
-						$result['msg'] = $this->notices['success'];
-					}
-
+				if ( is_wp_error( $response ) ) {
+					$result['msg']     = $this->notices['error'];
 					return $result;
 				}
 
-				$result['success'] = true;
-				$result['msg']     = $this->notices['success'];
+				if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
+					$result['success'] = true;
+					$result['msg'] = $this->notices['success'];
+					return $result;
+				}
 
+				$body = json_decode( wp_remote_retrieve_body( $response ), true );
+				$result['msg']     = $body['message'];
 				return $result;
 				break;
 
