@@ -59,13 +59,7 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 	 * Also, localize REST params
 	 */
 	function themeisle_content_forms_register_public_assets() {
-		$version = null; // a null version will go for a WordPress core version
-
-		$package = json_decode( file_get_contents( dirname( __FILE__ ) . '/composer.json' ) );
-
-		if ( isset( $package->version ) ) {
-			$version = $package->version;
-		}
+		$version = '1.2.1'; // the current plugin version
 
 		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', __FILE__ ), array( 'jquery' ), $version );
 
