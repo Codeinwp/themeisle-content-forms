@@ -12,64 +12,48 @@ use \Elementor\Scheme_Typography as Scheme_Typography;
 use \Elementor\Scheme_Color as Scheme_Color;
 use \Elementor\Group_Control_Typography as Group_Control_Typography;
 use Elementor\Group_Control_Border as Group_Control_Border;
+use Elementor\Widget_Base;
+
 /**
  * This class is used to create an Elementor widget based on a ContentForms config.
  * @package ThemeIsle\ContentForms
  */
-class ElementorWidget extends \Elementor\Widget_Base {
-
-	private $name;
-
-	private $title;
-
-	private $icon;
-
-	private $form_type;
-
-	private $forms_config = array();
+abstract class ElementorWidget extends Widget_Base {
 
 	/**
-	 * Widget base constructor.
-	 *
-	 * Initializing the widget base class.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @param array $data Widget data. Default is an empty array.
-	 * @param array|null $args Optional. Widget default arguments. Default is null.
+     * Type of form: contact, newsletter or registration.
+     *
+	 * @var string
 	 */
-	public function __construct( $data = array(), $args = null ) {
-		parent::__construct( $data, $args );
-		$this->setup_attributes( $data );
-	}
+	public $form_type;
+
+	/**
+     * Configuration of form.
+     *
+	 * @var array
+	 */
+	public $forms_config = array();
+
+	/**
+     * Set form type.
+     *
+	 * @return void
+	 */
+	abstract function set_form_type();
+
+	/**
+     * Set form configuration array.
+     *
+	 * @return void
+	 */
+	abstract function set_form_configuration();
 
 	/**
 	 * This method takes the given attributes and sets them as properties
-	 *
-	 * @param $data array
 	 */
-	private function setup_attributes( $data ) {
-
-		$this->setFormType();
-
-		if ( ! empty( $data['content_forms_config'] ) ) {
-			$this->setFormConfig( $data['content_forms_config'] );
-		} else {
-			$this->setFormConfig( apply_filters( 'content_forms_config_for_' . $this->getFormType(), $this->getFormConfig() ) );
-		}
-
-		if ( ! empty( $data['id'] ) ) {
-			$this->set_name( $data['id'] );
-		}
-
-		if ( ! empty( $this->forms_config['title'] ) ) {
-			$this->set_title( $this->forms_config['title'] );
-		}
-
-		if ( ! empty( $this->forms_config['icon'] ) ) {
-			$this->set_icon( $this->forms_config['icon'] );
-		}
+	public function setup_attributes() {
+	    $this->set_form_type();
+	    $this->set_form_configuration();
 	}
 
 	/**
@@ -97,78 +81,8 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		}
 	}
 
-	/**
-	 * Add alignment control for newsletter form
-	 */
-	protected function add_newsletter_form_alignment() {
 
-		if ( $this->getFormType() !== 'newsletter' ) {
-			return;
-		}
 
-		$this->add_responsive_control(
-			'align_submit',
-			[
-				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
-				'type' => \Elementor\Controls_Manager::CHOOSE,
-				'toggle' => false,
-				'default' => 'flex-start',
-				'options' => [
-					'flex-start' => [
-						'title' => __( 'Left', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-center',
-					],
-					'flex-end' => [
-						'title' => __( 'Right', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-right',
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .content-form.content-form-newsletter' => 'justify-content: {{VALUE}};',
-				],
-			]
-		);
-	}
-
-	/**
-	 * Add alignment control for button
-	 */
-	protected function add_submit_button_align() {
-		if ( $this->getFormType() === 'newsletter' ) {
-			return;
-		}
-
-		$this->add_responsive_control(
-			'align_submit',
-			[
-				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
-				'type' => \Elementor\Controls_Manager::CHOOSE,
-				'toggle' => false,
-				'default' => 'left',
-				'options' => [
-					'left' => [
-						'title' => __( 'Left', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-center',
-					],
-					'right' => [
-						'title' => __( 'Right', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-right',
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
-	}
 
 	// Style section
 	protected function _register_settings_controls() {
@@ -199,14 +113,16 @@ class ElementorWidget extends \Elementor\Widget_Base {
 			);
 		}
 
-		$this->add_newsletter_form_alignment();
-
-		$this->add_submit_button_align();
+		$this->add_additional_controls();
 
 		$this->end_controls_section();
 
 		$this->add_style_controls();
 	}
+
+	public function add_additional_controls(){
+	    return false;
+    }
 
 	protected function add_style_controls() {
 		$this->start_controls_section(
@@ -892,7 +808,7 @@ class ElementorWidget extends \Elementor\Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function render( $instance = array() ) {
+	protected function render() {
 		$form_id  = $this->get_data( 'id' );
 		$settings = $this->get_settings();
 		$instance = $this->get_settings();
@@ -1074,34 +990,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 		<?php
 	}
 
-	/**
-	 * Retrieve the widget name.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Widget name.
-	 */
-	public function get_name() {
-		return $this->name;
-	}
-
-	/**
-	 * Set the widget name property
-	 */
-	private function set_name( $name ) {
-		$this->name = $name;
-	}
-
-	private function setFormType() {
-		$this->form_type = $this->get_data( 'widgetType' );
-
-		if ( empty( $this->form_type ) ) {
-			$this->form_type = $this->get_data( 'id' );
-		}
-
-		$this->form_type = str_replace( 'content_form_', '', $this->form_type );
-	}
 
 	private function setFormConfig( $config ) {
 		$this->forms_config = $config;
@@ -1123,44 +1011,6 @@ class ElementorWidget extends \Elementor\Widget_Base {
 
 	private function getFormType() {
 		return $this->form_type;
-	}
-
-	/**
-	 * Retrieve the widget title.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Widget title.
-	 */
-	public function get_title() {
-		return $this->title;
-	}
-
-	/**
-	 * Set the widget title property
-	 */
-	private function set_title( $title ) {
-		$this->title = $title;
-	}
-
-	/**
-	 * Retrieve content form widget icon.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 * @return string Widget icon.
-	 */
-	public function get_icon() {
-		return $this->icon;
-	}
-
-	/**
-	 * Set the widget title property
-	 */
-	private function set_icon( $icon ) {
-		$this->icon = $icon;
 	}
 
 	/**
