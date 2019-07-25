@@ -1,21 +1,107 @@
 <?php
+/**
+ * Contact Form Elementor custom widget.
+ *
+ * @link       https://themeisle.com
+ * @since      1.0.0
+ *
+ * @package    ThemeIsle\ContentForms
+ */
 
 namespace ThemeIsle\ContentForms;
 
-class Eelementor_Contact_Widget extends ElementorWidget {
+use Elementor\Controls_Manager;
+use Exception;
 
+/**
+ * Class Elementor_Contact_Widget
+ *
+ * @package ThemeIsle\ContentForms
+ */
+class Elementor_Contact_Widget extends ElementorWidget {
+
+	/**
+	 * Elementor_Contact_Widget constructor.
+	 *
+	 * @param array $data Widget data.
+	 * @param array|null $args Widget arguments.
+	 *
+	 * @throws Exception
+	 * @since 1.0.1
+	 *
+	 */
 	public function __construct( $data = [], $args = null ) {
 		parent::setup_attributes();
-		parent::__construct( $data, $args );
+		try {
+			parent::__construct( $data, $args );
+		} catch ( Exception $exception ) {
+			error_log( $exception->getMessage() );
+		}
 	}
 
-	public function set_form_type() {
+	/**
+	 * Get widget name.
+	 *
+	 * Retrieve oEmbed widget name.
+	 *
+	 * @return string Widget name.
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 */
+	public function get_name() {
+		return 'content_form_contact';
+	}
+
+	/**
+	 * Get widget title.
+	 *
+	 * Retrieve oEmbed widget title.
+	 *
+	 * @return string Widget title.
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 */
+	public function get_title() {
+		return esc_html__( 'Contact Form', 'textdomain' );
+	}
+
+	/**
+	 * Get widget icon.
+	 *
+	 * Retrieve oEmbed widget icon.
+	 *
+	 * @return string Widget icon.
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 */
+	public function get_icon() {
+		return 'eicon-text-align-left';
+	}
+
+	/**
+	 * Set form type.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access protected
+	 */
+	protected function set_form_type() {
 		$this->form_type = 'contact';
 	}
 
-	public function set_form_configuration(){
+	/**
+	 * Set form configuration.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access protected
+	 */
+	protected function set_form_configuration() {
 		$this->forms_config = array(
-			'fields' /* or form_fields? */ => array(
+			'fields' => array(
 				'name'    => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Name' ),
@@ -64,74 +150,43 @@ class Eelementor_Contact_Widget extends ElementorWidget {
 	}
 
 	/**
-	 * Get widget name.
+	 * Add widget specific controls.
 	 *
-	 * Retrieve oEmbed widget name.
-	 *
-	 * @return string Widget name.
-	 * @since 1.0.0
-	 * @access public
-	 *
+	 * @return bool|void
+	 * @since 1.0.1
+	 * @access protected
 	 */
-	public function get_name() {
-		return 'content_form_contact';
-	}
-
-	/**
-	 * Get widget title.
-	 *
-	 * Retrieve oEmbed widget title.
-	 *
-	 * @return string Widget title.
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 */
-	public function get_title() {
-		return esc_html__( 'Contact Form', 'textdomain' );
-	}
-
-	/**
-	 * Get widget icon.
-	 *
-	 * Retrieve oEmbed widget icon.
-	 *
-	 * @return string Widget icon.
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 */
-	public function get_icon() {
-		return 'eicon-text-align-left';
-	}
-
-	public function add_additional_controls(){
+	protected function add_widget_specific_controls() {
 		$this->add_submit_button_align();
 	}
 
 	/**
-	 * Add alignment control for button
+	 * Add alignment control for button.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access private
 	 */
-	public function add_submit_button_align() {
+	private function add_submit_button_align() {
 		$this->add_responsive_control(
 			'align_submit',
 			[
-				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
-				'type' => \Elementor\Controls_Manager::CHOOSE,
-				'toggle' => false,
-				'default' => 'left',
-				'options' => [
-					'left' => [
+				'label'     => __( 'Alignment', 'elementor-addon-widgets' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'toggle'    => false,
+				'default'   => 'left',
+				'options'   => [
+					'left'   => [
 						'title' => __( 'Left', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-left',
+						'icon'  => 'fa fa-align-left',
 					],
 					'center' => [
 						'title' => __( 'Center', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-center',
+						'icon'  => 'fa fa-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-right',
+						'icon'  => 'fa fa-align-right',
 					],
 				],
 				'selectors' => [

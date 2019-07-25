@@ -1,18 +1,103 @@
 <?php
+/**
+ * Newsletter Form Elementor custom widget.
+ *
+ * @link       https://themeisle.com
+ * @since      1.0.0
+ *
+ * @package    ThemeIsle\ContentForms
+ */
 namespace ThemeIsle\ContentForms;
 
-class Eelementor_Newsletter_Widget extends ElementorWidget {
+use Elementor\Controls_Manager;
+use Exception;
 
+/**
+ * Class Elementor_Newsletter_Widget
+ * @package ThemeIsle\ContentForms
+ */
+class Elementor_Newsletter_Widget extends ElementorWidget {
+
+	/**
+	 * Elementor_Newsletter_Widget constructor.
+	 *
+	 * @param array $data Widget data.
+	 * @param array|null $args Widget arguments.
+	 *
+	 * @throws Exception
+	 * @since 1.0.1
+	 *
+	 */
 	public function __construct( $data = [], $args = null ) {
 		parent::setup_attributes();
-		parent::__construct( $data, $args );
+		try{
+			parent::__construct( $data, $args );
+		} catch ( Exception $exception ){
+			error_log( $exception->getMessage() );
+		}
 	}
 
+	/**
+	 * Get widget name.
+	 *
+	 * Retrieve oEmbed widget name.
+	 *
+	 * @return string Widget name.
+	 * @since 1.0.1
+	 * @access public
+	 *
+	 */
+	public function get_name() {
+		return 'content_form_newsletter';
+	}
+
+	/**
+	 * Get widget title.
+	 *
+	 * Retrieve oEmbed widget title.
+	 *
+	 * @return string Widget title.
+	 * @since 1.0.1
+	 * @access public
+	 *
+	 */
+	public function get_title() {
+		return esc_html__( 'Newsletter Form', 'textdomain' );
+	}
+
+	/**
+	 * Get widget icon.
+	 *
+	 * Retrieve oEmbed widget icon.
+	 *
+	 * @return string Widget icon.
+	 * @since 1.0.0
+	 * @access public
+	 *
+	 */
+	public function get_icon() {
+		return 'eicon-text-align-left';
+	}
+
+	/**
+	 * Set form type.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access protected
+	 */
 	function set_form_type() {
 		$this->form_type = 'newsletter';
 	}
 
-	function set_form_configuration() {
+	/**
+	 * Set form configuration.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access protected
+	 */
+	protected function set_form_configuration() {
 		$this->forms_config = array(
 			'controls' => array(
 				'provider'     => array(
@@ -57,57 +142,29 @@ class Eelementor_Newsletter_Widget extends ElementorWidget {
 	}
 
 	/**
-	 * Get widget name.
+	 * Add widget specific controls.
 	 *
-	 * Retrieve oEmbed widget name.
-	 *
-	 * @return string Widget name.
-	 * @since 1.0.0
-	 * @access public
-	 *
+	 * @return bool|void
+	 * @since 1.0.1
+	 * @access protected
 	 */
-	public function get_name() {
-		return 'content_form_newsletter';
-	}
-
-	/**
-	 * Get widget title.
-	 *
-	 * Retrieve oEmbed widget title.
-	 *
-	 * @return string Widget title.
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 */
-	public function get_title() {
-		return esc_html__( 'Newsletter Form', 'textdomain' );
-	}
-
-	/**
-	 * Get widget icon.
-	 *
-	 * Retrieve oEmbed widget icon.
-	 *
-	 * @return string Widget icon.
-	 * @since 1.0.0
-	 * @access public
-	 *
-	 */
-	public function get_icon() {
-		return 'eicon-text-align-left';
-	}
-
-	public function add_additional_controls(){
+	protected function add_widget_specific_controls(){
 		$this->add_form_alignment();
 	}
 
-	public function add_form_alignment() {
+	/**
+	 * Add form alignment.
+	 *
+	 * @access private
+	 * @since 1.0.1
+	 * @return void
+	 */
+	private function add_form_alignment() {
 		$this->add_responsive_control(
 			'align_submit',
 			[
 				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
-				'type' => \Elementor\Controls_Manager::CHOOSE,
+				'type' => Controls_Manager::CHOOSE,
 				'toggle' => false,
 				'default' => 'flex-start',
 				'options' => [
@@ -126,6 +183,44 @@ class Eelementor_Newsletter_Widget extends ElementorWidget {
 				],
 				'selectors' => [
 					'{{WRAPPER}} .content-form.content-form-newsletter' => 'justify-content: {{VALUE}};',
+				],
+			]
+		);
+	}
+
+	/**
+	 * Add specific widget fields
+	 *
+	 * @since 1.0.1
+	 * @access protected
+	 * @return bool|void
+	 */
+	protected function add_widget_specific_fields(){
+		$this->add_control(
+			'button_icon',
+			[
+				'label' => __( 'Submit Icon', 'elementor-pro' ),
+				'type' => Controls_Manager::ICON,
+				'label_block' => true,
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'button_icon_indent',
+			[
+				'label' => __( 'Icon Spacing', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'max' => 100,
+					],
+				],
+				'condition' => [
+					'button_icon!' => '',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-button-icon' => 'margin-right: {{SIZE}}{{UNIT}}; margin-left: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);

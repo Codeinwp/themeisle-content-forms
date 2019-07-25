@@ -102,17 +102,17 @@ abstract class ContentFormBase {
 			$widget = array();
 			if( $widget_type === 'contact' ){
 				require_once( __DIR__ . '/class-themeisle-elementor-contact-widget.php' );
-				$widget = new \ThemeIsle\ContentForms\Eelementor_Contact_Widget();
+				$widget = new \ThemeIsle\ContentForms\Elementor_Contact_Widget();
 			}
 
 			if( $widget_type === 'newsletter' ){
 				require_once( __DIR__ . '/class-themeisle-elementor-newsletter-widget.php' );
-				$widget = new \ThemeIsle\ContentForms\Eelementor_Newsletter_Widget();
+				$widget = new \ThemeIsle\ContentForms\Elementor_Newsletter_Widget();
 			}
 
 			if( $widget_type === 'registration' ){
 				require_once( __DIR__ . '/class-themeisle-elementor-registration-widget.php' );
-				$widget = new \ThemeIsle\ContentForms\Eelementor_Registration_Widget();
+				$widget = new \ThemeIsle\ContentForms\Elementor_Registration_Widget();
 			}
 
 			if( !empty( $widget ) ){

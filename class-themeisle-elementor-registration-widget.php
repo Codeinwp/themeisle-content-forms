@@ -1,18 +1,51 @@
 <?php
+/**
+ * Registration Form Elementor custom widget.
+ *
+ * @link       https://themeisle.com
+ * @since      1.0.0
+ *
+ * @package    ThemeIsle\ContentForms
+ */
+
 namespace ThemeIsle\ContentForms;
 
-class Eelementor_Registration_Widget extends ElementorWidget {
+use Elementor\Controls_Manager;
+use Exception;
 
+/**
+ * Class Elementor_Registration_Widget
+ * @package ThemeIsle\ContentForms
+ */
+class Elementor_Registration_Widget extends ElementorWidget {
+
+	/**
+	 * Elementor_Registration_Widget constructor.
+	 *
+	 * @param array $data
+	 * @param null $args
+	 *
+	 * @throws Exception
+	 */
 	public function __construct( $data = [], $args = null ) {
 		parent::setup_attributes();
-		parent::__construct( $data, $args );
+		try {
+			parent::__construct( $data, $args );
+		} catch ( Exception $exception ) {
+			error_log( $exception->getMessage() );
+		}
 	}
 
-
-	function set_form_type() {
-		$this->form_type = 'registration';
-	}
-
+	/**
+	 * Get widget name.
+	 *
+	 * Retrieve oEmbed widget name.
+	 *
+	 * @return string Widget name.
+	 * @since 1.0.1
+	 * @access public
+	 *
+	 */
 	public function get_name() {
 		return 'content_form_registration';
 	}
@@ -23,7 +56,7 @@ class Eelementor_Registration_Widget extends ElementorWidget {
 	 * Retrieve oEmbed widget title.
 	 *
 	 * @return string Widget title.
-	 * @since 1.0.0
+	 * @since 1.0.1
 	 * @access public
 	 *
 	 */
@@ -45,7 +78,25 @@ class Eelementor_Registration_Widget extends ElementorWidget {
 		return 'eicon-text-align-left';
 	}
 
-	function set_form_configuration() {
+	/**
+	 * Set form type.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access protected
+	 */
+	function set_form_type() {
+		$this->form_type = 'registration';
+	}
+
+	/**
+	 * Set form configuration.
+	 *
+	 * @return void
+	 * @since 1.0.1
+	 * @access protected
+	 */
+	protected function set_form_configuration() {
 		$this->forms_config = array(
 			'fields' => array(
 				'username' => array(
@@ -83,33 +134,44 @@ class Eelementor_Registration_Widget extends ElementorWidget {
 		);
 	}
 
-	public function add_additional_controls(){
+	/**
+	 * Add widget specific controls.
+	 *
+	 * @return bool|void
+	 * @since 1.0.1
+	 * @access protected
+	 */
+	protected function add_widget_specific_controls() {
 		$this->add_submit_button_align();
 	}
 
 	/**
 	 * Add alignment control for button
+	 *
+	 * @access private
+	 * @return void
+	 * @since 1.0.1
 	 */
-	public function add_submit_button_align() {
+	private function add_submit_button_align() {
 		$this->add_responsive_control(
 			'align_submit',
 			[
-				'label' => __( 'Alignment', 'elementor-addon-widgets' ),
-				'type' => \Elementor\Controls_Manager::CHOOSE,
-				'toggle' => false,
-				'default' => 'left',
-				'options' => [
-					'left' => [
+				'label'     => __( 'Alignment', 'elementor-addon-widgets' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'toggle'    => false,
+				'default'   => 'left',
+				'options'   => [
+					'left'   => [
 						'title' => __( 'Left', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-left',
+						'icon'  => 'fa fa-align-left',
 					],
 					'center' => [
 						'title' => __( 'Center', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-center',
+						'icon'  => 'fa fa-align-center',
 					],
-					'right' => [
+					'right'  => [
 						'title' => __( 'Right', 'elementor-addon-widgets' ),
-						'icon' => 'fa fa-align-right',
+						'icon'  => 'fa fa-align-right',
 					],
 				],
 				'selectors' => [
@@ -118,5 +180,4 @@ class Eelementor_Registration_Widget extends ElementorWidget {
 			]
 		);
 	}
-
 }
