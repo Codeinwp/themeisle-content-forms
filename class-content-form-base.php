@@ -98,17 +98,27 @@ abstract class ContentFormBase {
 		// We check if the Elementor plugin has been installed / activated.
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 
-			\Elementor\Plugin::instance()->widgets_manager->register_widget_type(
-				new \ThemeIsle\ContentForms\ElementorWidget(
-					array(
-						'id'                   => 'content_form_' . $this->get_type(),
-						'content_forms_config' => $this->get_config()
-					),
-					array(
-						'content_forms_config' => $this->get_config()
-					)
-				)
-			);
+			$widget_type = $this->get_type();
+			$widget = array();
+			if( $widget_type === 'contact' ){
+				require_once( __DIR__ . '/class-themeisle-elementor-contact-widget.php' );
+				$widget = new \ThemeIsle\ContentForms\Elementor_Contact_Widget();
+			}
+
+			if( $widget_type === 'newsletter' ){
+				require_once( __DIR__ . '/class-themeisle-elementor-newsletter-widget.php' );
+				$widget = new \ThemeIsle\ContentForms\Elementor_Newsletter_Widget();
+			}
+
+			if( $widget_type === 'registration' ){
+				require_once( __DIR__ . '/class-themeisle-elementor-registration-widget.php' );
+				$widget = new \ThemeIsle\ContentForms\Elementor_Registration_Widget();
+			}
+
+			if( !empty( $widget ) ){
+				\Elementor\Plugin::instance()->widgets_manager->register_widget_type( $widget );
+			}
+
 		}
 	}
 

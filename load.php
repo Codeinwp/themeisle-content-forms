@@ -61,7 +61,7 @@ if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :
 	function themeisle_content_forms_register_public_assets() {
 		$version = '1.2.1'; // the current plugin version
 
-		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', __FILE__ ), array( 'jquery' ), $version );
+		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', __FILE__ ), array( 'jquery' ), $version, true );
 
 		wp_localize_script( 'content-forms', 'contentFormsSettings', array(
 			'restUrl' => esc_url_raw( rest_url() . 'content-forms/v1/' ),
