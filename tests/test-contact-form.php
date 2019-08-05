@@ -68,7 +68,7 @@ class ContactFormTest extends WP_UnitTestCase {
 		);
 
 		$this->assertEquals( $return, array(
-			'msg' => 'Invalid email.'
+			'message' => 'Invalid email.'
 		) );
 	}
 
@@ -86,7 +86,7 @@ class ContactFormTest extends WP_UnitTestCase {
 		);
 
 		$this->assertEquals( $return, array(
-			'msg' => 'Missing name.'
+			'message' => 'Missing name.'
 		) );
 	}
 
@@ -107,7 +107,7 @@ class ContactFormTest extends WP_UnitTestCase {
 		);
 
 		$this->assertEquals( $return, array(
-			'msg' => 'Missing message.'
+			'message' => 'Missing message.'
 		) );
 	}
 }

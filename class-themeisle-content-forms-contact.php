@@ -112,40 +112,40 @@ class ContactForm extends Base {
 				}
 				$required[] = $key;
 				if ( empty( $data[ $key ] ) ) {
-					$return['msg'] = esc_html( sprintf( 'Missing %s', $field['label']), 'textdomain' );
+					$return['message'] = esc_html( sprintf( 'Missing %s', $field['label']), 'textdomain' );
 					return $return;
 				} else {
 					if ( $key === 'email' && ! is_email( $data['email'] ) ) {
-						$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
+						$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 						return $return;
 					}
 				}
 			}
 		}
-		
+
 		// Empty email does not make much sense!
 		$from = isset( $data['email'] ) ? $data['email'] : null;
 		$name = isset( $data['name'] ) ? $data['name'] : null;
 
 		// Empty message does not make much sense!
-		$msg = isset( $data['message'] ) ? $data['message'] : null;
+		$message = isset( $data['message'] ) ? $data['message'] : null;
 
 		// prepare settings for submit
 		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 
 		if ( ! isset( $settings['to_send_email'] ) || ! is_email( $settings['to_send_email'] ) ) {
-			$return['msg'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
+			$return['message'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
 
 			return $return;
 		}
 
-		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $msg, $data );
+		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $message, $data );
 
 		if ( $result ) {
 			$return['success'] = true;
-			$return['msg']     = $this->notices['success'];
+			$return['message']     = $this->notices['success'];
 		} else {
-			$return['msg'] = esc_html__( 'Oops! I cannot send this email!', 'textdomain' );
+			$return['message'] = esc_html__( 'Oops! I cannot send this email!', 'textdomain' );
 		}
 
 		return $return;

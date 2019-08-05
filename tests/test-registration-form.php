@@ -67,7 +67,7 @@ class RegistrationFormTest extends WP_UnitTestCase {
 		);
 
 		$this->assertEquals( $return, array(
-			'msg' => 'Invalid email.'
+			'message' => 'Invalid email.'
 		) );
 	}
 
@@ -89,7 +89,7 @@ class RegistrationFormTest extends WP_UnitTestCase {
 		// if the username is not serverd, the email should be used instead
 		$this->assertEquals( $return, array(
 			'success' => true,
-			'msg' => 'Welcome, admin@admin.com'
+			'message' => 'Welcome, admin@admin.com'
 		) );
 	}
 
@@ -109,7 +109,7 @@ class RegistrationFormTest extends WP_UnitTestCase {
 		);
 
 		$this->assertEquals( $return, array(
-			'msg' => 'This website does not allow registrations at this moment!'
+			'message' => 'This website does not allow registrations at this moment!'
 		) );
 	}
 
@@ -133,7 +133,7 @@ class RegistrationFormTest extends WP_UnitTestCase {
 
 		$this->assertEquals( $return, array(
 			'success' => true,
-			'msg' => 'Welcome, admin2'
+			'message' => 'Welcome, admin2'
 		) );
 	}
 }

@@ -78,7 +78,7 @@ class RestServer extends \WP_Rest_Controller {
 	public function submit_form( $request ) {
 		$return = array(
 			'success' => false,
-			'msg'     => esc_html__( 'Something went wrong', 'textdomain' )
+			'message'     => esc_html__( 'Something went wrong', 'textdomain' )
 		);
 
 		$nonce   = $request->get_param( 'nonce' );
@@ -86,8 +86,14 @@ class RestServer extends \WP_Rest_Controller {
 		$post_id = $request->get_param( 'post_id' );
 
 		if ( ! wp_verify_nonce( $nonce, 'content-form-' . $form_id ) ) {
-			$return['msg'] = 'Invalid nonce';
-			return rest_ensure_response( $return );
+			return new \WP_REST_Response(
+				array(
+					'success'    => false,
+					'message' => esc_html__( 'Invalid nonce', 'textdomain' ),
+				),
+				400
+			);
+
 		}
 
 		$form_type    = $request->get_param( 'form_type' );
@@ -95,8 +101,13 @@ class RestServer extends \WP_Rest_Controller {
 		$data         = $request->get_param( 'data' );
 
 		if ( empty( $data[ $form_id ] ) ) {
-			$return['msg'] = esc_html__( 'Invalid Data ', 'textdomain' ) . $form_id;
-			return $return;
+			return new \WP_REST_Response(
+				array(
+					'success'    => false,
+					'message' => esc_html__( 'Invalid Data ', 'textdomain' ) . $form_id,
+				),
+				400
+			);
 		}
 
 		$data = $data[ $form_id ];
@@ -106,8 +117,10 @@ class RestServer extends \WP_Rest_Controller {
 		 * Must return the success status and a message.
 		 */
 		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id, $form_builder );
-
-		return rest_ensure_response( $return );
+		return new \WP_REST_Response(
+			$return,
+			200
+		);
 	}
 
 	public function submit_forms_permissions_check() {
