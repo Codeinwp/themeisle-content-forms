@@ -96,7 +96,7 @@ class NewsletterForm extends Base {
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
-			$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
+			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
 		}
@@ -115,7 +115,7 @@ class NewsletterForm extends Base {
 		$providerArgs = array();
 
 		if ( empty( $settings['access_key'] ) || empty( $settings['list_id'] ) ) {
-			$return['msg'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
+			$return['message'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
 
 			return $return;
 		}
@@ -167,17 +167,17 @@ class NewsletterForm extends Base {
 
 				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 					$result['success'] = false;
-					$result['msg']    = $body['detail'];
+					$result['message']    = $body['detail'];
 					return $result;
 				}
 
 
 				if ( $body['status'] == $status ) {
 					$result['success'] = true;
-					$result['msg']     = $this->notices['success'];
+					$result['message']     = $this->notices['success'];
 				} else {
 					$result['success'] = false;
-					$result['msg']    = $this->notices['error'];
+					$result['message']    = $this->notices['error'];
 				}
 
 				return $result;
@@ -204,18 +204,18 @@ class NewsletterForm extends Base {
 				$response = wp_remote_post( $url, $args );
 
 				if ( is_wp_error( $response ) ) {
-					$result['msg']     = $this->notices['error'];
+					$result['message']     = $this->notices['error'];
 					return $result;
 				}
 
 				if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
 					$result['success'] = true;
-					$result['msg'] = $this->notices['success'];
+					$result['message'] = $this->notices['success'];
 					return $result;
 				}
 
 				$body = json_decode( wp_remote_retrieve_body( $response ), true );
-				$result['msg']     = $body['message'];
+				$result['message']     = $body['message'];
 				return $result;
 				break;
 
