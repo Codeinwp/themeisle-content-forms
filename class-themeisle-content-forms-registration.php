@@ -92,7 +92,7 @@ class RegistrationForm extends Base {
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
-			$return['msg'] = esc_html__( 'Invalid email.', 'textdomain' );
+			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
 		}
@@ -136,25 +136,25 @@ class RegistrationForm extends Base {
 	private function _register_user( $return, $user_email, $user_name, $password = null, $extra_data = array() ) {
 
 		if ( ! get_option( 'users_can_register' ) ) {
-			$return['msg'] = esc_html__( 'This website does not allow registrations at this moment!' );
+			$return['message'] = esc_html__( 'This website does not allow registrations at this moment!' );
 
 			return $return;
 		}
 
 		if ( ! validate_username( $user_name ) ) {
-			$return['msg'] = esc_html__( 'Invalid user name' );
+			$return['message'] = esc_html__( 'Invalid user name' );
 
 			return $return;
 		}
 
 		if ( username_exists( $user_name ) ) {
-			$return['msg'] = esc_html__( 'Username already exists' );
+			$return['message'] = esc_html__( 'Username already exists' );
 
 			return $return;
 		}
 
 		if ( email_exists( $user_email ) ) {
-			$return['msg'] = esc_html__( 'This email is already registered' );
+			$return['message'] = esc_html__( 'This email is already registered' );
 			return $return;
 		}
 
@@ -183,7 +183,7 @@ class RegistrationForm extends Base {
 			}
 
 			$return['success'] = true;
-			$return['msg']     = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
+			$return['message']     = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
 		}
 
 		return $return;

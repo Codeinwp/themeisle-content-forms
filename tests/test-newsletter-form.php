@@ -67,7 +67,7 @@ class NewsletterFormTest extends WP_UnitTestCase {
 		);
 
 		$this->assertEquals( $return, array(
-			'msg' => 'Invalid email.'
+			'message' => 'Invalid email.'
 		) );
 	}
 }
