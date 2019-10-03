@@ -1,40 +1,64 @@
 <?php
-
-namespace ThemeIsle\ContentForms;
-
 /**
- * Class RestServer
  *
  */
-class RestServer extends \WP_Rest_Controller {
+
+namespace ThemeIsle\ContentForms\Rest;
+
+/**
+ * Class Server
+ * @package ThemeIsle\ContentForms\Rest
+ */
+class Server extends \WP_Rest_Controller{
 
 	/**
-	 * @var RestServer
+	 * The unique instance of the Rest Server.
+	 *
+	 * @var Server
 	 */
-	public static $instance = null;
+	private static $instance;
 
-	public $namespace = 'content-forms/';
-	public $version = 'v1';
+	/**
+	 * Gets an instance of our class.
+	 *
+	 * @return Server
+	 */
+	public static function instance() {
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
+			self::$instance->register_hooks();
+		}
 
-	public function init() {
-		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		return self::$instance;
 	}
 
-	public function register_routes() {
-		$namespace = $this->namespace . $this->version;
+	/**
+	 * Initialize the rest functionality.
+	 */
+	public function register_hooks() {
+		add_action( 'rest_api_init', array( $this, 'register_endpoints' ) );
+	}
 
-		register_rest_route( $namespace, '/check', array(
+	/**
+	 * Register endpoints.
+	 */
+	public function register_endpoints() {
+
+		register_rest_route(
+			TI_CONTENT_FORMS_NAMESPACE,
+			'/check',
 			array(
 				'methods'  => \WP_REST_Server::READABLE,
 				'callback' => array( $this, 'rest_check' )
-			),
-		) );
+			)
+		);
 
-		register_rest_route( $namespace, '/submit', array(
+		register_rest_route(
+			TI_CONTENT_FORMS_NAMESPACE,
+			'/submit',
 			array(
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'callback'            => array( $this, 'submit_form' ),
-				'permission_callback' => array( $this, 'submit_forms_permissions_check' ),
 				'args'                => array(
 					'form_type' => array(
 						'type'        => 'string',
@@ -62,12 +86,19 @@ class RestServer extends \WP_Rest_Controller {
 						'description' => __( 'The form identifier.', 'textdomain' ),
 					)
 				),
-			),
-		) );
+			)
+		);
 	}
 
+	/**
+	 * Validate response status.
+	 *
+	 * @param \WP_REST_Request $request Rest Request.
+	 *
+	 * @return mixed|\WP_REST_Response
+	 */
 	public function rest_check( \WP_REST_Request $request ) {
-			return rest_ensure_response( 'success' );
+		return rest_ensure_response( 'success' );
 	}
 
 	/**
@@ -76,14 +107,8 @@ class RestServer extends \WP_Rest_Controller {
 	 * @return mixed|\WP_REST_Response
 	 */
 	public function submit_form( $request ) {
-		$return = array(
-			'success' => false,
-			'message'     => esc_html__( 'Something went wrong', 'textdomain' )
-		);
-
 		$nonce   = $request->get_param( 'nonce' );
 		$form_id = $request->get_param( 'form_id' );
-		$post_id = $request->get_param( 'post_id' );
 
 		if ( ! wp_verify_nonce( $nonce, 'content-form-' . $form_id ) ) {
 			return new \WP_REST_Response(
@@ -96,10 +121,7 @@ class RestServer extends \WP_Rest_Controller {
 
 		}
 
-		$form_type    = $request->get_param( 'form_type' );
-		$form_builder = $request->get_param( 'form_builder' );
-		$data         = $request->get_param( 'data' );
-
+		$data = $request->get_param( 'data' );
 		if ( empty( $data[ $form_id ] ) ) {
 			return new \WP_REST_Response(
 				array(
@@ -110,62 +132,48 @@ class RestServer extends \WP_Rest_Controller {
 			);
 		}
 
-		$data = $data[ $form_id ];
+		$data         = $data[ $form_id ];
+		$post_id      = $request->get_param( 'post_id' );
+		$form_type    = $request->get_param( 'form_type' );
+		$form_builder = $request->get_param( 'form_builder' );
+
+		$return = array(
+			'success' => false,
+			'message' => esc_html__( 'Something went wrong', 'textdomain' )
+		);
 
 		/**
 		 * Each form type should be able to provide its own process of submitting data.
 		 * Must return the success status and a message.
 		 */
 		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id, $form_builder );
+		$status = 200;
+		if ( $return['success'] === false ){
+			$status = 400;
+		}
 		return new \WP_REST_Response(
 			$return,
-			200
+			$status
 		);
 	}
 
-	public function submit_forms_permissions_check() {
-		return 1;
-	}
-
 	/**
-	 * @static
-	 * @since 1.0.0
-	 * @access public
-	 * @return RestServer
-	 */
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-			self::$instance->init();
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * Throw error on object clone
-	 *
-	 * The whole idea of the singleton design pattern is that there is a single
-	 * object therefore, we don't want the object to be cloned.
+	 * Cloning is forbidden.
 	 *
 	 * @access public
-	 * @since 1.0.0
-	 * @return void
+	 * @since  0.0.1
 	 */
 	public function __clone() {
-		// Cloning instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'textdomain' ), TI_CONTENT_FORMS_VERSION );
 	}
-
 	/**
-	 * Disable unserializing of the class
+	 * Unserializing instances of this class is forbidden.
 	 *
 	 * @access public
-	 * @since 1.0.0
-	 * @return void
+	 * @since  0.0.1
 	 */
 	public function __wakeup() {
-		// Unserializing instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'textdomain' ), '1.0.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'textdomain' ), TI_CONTENT_FORMS_VERSION );
 	}
+
 }

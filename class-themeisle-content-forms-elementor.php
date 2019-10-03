@@ -989,8 +989,11 @@ abstract class ElementorWidget extends Widget_Base {
 	 * @since 1.0.0
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
-		$item_index  = $field['_id'];
-		$key         = ! empty( $field['key'] ) ? $field['key'] : sanitize_title( $field['label'] );
+		$item_index = $field['_id'];
+		$key        = ! empty( $field['label'] ) ? sanitize_title( $field['label'] ) : ( ! empty( $field['placeholder'] ) ? sanitize_title( $field['placeholder'] ) : 'field_' . $item_index );
+		if ( ! empty( $field['key'] ) ){
+			$key = $field['key'];
+		}
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 
 		$required = '';
@@ -1027,7 +1030,7 @@ abstract class ElementorWidget extends Widget_Base {
 
 		echo '<label for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $item_index ) . '>';
 		echo wp_kses_post( $field['label'] );
-		if ( $field['requirement'] === 'required' ) {
+		if ( ! empty( $field['label'] ) && $field['requirement'] === 'required' ) {
 			echo '<span class="required-mark"> *</span>';
 		}
 		echo '</label>';

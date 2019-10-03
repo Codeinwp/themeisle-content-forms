@@ -8,40 +8,45 @@
  * @since       1.0.0
  */
 
+define( 'TI_CONTENT_FORMS_VERSION', '1.0.0' );
+define( 'TI_CONTENT_FORMS_NAMESPACE', 'content-forms/v1');
+define( 'TI_CONTENT_FOTMS_PATH' , dirname( __FILE__ ));
+
 if ( ! function_exists( 'themeisle_content_forms_load' ) ) :
 
 	/**
 	 * Load the necessary resource for this library
 	 */
 	function themeisle_content_forms_load() {
-		$path = dirname( __FILE__ );
 
 		// @TODO we should autoload these
 		// get base classes
-		require_once $path . '/class-content-form-base.php';
-		require_once $path . '/class-themeisle-content-forms-server.php';
+		require_once TI_CONTENT_FOTMS_PATH . '/class-content-form-base.php';
+		require_once TI_CONTENT_FOTMS_PATH . '/rest/server.php';
+		\ThemeIsle\ContentForms\Rest\Server::instance();
 
-		\Themeisle\ContentForms\RestServer::instance();
+
+
 
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 			// get builders generators
-			require_once $path . '/class-themeisle-content-forms-elementor.php';
+			require_once TI_CONTENT_FOTMS_PATH . '/class-themeisle-content-forms-elementor.php';
 		}
 
 		if ( class_exists( '\FLBuilderModel' ) ) {
-			require_once $path . '/beaver/class-themeisle-content-forms-beaver-base.php';
-			require_once $path . '/beaver/class-themeisle-content-forms-beaver-contact.php';
-			require_once $path . '/beaver/class-themeisle-content-forms-beaver-newsletter.php';
-			require_once $path . '/beaver/class-themeisle-content-forms-beaver-registration.php';
+			require_once TI_CONTENT_FOTMS_PATH . '/beaver/class-themeisle-content-forms-beaver-base.php';
+			require_once TI_CONTENT_FOTMS_PATH . '/beaver/class-themeisle-content-forms-beaver-contact.php';
+			require_once TI_CONTENT_FOTMS_PATH . '/beaver/class-themeisle-content-forms-beaver-newsletter.php';
+			require_once TI_CONTENT_FOTMS_PATH . '/beaver/class-themeisle-content-forms-beaver-registration.php';
 		}
 
 		// @TODO Gutenberg is not working yet
 		//require_once $path . '/class-themeisle-content-forms-gutenberg.php';
 
 		// get forms
-		require_once $path . '/class-themeisle-content-forms-contact.php';
-		require_once $path . '/class-themeisle-content-forms-newsletter.php';
-		require_once $path . '/class-themeisle-content-forms-registration.php';
+		require_once TI_CONTENT_FOTMS_PATH . '/class-themeisle-content-forms-contact.php';
+		require_once TI_CONTENT_FOTMS_PATH . '/class-themeisle-content-forms-newsletter.php';
+		require_once TI_CONTENT_FOTMS_PATH . '/class-themeisle-content-forms-registration.php';
 
 		/**
 		 * At this point all the PHP classes are available and the forms can be loaded
