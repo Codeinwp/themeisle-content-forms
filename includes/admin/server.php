@@ -3,34 +3,13 @@
  *
  */
 
-namespace ThemeIsle\ContentForms\Rest;
+namespace ThemeIsle\ContentForms\Includes\Admin;
 
 /**
  * Class Server
  * @package ThemeIsle\ContentForms\Rest
  */
 class Server extends \WP_Rest_Controller{
-
-	/**
-	 * The unique instance of the Rest Server.
-	 *
-	 * @var Server
-	 */
-	private static $instance;
-
-	/**
-	 * Gets an instance of our class.
-	 *
-	 * @return Server
-	 */
-	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
-			self::$instance->register_hooks();
-		}
-
-		return self::$instance;
-	}
 
 	/**
 	 * Initialize the rest functionality.
@@ -155,25 +134,6 @@ class Server extends \WP_Rest_Controller{
 			$return,
 			$status
 		);
-	}
-
-	/**
-	 * Cloning is forbidden.
-	 *
-	 * @access public
-	 * @since  0.0.1
-	 */
-	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'textdomain' ), TI_CONTENT_FORMS_VERSION );
-	}
-	/**
-	 * Unserializing instances of this class is forbidden.
-	 *
-	 * @access public
-	 * @since  0.0.1
-	 */
-	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'textdomain' ), TI_CONTENT_FORMS_VERSION );
 	}
 
 }
