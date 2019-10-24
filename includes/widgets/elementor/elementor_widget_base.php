@@ -191,6 +191,17 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->add_specific_settings_controls();
 
 		$submit_default = ! empty( $this->submit_button_label ) ? $this->submit_button_label : esc_html__( 'Submit', 'textdomain' );
+
+		$this->add_control(
+			'hide_label',
+			array(
+				'type'         => Controls_Manager::SWITCHER,
+				'label'        => __( 'Hide Label', 'textdomain' ),
+				'return_value' => 'hide',
+				'default'      => '',
+			)
+		);
+
 		$this->add_control(
 			'submit_label',
 			array(
@@ -858,6 +869,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 
 		$required = '';
 		$form_id  = $this->get_data( 'id' );
+		$settings = $this->get_settings();
+		$display_label = $settings[ 'hide_label' ];
 
 		if ( $field['requirement'] === 'required' ) {
 			$required = 'required="required"';
@@ -888,13 +901,14 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 
 		echo '<fieldset ' . $this->get_render_attribute_string( 'fieldset' . $field['_id'] ) . '>';
 
-		echo '<label for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $item_index ) . '>';
-		echo wp_kses_post( $field['label'] );
-		if ( ! empty( $field['label'] ) && $field['requirement'] === 'required' ) {
-			echo '<span class="required-mark"> *</span>';
+		if( $display_label !== 'hide' ) {
+			echo '<label for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $item_index ) . '>';
+			echo wp_kses_post( $field['label'] );
+			if ( ! empty( $field['label'] ) && $field['requirement'] === 'required' ) {
+				echo '<span class="required-mark"> *</span>';
+			}
+			echo '</label>';
 		}
-		echo '</label>';
-
 		switch ( $field['type'] ) {
 			case 'textarea':
 				echo '<textarea name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . ' ' . $required . ' placeholder="' . esc_attr( $placeholder ) . '" cols="30" rows="5"></textarea>';
