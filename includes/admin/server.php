@@ -114,9 +114,7 @@ class Server extends \WP_Rest_Controller{
 		$data         = $data[ $form_id ];
 		$post_id      = $request->get_param( 'post_id' );
 		$form_type    = $request->get_param( 'form_type' );
-		$form_builder = $request->get_param( 'form_builder' );
-
-		$return = array(
+		$return       = array(
 			'success' => false,
 			'message' => esc_html__( 'Something went wrong', 'textdomain' )
 		);
@@ -125,7 +123,7 @@ class Server extends \WP_Rest_Controller{
 		 * Each form type should be able to provide its own process of submitting data.
 		 * Must return the success status and a message.
 		 */
-		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id, $form_builder );
+		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id );
 		$status = 200;
 		if ( $return['success'] === false ){
 			$status = 400;

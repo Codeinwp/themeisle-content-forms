@@ -22,6 +22,7 @@ function themeisle_content_forms_load() {
 	require_once 'form_manager.php';
 	require_once 'includes/widgets/elementor/elementor_widget_manager.php';
 	require_once 'includes/widgets/elementor/elementor_widget_base.php';
+	require_once 'includes/widgets/elementor/elementor_widget_actions_base.php';
 	require_once 'includes/widgets/elementor/contact/contact_public.php';
 	require_once 'includes/widgets/elementor/contact/contact_admin.php';
 	require_once 'includes/widgets/elementor/newsletter/newsletter_public.php';
