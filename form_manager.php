@@ -66,8 +66,10 @@ class Form_Manager{
 	 * Load Elementor, Beaver or other widgets manager class.
 	 */
 	private function make() {
-		$elementor_manager = new Elementor_Widget_Manager();
-		$elementor_manager->init();
+		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
+			$elementor_manager = new Elementor_Widget_Manager();
+			$elementor_manager->init();
+		}
 	}
 
 }
