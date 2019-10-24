@@ -1,27 +1,29 @@
 <?php
 /**
- * Main class for Elementor Contact Form Custom Widget
+ * Main class for Elementor Registration Form Custom Widget
  *
  * @package ContentForms
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
+namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Registration;
 
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
 /**
- * Class Contact_Admin
+ * Class Registration_Admin
+ *
+ * @package ThemeIsle\ContentForms\Includes\Widgets\Elementor\Registration
  */
-class Contact_Admin extends Elementor_Widget_Base {
+class Registration_Admin extends Elementor_Widget_Base{
 
 	/**
 	 * The type of current widget form.
 	 *
 	 * @var string
 	 */
-	public $form_type = 'contact';
+	public $form_type = 'registration';
 
 	/**
 	 * Elementor Widget Name.
@@ -29,7 +31,7 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'content_form_contact';
+		return 'content_form_registration';
 	}
 
 	/**
@@ -38,7 +40,7 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'Contact Form', 'textdomain' );
+		return esc_html__( 'Registration Form', 'textdomain' );
 	}
 
 	/**
@@ -46,50 +48,41 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 *
 	 * @return array
 	 */
-	public function get_default_config() {
+	function get_default_config() {
 		return array(
 			array(
-				'key'         => 'name',
+				'key'         => 'username',
 				'type'        => 'text',
-				'label'       => esc_html__( 'Name', 'textdomain' ),
-				'requirement' => 'required',
-				'placeholder' => esc_html__( 'Name', 'textdomain' ),
+				'label'       => esc_html__( 'User Name', 'textdomain' ),
+				'require'     => 'required',
+				'placeholder' => esc_html__( 'User Name', 'textdomain' ),
 				'field_width' => '100',
 			),
 			array(
 				'key'         => 'email',
 				'type'        => 'email',
 				'label'       => esc_html__( 'Email', 'textdomain' ),
-				'requirement' => 'required',
+				'require'     => 'required',
 				'placeholder' => esc_html__( 'Email', 'textdomain' ),
 				'field_width' => '100',
 			),
 			array(
-				'key'         => 'phone',
-				'type'        => 'number',
-				'label'       => esc_html__( 'Phone', 'textdomain' ),
-				'requirement' => 'optional',
-				'placeholder' => esc_html__( 'Phone', 'textdomain' ),
+				'key'         => 'password',
+				'type'        => 'password',
+				'label'       => esc_html__( 'Password', 'textdomain' ),
+				'require'     => 'required',
+				'placeholder' => esc_html__( 'Password', 'textdomain' ),
 				'field_width' => '100',
-			),
-			array(
-				'key'         => 'message',
-				'type'        => 'textarea',
-				'label'       => esc_html__( 'Message', 'textdomain' ),
-				'requirement' => 'required',
-				'placeholder' => esc_html__( 'Message', 'textdomain' ),
-				'field_width' => '100',
-			),
-
+			)
 		);
 	}
 
 	/**
-	 * Register Contact Form Widget Fields
+	 * Register Registration Form Widget Fields
 	 */
-	public function _register_fields_controls() {
+	function _register_fields_controls() {
 		$this->start_controls_section(
-			'contact_form_fields',
+			'registration_form_fields',
 			array(
 				'label' => __( 'Fields', 'textdomain' )
 			)
@@ -186,23 +179,13 @@ class Contact_Admin extends Elementor_Widget_Base {
 	}
 
 	/**
-	 * Register Contact Form Widget Settings
+	 * Register Registration Form Widget Settings
 	 */
-	public function _register_settings_controls(){
+	function _register_settings_controls() {
 		$this->start_controls_section(
-			'contact_form_settings',
+			'registration_form_settings',
 			array(
 				'label' => __( 'Form Settings', 'textdomain' ),
-			)
-		);
-
-		$this->add_control(
-			'to_send_email',
-			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Send to', 'textdomain' ),
-				'default'     => get_bloginfo( 'admin_email' ),
-				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
 			)
 		);
 

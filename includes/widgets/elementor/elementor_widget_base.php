@@ -25,6 +25,15 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
+	 * Get Widget Icon.
+	 *
+	 * @return string
+	 */
+	public function get_icon() {
+		return 'eicon-text-align-left';
+	}
+
+	/**
 	 * @return bool|void
 	 */
 	protected function _register_controls() {
@@ -724,8 +733,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	abstract function get_default_config();
-
-	abstract function add_widget_specific_fields();
 
 	/**
 	 * Extract widget settings based on a widget id and a page id

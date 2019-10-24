@@ -1,27 +1,27 @@
 <?php
 /**
- * Main class for Elementor Contact Form Custom Widget
+ * Main class for Elementor Newsletter Form Custom Widget
  *
  * @package ContentForms
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
+namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Newsletter;
 
 use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
 /**
- * Class Contact_Admin
+ * Class Newsletter_Admin
  */
-class Contact_Admin extends Elementor_Widget_Base {
+class Newsletter_Admin extends Elementor_Widget_Base{
 
 	/**
 	 * The type of current widget form.
 	 *
 	 * @var string
 	 */
-	public $form_type = 'contact';
+	public $form_type = 'newsletter';
 
 	/**
 	 * Elementor Widget Name.
@@ -29,7 +29,16 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		return 'content_form_contact';
+		return 'content_form_newsletter';
+	}
+
+	/**
+	 * The default values for current widget.
+	 *
+	 * @return array
+	 */
+	function get_default_config() {
+		return array();
 	}
 
 	/**
@@ -38,58 +47,15 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'Contact Form', 'textdomain' );
+		return esc_html__( 'Newsletter Form', 'textdomain' );
 	}
 
 	/**
-	 * The default values for current widget.
-	 *
-	 * @return array
+	 * Register Registration Form Widget Fields
 	 */
-	public function get_default_config() {
-		return array(
-			array(
-				'key'         => 'name',
-				'type'        => 'text',
-				'label'       => esc_html__( 'Name', 'textdomain' ),
-				'requirement' => 'required',
-				'placeholder' => esc_html__( 'Name', 'textdomain' ),
-				'field_width' => '100',
-			),
-			array(
-				'key'         => 'email',
-				'type'        => 'email',
-				'label'       => esc_html__( 'Email', 'textdomain' ),
-				'requirement' => 'required',
-				'placeholder' => esc_html__( 'Email', 'textdomain' ),
-				'field_width' => '100',
-			),
-			array(
-				'key'         => 'phone',
-				'type'        => 'number',
-				'label'       => esc_html__( 'Phone', 'textdomain' ),
-				'requirement' => 'optional',
-				'placeholder' => esc_html__( 'Phone', 'textdomain' ),
-				'field_width' => '100',
-			),
-			array(
-				'key'         => 'message',
-				'type'        => 'textarea',
-				'label'       => esc_html__( 'Message', 'textdomain' ),
-				'requirement' => 'required',
-				'placeholder' => esc_html__( 'Message', 'textdomain' ),
-				'field_width' => '100',
-			),
-
-		);
-	}
-
-	/**
-	 * Register Contact Form Widget Fields
-	 */
-	public function _register_fields_controls() {
+	function _register_fields_controls() {
 		$this->start_controls_section(
-			'contact_form_fields',
+			'newsletter_form_fields',
 			array(
 				'label' => __( 'Fields', 'textdomain' )
 			)
@@ -182,37 +148,88 @@ class Contact_Admin extends Elementor_Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'button_icon',
+			[
+				'label' => __( 'Submit Icon', 'elementor-pro' ),
+				'type' => Controls_Manager::ICON,
+				'label_block' => true,
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'button_icon_indent',
+			[
+				'label' => __( 'Icon Spacing', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'range' => [
+					'px' => [
+						'max' => 100,
+					],
+				],
+				'condition' => [
+					'button_icon!' => '',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .elementor-button-icon' => 'margin-right: {{SIZE}}{{UNIT}}; margin-left: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
 		$this->end_controls_section();
 	}
 
 	/**
-	 * Register Contact Form Widget Settings
+	 * Register Registration Form Widget Settings
 	 */
-	public function _register_settings_controls(){
+	function _register_settings_controls() {
 		$this->start_controls_section(
-			'contact_form_settings',
+			'registration_form_settings',
 			array(
 				'label' => __( 'Form Settings', 'textdomain' ),
 			)
 		);
 
 		$this->add_control(
-			'to_send_email',
+			'provider',
+			array(
+				'type'        => 'select',
+				'label'       => esc_html__( 'Subscribe to', 'textdomain' ),
+				'description' => esc_html__( 'Where to send the email?', 'textdomain' ),
+				'options'     => array(
+					'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
+					'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' )
+				)
+			)
+		);
+
+		$this->add_control(
+			'access_key',
 			array(
 				'type'        => 'text',
-				'label'       => esc_html__( 'Send to', 'textdomain' ),
-				'default'     => get_bloginfo( 'admin_email' ),
-				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
+				'label'       => esc_html__( 'Access Key', 'textdomain' ),
+				'description' => esc_html__( 'Provide an access key for the selected service', 'textdomain' ),
+				'required' => true
+			)
+		);
+
+		$this->add_control(
+			'list_id',
+			array(
+				'type'  => 'text',
+				'label' => esc_html__( 'List ID', 'textdomain' ),
+				'description' => esc_html__( 'The List ID (based on the seleced service) where we should subscribe the user', 'textdomain' ),
+				'required' => true
 			)
 		);
 
 		$this->add_control(
 			'submit_label',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Submit', 'textdomain' ),
-				'default'     => esc_html__( 'Submit', 'textdomain' ),
-				'description' => esc_html__( 'The Call To Action label', 'textdomain' )
+				'type'    => 'text',
+				'label'   => esc_html__( 'Submit Label', 'textdomain' ),
+				'default' => esc_html__( 'Join Newsletter', 'textdomain' ),
 			)
 		);
 
@@ -245,4 +262,8 @@ class Contact_Admin extends Elementor_Widget_Base {
 
 		$this->end_controls_section();
 	}
+
+
+
+
 }

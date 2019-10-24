@@ -19,24 +19,19 @@ class Elementor_Widget_Manager {
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact' ];
+	public static $forms = [ 'contact', 'registration', 'newsletter' ];
 
 	/**
 	 * Initialization Function
 	 */
 	public function init(){
-		$this->load_hooks();
-	}
-
-	/**
-	 * Load hooks and filters.
-	 */
-	private function load_hooks(){
 		// Register Orbit Fox Category in Elementor Dashboard
 		add_action( 'elementor/elements/categories_registered', array( $this, 'add_elementor_widget_categories' ) );
 
 		// Register Orbit Fox Elementor Widgets
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
+
+		// Register the actions that forms do
 		add_action( 'rest_api_init', array( $this, 'register_widgets_actions' ) );
 	}
 
@@ -60,7 +55,7 @@ class Elementor_Widget_Manager {
 	 */
 	public function register_elementor_widget(){
 		foreach ( self::$forms as $form ){
-			$widget = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Public';
+			$widget = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Admin';
 			Plugin::instance()->widgets_manager->register_widget_type( new $widget() );
 		}
 	}
@@ -70,7 +65,7 @@ class Elementor_Widget_Manager {
 	 */
 	public function register_widgets_actions(){
 		foreach ( self::$forms as $form ){
-			$admin_class  = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Admin';
+			$admin_class  = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Public';
 			if( class_exists( $admin_class ) ){
 				$admin = new $admin_class();
 				$admin->init();
