@@ -1,6 +1,8 @@
 <?php
 /**
+ * This class is a wrapper for all Elementor custom Widgets defined in this module
  *
+ * @package ContentForms
  */
 
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor;
@@ -9,23 +11,32 @@ use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Typography;
 use Elementor\Plugin;
+use Elementor\Repeater;
 use Elementor\Scheme_Color;
 use Elementor\Scheme_Typography;
 use Elementor\Widget_Base;
 
 /**
  * Class Elementor_Base
- *
- * @package ThemeIsle\ContentForms\Includes\Widgets\Elementor
  */
 abstract class Elementor_Widget_Base extends Widget_Base {
 
+	/**
+	 * @var string
+	 */
+	public $submit_button_label = '';
+
+	/**
+	 * All the widgets that extends this class have the same category.
+	 *
+	 * @return array
+	 */
 	public function get_categories() {
 		return ['obfx-elementor-widgets'];
 	}
 
 	/**
-	 * Get Widget Icon.
+	 * All the widgets that extends this class have the same Icon.
 	 *
 	 * @return string
 	 */
@@ -34,16 +45,196 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
-	 * @return bool|void
+	 * Register the controls for each Elementor Widget.
 	 */
 	protected function _register_controls() {
-		$this->_register_fields_controls();
-		$this->_register_settings_controls();
-		$this->_register_style_controls();
+		$this->register_form_fields();
+		$this->register_settings_controls();
+		$this->register_style_controls();
 	}
 
-	abstract function _register_fields_controls();
-	abstract function _register_settings_controls();
+	/**
+	 * This function registers the Repeater Control that adds fields in the form.
+	 */
+	private function register_form_fields() {
+
+		$this->start_controls_section(
+			$this->form_type . '_form_fields',
+			array(
+				'label' => __( 'Fields', 'textdomain' )
+			)
+		);
+
+		$repeater = new Repeater();
+
+		$repeater->add_control(
+			'label',
+			array(
+				'label'   => __( 'Label', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '',
+			)
+		);
+
+		$repeater->add_control(
+			'placeholder',
+			array(
+				'label'   => __( 'Placeholder', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '',
+			)
+		);
+
+		$repeater->add_control(
+			'requirement',
+			array(
+				'label'        => __( 'Required', 'textdomain' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'return_value' => 'required',
+				'default'      => '',
+			)
+		);
+
+		$field_types = array(
+			'text'     => __( 'Text', 'textdomain' ),
+			'password' => __( 'Password', 'textdomain' ),
+			'email'    => __( 'Email', 'textdomain' ),
+			'textarea' => __( 'Textarea', 'textdomain' ),
+		);
+
+		$repeater->add_control(
+			'type',
+			array(
+				'label'   => __( 'Type', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => $field_types,
+				'default' => 'text'
+			)
+		);
+
+		$repeater->add_control(
+			'key',
+			array(
+				'label' => __( 'Key', 'textdomain' ),
+				'type'  => Controls_Manager::HIDDEN
+			)
+		);
+
+		$repeater->add_responsive_control(
+			'field_width',
+			[
+				'label'   => __( 'Field Width', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => [
+					'100' => '100%',
+					'75'  => '75%',
+					'66'  => '66%',
+					'50'  => '50%',
+					'33'  => '33%',
+					'25'  => '25%',
+				],
+				'default' => '100',
+			]
+		);
+
+		$this->add_specific_fields_for_repeater( $repeater );
+
+		$default_fields = $this->get_default_config();
+		$this->add_control(
+			'form_fields',
+			array(
+				'label'       => __( 'Form Fields', 'textdomain' ),
+				'type'        => Controls_Manager::REPEATER,
+				'show_label'  => false,
+				'separator'   => 'before',
+				'fields'      => array_values( $repeater->get_controls() ),
+				'default'     => $default_fields,
+				'title_field' => '{{{ label }}}',
+			)
+		);
+
+		$this->add_specific_form_fields();
+		$this->end_controls_section();
+	}
+
+	/**
+	 * Get form fields default values.
+	 *
+	 * @return array
+	 */
+	abstract function get_default_config();
+
+	/**
+	 * Add more fields in the repeater configuration.
+	 *
+	 * @var Object $repeater Repeater instance.
+	 */
+	abstract function add_specific_fields_for_repeater( $repeater );
+
+	/**
+	 * Add Widget specific form fields.
+	 */
+	abstract function add_specific_form_fields();
+
+	/**
+	 * Register form setting controls.
+	 */
+	private function register_settings_controls(){
+
+		$this->start_controls_section(
+			'contact_form_settings',
+			array(
+				'label' => __( 'Form Settings', 'textdomain' ),
+			)
+		);
+
+		$this->add_specific_settings_controls();
+
+		$submit_default = ! empty( $this->submit_button_label ) ? $this->submit_button_label : esc_html__( 'Submit', 'textdomain' );
+		$this->add_control(
+			'submit_label',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Submit', 'textdomain' ),
+				'default'     => $submit_default,
+				'description' => esc_html__( 'The Call To Action label', 'textdomain' )
+			)
+		);
+
+		$this->add_responsive_control(
+			'align_submit',
+			[
+				'label'     => __( 'Alignment', 'textdomain' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'toggle'    => false,
+				'default'   => 'left',
+				'options'   => [
+					'left'   => [
+						'title' => __( 'Left', 'textdomain' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'textdomain' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'  => [
+						'title' => __( 'Right', 'textdomain' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+	}
+
+	/**
+	 * Add widget specific settings controls.
+	 */
+	abstract function add_specific_settings_controls();
 
 	/**
 	 * Add style controls.
@@ -52,7 +243,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * @return void
 	 * @since 1.0,0
 	 */
-	protected function _register_style_controls() {
+	protected function register_style_controls() {
 		$this->start_controls_section(
 			'section_form_style',
 			[
@@ -579,6 +770,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * Render the widget.
+	 */
 	protected function render() {
 		$form_id  = $this->get_data( 'id' );
 		$settings = $this->get_settings();
@@ -632,9 +826,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * It is also takes care about the form attributes and the regular hidden fields
 	 *
 	 * @param string $id Form id.
-	 *
-	 * @since 1.0.0
-	 * @access private
 	 */
 	private function render_form_header( $id ) {
 		// create an url for the form's action
@@ -656,9 +847,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 *
 	 * @param array $field Field settings.
 	 * @param bool $is_preview Is preview flag.
-	 *
-	 * @return void
-	 * @since 1.0.0
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
 		$item_index = $field['_id'];
@@ -723,63 +911,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 
 	/**
 	 * Display method for the form's footer
-	 *
-	 * @return void
-	 * @since 1.0.0
-	 * @access private
 	 */
 	private function render_form_footer() {
 		echo '</form>';
-	}
-
-	abstract function get_default_config();
-
-	/**
-	 * Extract widget settings based on a widget id and a page id
-	 *
-	 * @param $post_id
-	 * @param $widget_id
-	 *
-	 * @return bool
-	 */
-	static function get_widget_settings( $widget_id, $post_id ) {
-
-		$document = Plugin::$instance->documents->get( $post_id );
-		$el_data = $document->get_elements_data();
-		$el_data = apply_filters( 'elementor/frontend/builder_content_data', $el_data, $post_id );
-
-		if ( ! empty( $el_data ) ) {
-			return self::get_widget_data_by_id( $widget_id, $el_data );
-		}
-
-		return $el_data;
-	}
-
-	/**
-	 * Recursively look through Elementor data and extract the settings for a specific
-	 *
-	 * @param $widget_id
-	 * @param $el_data
-	 *
-	 * @return bool
-	 */
-	static function get_widget_data_by_id( $widget_id, $el_data ) {
-
-		if ( ! empty( $el_data ) ) {
-			foreach ( $el_data as $el ) {
-
-				if ( $el['elType'] === 'widget' && $el['id'] === $widget_id ) {
-					return $el;
-				} elseif ( ! empty( $el['elements'] ) ) {
-					$el = self::get_widget_data_by_id( $widget_id, $el['elements'] );
-
-					if ( $el ) {
-						return $el;
-					}
-				}
-			}
-		}
-
-		return false;
 	}
 }
