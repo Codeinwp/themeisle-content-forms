@@ -23,11 +23,10 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	public $form_type = 'newsletter';
 
 	/**
-	 * Change the value for submit button label.
-	 *
-	 * @var string
+	 * @var array
 	 */
-	public $submit_button_label;
+	public $strings = array();
+
 
 	/**
 	 * Elementor Widget Name.
@@ -52,6 +51,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'require'     => 'required',
 				'placeholder' => esc_html__( 'Email', 'textdomain' ),
 				'field_width' => '100',
+				'field_map'   => 'email',
 			)
 		);
 	}
@@ -67,14 +67,28 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 
 	/**
 	 * Additional fields for repeater.
-	 * // TODO: Add a dorpdown to map the exact fields in mailchimp and send in blue
 	 *
 	 * @param Object $repeater Repeater instance.
-	 *
-	 * @return bool
 	 */
 	function add_specific_fields_for_repeater( $repeater ) {
-		return false;
+		$field_types = array(
+			'email'     => __( 'Email', 'textdomain' ),
+			'fname'    => __( 'First Name', 'textdomain' ),
+			'lname'    => __( 'Last Name', 'textdomain' ),
+			'address' => __( 'Address', 'textdomain' ),
+			'phone' => __( 'Phone', 'textdomain' ),
+			'birthday' => __( 'Birth Day', 'textdomain' ),
+		);
+
+		$repeater->add_control(
+			'field_map',
+			array(
+				'label'   => __( 'Map field to', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => $field_types,
+				'default' => 'text'
+			)
+		);
 	}
 
 	/**
@@ -88,7 +102,25 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	 * Add specific settings for Newsletter widget.
 	 */
 	function add_specific_settings_controls() {
-		$this->submit_button_label = esc_html__( 'Join Newsletter', 'textdomain' );
+		$this->strings['submit_button_label'] = esc_html__( 'Join Newsletter', 'textdomain' );
+
+		$this->add_control(
+			'success_message',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Success message', 'textdomain' ),
+				'default'     => esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
+			)
+		);
+
+		$this->add_control(
+			'error_message',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Error message', 'textdomain' ),
+				'default'     => esc_html__( 'Action failed!', 'textdomain' ),
+			)
+		);
 
 		$this->add_control(
 			'provider',

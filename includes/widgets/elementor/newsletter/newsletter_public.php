@@ -61,7 +61,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$providerArgs['access_key'] = $settings['access_key'];
 		$providerArgs['list_id']    = $settings['list_id'];
 
-		$return = $this->_subscribe_mail( $return, $email, $provider, $providerArgs );
+		$return = $this->_subscribe_mail( $return, $email, $provider, $providerArgs, $settings );
 
 		return $return;
 	}
@@ -76,7 +76,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	 *
 	 * @return bool|array
 	 */
-	private function _subscribe_mail( $result, $email, $provider = 'mailchimp', $provider_args = array() ) {
+	private function _subscribe_mail( $result, $email, $provider = 'mailchimp', $provider_args = array(), $settings ) {
 
 		$api_key = $provider_args['access_key'];
 		$list_id = $provider_args['list_id'];
@@ -110,13 +110,11 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 					return $result;
 				}
 
-
+				$result['success'] = false;
+				$result['message'] = $settings['error_message'];
 				if ( $body['status'] == $status ) {
 					$result['success'] = true;
-					$result['message'] = esc_html__( 'Welcome to our newsletter!', 'textdomain' );
-				} else {
-					$result['success'] = false;
-					$result['message'] = esc_html__( 'Action failed!', 'textdomain' );
+					$result['message'] = $settings['success_message'];
 				}
 
 				return $result;
@@ -143,14 +141,14 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 				$response = wp_remote_post( $url, $args );
 
 				if ( is_wp_error( $response ) ) {
-					$result['message'] = esc_html__( 'Action failed!', 'textdomain' );
+					$result['message'] = $settings['error_message'];
 
 					return $result;
 				}
 
 				if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
 					$result['success'] = true;
-					$result['message'] = esc_html__( 'Welcome to our newsletter!', 'textdomain' );
+					$result['message'] = $settings['success_message'];
 
 					return $result;
 				}

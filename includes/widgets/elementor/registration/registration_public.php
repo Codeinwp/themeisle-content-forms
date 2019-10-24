@@ -120,7 +120,7 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 			}
 
 			$return['success'] = true;
-			$return['message'] = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
+			$return['message'] = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name . '!';
 		}
 
 		return $return;

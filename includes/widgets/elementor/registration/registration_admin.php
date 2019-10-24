@@ -26,11 +26,9 @@ class Registration_Admin extends Elementor_Widget_Base{
 	public $form_type = 'registration';
 
 	/**
-	 * Change the value for submit button label.
-	 *
-	 * @var string
+	 * @var array
 	 */
-	public $submit_button_label;
+	public $strings = array();
 
 	/**
 	 * Elementor Widget Name.
@@ -105,6 +103,6 @@ class Registration_Admin extends Elementor_Widget_Base{
 	 * Add specific settings for Newsletter widget.
 	 */
 	function add_specific_settings_controls() {
-		$this->submit_button_label = esc_html__( 'Register', 'textdomain' );
+		$this->strings['submit_button_label'] = esc_html__( 'Register', 'textdomain' );
 	}
 }

@@ -25,6 +25,27 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 	public $form_type = 'contact';
 
 	/**
+	 * @param $field
+	 *
+	 * @return string
+	 */
+	private function get_field_key_name( $field ){
+		if( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ){
+			return strtoupper( $field['field_map'] );
+		}
+
+		if( ! empty( $field['label'] ) ){
+			return sanitize_title( $field['label'] );
+		}
+
+		if( ! empty( $field['placeholder'] ) ){
+			return sanitize_title( $field['placeholder'] );
+		}
+
+		return 'field_'.$field['_id'];
+	}
+
+	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
 	 *
 	 * @param $return array
@@ -51,10 +72,7 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 		}
 
 		foreach( $settings['form_fields'] as $field ) {
-			$key = ! empty( $field['label'] ) ? sanitize_title( $field['label'] ) : ( ! empty( $field['placeholder'] ) ? sanitize_title( $field['placeholder'] ) : 'field_' . $field['_id'] );
-			if ( ! empty( $field['key'] ) ){
-				$key = $field['key'];
-			}
+			$key = $this->get_field_key_name($field);
 
 			if ( 'required' === $field['requirement'] && empty( $data[ $key ] ) ) {
                 $return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain'), $key );
@@ -72,10 +90,10 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 		// prepare settings for submit
 		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $data );
 
-		$return['message'] = esc_html__( 'Oops! I cannot send this email!', 'textdomain' );
+		$return['message'] = $settings['error_message'];
 		if ( $result ) {
 			$return['success'] = true;
-			$return['message'] = esc_html__( 'Your message has been sent!', 'textdomain' );
+			$return['message'] = $settings['success_message'];
 		}
 
 		return $return;

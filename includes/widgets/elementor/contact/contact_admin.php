@@ -106,6 +106,25 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * Add specific settings for Contact Widget.
 	 */
 	function add_specific_settings_controls() {
+
+		$this->add_control(
+			'success_message',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Success message', 'textdomain' ),
+				'default'     => esc_html__( 'Your message has been sent!', 'textdomain' ),
+			)
+		);
+
+		$this->add_control(
+			'error_message',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Error message', 'textdomain' ),
+				'default'     => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
+			)
+		);
+
 		$this->add_control(
 			'to_send_email',
 			array(
