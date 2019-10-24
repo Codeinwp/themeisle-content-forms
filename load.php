@@ -26,8 +26,8 @@ function themeisle_content_forms_load() {
 	require_once 'includes/widgets/elementor/contact/contact_admin.php';
 	require_once 'includes/widgets/elementor/newsletter/newsletter_public.php';
 	require_once 'includes/widgets/elementor/newsletter/newsletter_admin.php';
-//	require_once 'includes/widgets/elementor/registration/registration_public.php';
-//	require_once 'includes/widgets/elementor/registration/registration_admin.php';
+	require_once 'includes/widgets/elementor/registration/registration_public.php';
+	require_once 'includes/widgets/elementor/registration/registration_admin.php';
 	require_once 'includes/admin/server.php';
 
 //

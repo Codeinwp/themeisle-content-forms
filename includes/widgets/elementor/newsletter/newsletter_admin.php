@@ -22,6 +22,11 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	 */
 	public $form_type = 'newsletter';
 
+	/**
+	 * Change the value for submit button label.
+	 *
+	 * @var string
+	 */
 	public $submit_button_label;
 
 	/**

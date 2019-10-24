@@ -26,6 +26,13 @@ class Registration_Admin extends Elementor_Widget_Base{
 	public $form_type = 'registration';
 
 	/**
+	 * Change the value for submit button label.
+	 *
+	 * @var string
+	 */
+	public $submit_button_label;
+
+	/**
 	 * Elementor Widget Name.
 	 *
 	 * @return string
@@ -78,154 +85,26 @@ class Registration_Admin extends Elementor_Widget_Base{
 	}
 
 	/**
-	 * Register Registration Form Widget Fields
+	 * Add repeater fields.
+	 *
+	 * @param Object $repeater Repeater instance.
+	 * @return bool
 	 */
-	function _register_fields_controls() {
-		$this->start_controls_section(
-			'registration_form_fields',
-			array(
-				'label' => __( 'Fields', 'textdomain' )
-			)
-		);
-
-		$repeater = new Repeater();
-
-		$repeater->add_control(
-			'label',
-			array(
-				'label'   => __( 'Label', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$repeater->add_control(
-			'placeholder',
-			array(
-				'label'   => __( 'Placeholder', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$repeater->add_control(
-			'requirement',
-			array(
-				'label'        => __( 'Required', 'textdomain' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'return_value' => 'required',
-				'default'      => '',
-			)
-		);
-
-		$field_types = array(
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
-		);
-
-		$repeater->add_control(
-			'type',
-			array(
-				'label'   => __( 'Type', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text'
-			)
-		);
-
-		$repeater->add_control(
-			'key',
-			array(
-				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN
-			)
-		);
-
-		$repeater->add_responsive_control(
-			'field_width',
-			[
-				'label'   => __( 'Field Width', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => [
-					'100' => '100%',
-					'75'  => '75%',
-					'66'  => '66%',
-					'50'  => '50%',
-					'33'  => '33%',
-					'25'  => '25%',
-				],
-				'default' => '100',
-			]
-		);
-
-		$default_fields = $this->get_default_config();
-
-		$this->add_control(
-			'form_fields',
-			array(
-				'label'       => __( 'Form Fields', 'textdomain' ),
-				'type'        => Controls_Manager::REPEATER,
-				'show_label'  => false,
-				'separator'   => 'before',
-				'fields'      => array_values( $repeater->get_controls() ),
-				'default'     => $default_fields,
-				'title_field' => '{{{ label }}}',
-			)
-		);
-
-		$this->end_controls_section();
+	function add_specific_fields_for_repeater( $repeater ) {
+		return false;
 	}
 
 	/**
-	 * Register Registration Form Widget Settings
+	 * Add specific form fields for Registration Widget.
 	 */
-	function _register_settings_controls() {
-		$this->start_controls_section(
-			'registration_form_settings',
-			array(
-				'label' => __( 'Form Settings', 'textdomain' ),
-			)
-		);
+	function add_specific_form_fields() {
+		return false;
+	}
 
-		$this->add_control(
-			'submit_label',
-			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Submit', 'textdomain' ),
-				'default'     => esc_html__( 'Submit', 'textdomain' ),
-				'description' => esc_html__( 'The Call To Action label', 'textdomain' )
-			)
-		);
-
-		$this->add_responsive_control(
-			'align_submit',
-			[
-				'label'     => __( 'Alignment', 'textdomain' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'toggle'    => false,
-				'default'   => 'left',
-				'options'   => [
-					'left'   => [
-						'title' => __( 'Left', 'textdomain' ),
-						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'textdomain' ),
-						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
-						'title' => __( 'Right', 'textdomain' ),
-						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->end_controls_section();
+	/**
+	 * Add specific settings for Newsletter widget.
+	 */
+	function add_specific_settings_controls() {
+		$this->submit_button_label = esc_html__( 'Register', 'textdomain' );
 	}
 }
