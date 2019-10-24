@@ -5,14 +5,16 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Registration;
 
-class Registration_Public {
+use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
+
+class Registration_Public extends Elementor_Widget_Actions_Base {
 
 	/**
-	 * Initialization function.
+	 * The type of current widget form.
+	 *
+	 * @var string
 	 */
-	public function init() {
-		add_filter( 'content_forms_submit_registration', array( $this, 'rest_submit_form' ), 10, 5 );
-	}
+	public $form_type = 'registration';
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
@@ -21,11 +23,10 @@ class Registration_Public {
 	 * @param $data array Must contain the following keys: `email`, `name` but it can also have extra keys
 	 * @param $widget_id string
 	 * @param $post_id string
-	 * @param $builder string
 	 *
 	 * @return mixed
 	 */
-	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
+	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
 
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
@@ -119,7 +120,7 @@ class Registration_Public {
 			}
 
 			$return['success'] = true;
-			$return['message']     = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
+			$return['message'] = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
 		}
 
 		return $return;

@@ -1,19 +1,26 @@
 <?php
 /**
+ * This class handles the action part of the Newsletter Widget.
  *
+ * @package ContentForms
  */
+
 
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Newsletter;
 
-class Newsletter_Public {
+use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
+
+/**
+ * Class Newsletter_Public
+ */
+class Newsletter_Public extends Elementor_Widget_Actions_Base {
 
 	/**
-	 * Initialization function.
+	 * The type of current widget form.
+	 *
+	 * @var string
 	 */
-	public function init() {
-		add_filter( 'content_forms_submit_newsletter', array( $this, 'rest_submit_form' ), 10, 5 );
-	}
-
+	public $form_type = 'newsletter';
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
@@ -22,11 +29,10 @@ class Newsletter_Public {
 	 * @param $data array Must contain the following keys: `email` but it can also have extra keys
 	 * @param $widget_id string
 	 * @param $post_id string
-	 * @param $builder string
 	 *
 	 * @return mixed
 	 */
-	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
+	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
 
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
@@ -37,10 +43,9 @@ class Newsletter_Public {
 		$email = $data['email'];
 
 		// prepare settings for submit
-		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
+		$settings = $this->get_widget_settings( $widget_id, $post_id );
 
 		$provider = 'mailchimp';
-
 		if ( ! empty( $settings['provider'] ) ) {
 			$provider = $settings['provider'];
 		}
@@ -96,21 +101,22 @@ class Newsletter_Public {
 				$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
 
 				$response = wp_remote_post( $url, $args );
-				$body = json_decode( wp_remote_retrieve_body( $response ), true );
+				$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 
 				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 					$result['success'] = false;
-					$result['message']    = $body['detail'];
+					$result['message'] = $body['detail'];
+
 					return $result;
 				}
 
 
 				if ( $body['status'] == $status ) {
 					$result['success'] = true;
-					$result['message']     = $this->notices['success'];
+					$result['message'] = esc_html__( 'Welcome to our newsletter!', 'textdomain' );
 				} else {
 					$result['success'] = false;
-					$result['message']    = $this->notices['error'];
+					$result['message'] = esc_html__( 'Action failed!', 'textdomain' );
 				}
 
 				return $result;
@@ -137,18 +143,21 @@ class Newsletter_Public {
 				$response = wp_remote_post( $url, $args );
 
 				if ( is_wp_error( $response ) ) {
-					$result['message']     = $this->notices['error'];
+					$result['message'] = esc_html__( 'Action failed!', 'textdomain' );
+
 					return $result;
 				}
 
 				if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
 					$result['success'] = true;
-					$result['message'] = $this->notices['success'];
+					$result['message'] = esc_html__( 'Welcome to our newsletter!', 'textdomain' );
+
 					return $result;
 				}
 
-				$body = json_decode( wp_remote_retrieve_body( $response ), true );
-				$result['message']     = $body['message'];
+				$body              = json_decode( wp_remote_retrieve_body( $response ), true );
+				$result['message'] = $body['message'];
+
 				return $result;
 				break;
 
@@ -158,6 +167,4 @@ class Newsletter_Public {
 
 		return false;
 	}
-
-
 }

@@ -14,6 +14,13 @@ use Elementor\Plugin;
 abstract class Elementor_Widget_Actions_Base {
 
 	/**
+	 * The type of form.
+	 *
+	 * @var $form_type
+	 */
+	public $form_type;
+
+	/**
 	 * Extract widget settings based on a widget id and a page id
 	 *
 	 * @param int $post_id The id of the post.
@@ -73,7 +80,7 @@ abstract class Elementor_Widget_Actions_Base {
 	 * Initialization function.
 	 */
 	public function init() {
-		add_filter( 'content_forms_submit_contact', array( $this, 'rest_submit_form' ), 10, 4 );
+		add_filter( 'content_forms_submit_' . $this->form_type , array( $this, 'rest_submit_form' ), 10, 4 );
 	}
 
 	/**

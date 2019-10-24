@@ -18,6 +18,13 @@ use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_B
 class Contact_Public extends Elementor_Widget_Actions_Base {
 
 	/**
+	 * The type of current widget form.
+	 *
+	 * @var string
+	 */
+	public $form_type = 'contact';
+
+	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
 	 *
 	 * @param $return array
