@@ -855,28 +855,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
-	 * @param $field
-	 *
-	 * @return string
-	 */
-	private function get_field_key_name( $field ){
-		if( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ){
-			return strtoupper( $field['field_map'] );
-		}
-
-		if( ! empty( $field['label'] ) ){
-			return sanitize_title( $field['label'] );
-		}
-
-		if( ! empty( $field['placeholder'] ) ){
-			return sanitize_title( $field['placeholder'] );
-		}
-
-		return 'field_'.$field['_id'];
-	}
-
-
-	/**
 	 * Print the output of an individual field
 	 *
 	 * @param array $field Field settings.
@@ -884,7 +862,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
 		$item_index = $field['_id'];
-		$key        = $this->get_field_key_name( $field );
+		$key        = Elementor_Widget_Manager::get_field_key_name( $field );
 		if ( ! empty( $field['key'] ) ){
 			$key = $field['key'];
 		}
@@ -934,13 +912,13 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		}
 		switch ( $field['type'] ) {
 			case 'textarea':
-				echo '<textarea name="' . esc_attr( $key ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . ' ' . $required . ' placeholder="' . esc_attr( $placeholder ) . '" cols="30" rows="5"></textarea>';
+				echo '<textarea name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . ' ' . $required . ' placeholder="' . esc_attr( $placeholder ) . '" cols="30" rows="5"></textarea>';
 				break;
 			case 'password':
-				echo '<input type="password" name="' . esc_attr( $key ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . '>';
+				echo '<input type="password" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . '>';
 				break;
 			default:
-				echo '<input type="text" name="' . esc_attr( $key ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
+				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
 				break;
 		}
 		echo '</fieldset>';

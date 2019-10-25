@@ -8,6 +8,7 @@
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
 
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
+use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Manager;
 
 
 /**
@@ -23,27 +24,6 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 	 * @var string
 	 */
 	public $form_type = 'contact';
-
-	/**
-	 * @param $field
-	 *
-	 * @return string
-	 */
-	private function get_field_key_name( $field ){
-		if( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ){
-			return strtoupper( $field['field_map'] );
-		}
-
-		if( ! empty( $field['label'] ) ){
-			return sanitize_title( $field['label'] );
-		}
-
-		if( ! empty( $field['placeholder'] ) ){
-			return sanitize_title( $field['placeholder'] );
-		}
-
-		return 'field_'.$field['_id'];
-	}
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
@@ -72,7 +52,7 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 		}
 
 		foreach( $settings['form_fields'] as $field ) {
-			$key = $this->get_field_key_name($field);
+			$key = Elementor_Widget_Manager::get_field_key_name($field);
 
 			if ( 'required' === $field['requirement'] && empty( $data[ $key ] ) ) {
                 $return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain'), $key );

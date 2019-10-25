@@ -34,135 +34,167 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
 
+		/**
+		 * Email address is required for this type of form
+		 */
 		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
 		}
 
-		$email = $data['email'];
-
-		// prepare settings for submit
+		/**
+		 * Get form settings and bail if there is no access key or list id.
+		 */
 		$settings = $this->get_widget_settings( $widget_id, $post_id );
-
-		$provider = 'mailchimp';
-		if ( ! empty( $settings['provider'] ) ) {
-			$provider = $settings['provider'];
-		}
-
-		$providerArgs = array();
-
 		if ( empty( $settings['access_key'] ) || empty( $settings['list_id'] ) ) {
 			$return['message'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
 
 			return $return;
 		}
 
-		$providerArgs['access_key'] = $settings['access_key'];
-		$providerArgs['list_id']    = $settings['list_id'];
+		$form_fields = array();
+		foreach ( $data as $field_name => $field_value ) {
+			$form_fields[ $field_name ] = $field_value;
+		}
 
-		$return = $this->_subscribe_mail( $return, $email, $provider, $providerArgs, $settings );
+		$form_settings = array(
+			'provider_settings' => array(
+				'provider'   => ! empty( $settings['provider'] ) ? $settings['provider'] : 'mailchimp',
+				'access_key' => $settings['access_key'],
+				'list_id'    => $settings['list_id'],
+			),
+			'data'              => $form_fields,
+			'strings'           => array(
+				'error_message'   => $settings['error_message'],
+				'success_message' => $settings['success_message'],
+			)
+		);
+
+		$return = $this->subscribe_mail( $form_settings, $return );
 
 		return $return;
 	}
 
 	/**
-	 * Subscribe the given email to the given provider; either mailchimp or sendinblue.
+	 * Subscribe the given email to the given provider, either mailchimp or sendinblue.
 	 *
-	 * @param $result
-	 * @param $email
-	 * @param string $provider
-	 * @param array $provider_args
+	 * @param array $form_settings Form Settings.
+	 * @param array $result Return result
 	 *
-	 * @return bool|array
+	 * @return array
 	 */
-	private function _subscribe_mail( $result, $email, $provider = 'mailchimp', $provider_args = array(), $settings ) {
+	private function subscribe_mail( $form_settings, $result ) {
 
-		$api_key = $provider_args['access_key'];
-		$list_id = $provider_args['list_id'];
+		$provider_name = $form_settings['provider_settings']['provider'];
 
-		switch ( $provider ) {
+		$submit = false;
+		if ( $provider_name === 'mailchimp' ) {
+			$submit = $this->mailchimp_subscribe( $form_settings );
+		}
 
-			case 'mailchimp':
-				// add a pending subscription for the user to confirm
-				$status = 'pending';
+		if ( $provider_name === 'sendinblue' ) {
+			$submit = $this->sib_subscribe( $form_settings );
+		}
 
-				$args = array(
-					'method'  => 'PUT',
-					'headers' => array(
-						'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key )
-					),
-					'body'    => json_encode( array(
-						'email_address' => $email,
-						'status'        => $status
-					) )
-				);
+		$result['success'] = false;
+		$result['message'] = $form_settings['strings']['error_message'];
+		if ( $submit === true ) {
+			$result['success'] = true;
+			$result['message'] = $form_settings['strings']['success_message'];
+		}
 
-				$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
+		return $result;
+	}
 
-				$response = wp_remote_post( $url, $args );
-				$body     = json_decode( wp_remote_retrieve_body( $response ), true );
+	/**
+	 * Handle the request for mailchimp.
+	 * https://mailchimp.com/developer/reference/lists/list-members/
+	 *
+	 * @param array $form_settings Form settings.
+	 *
+	 * @return bool
+	 */
+	private function mailchimp_subscribe( $form_settings ) {
 
-				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-					$result['success'] = false;
-					$result['message'] = $body['detail'];
+		$api_key   = $form_settings['provider_settings']['access_key'];
+		$list_id   = $form_settings['provider_settings']['list_id'];
+		$form_data = $form_settings['data'];
+		$email     = $form_data['email'];
+		unset( $form_data['email'] );
 
-					return $result;
-				}
+		$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
 
-				$result['success'] = false;
-				$result['message'] = $settings['error_message'];
-				if ( $body['status'] == $status ) {
-					$result['success'] = true;
-					$result['message'] = $settings['success_message'];
-				}
+		$args = array(
+			'method'  => 'PUT',
+			'headers' => array(
+				'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key )
+			),
+			'body'    => json_encode( array(
+				'email_address' => $email,
+				'status'        => 'pending',
+				'merge_fields'  => $form_data,
+			) )
+		);
 
-				return $result;
-				break;
-			case 'sendinblue':
+		$response = wp_remote_post( $url, $args );
+		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 
-				$url = 'https://api.sendinblue.com/v3/contacts';
+		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
+			return false;
+		}
 
-				// https://developers.sendinblue.com/reference#createcontact
-				$args = array(
-					'method'  => 'POST',
-					'headers' => array(
-						'content-type' => 'application/json',
-						'api-key'      => $api_key
-					),
-					'body'    => json_encode( array(
-						'email'            => $email,
-						'listIds'          => array( (int) $list_id ),
-						'emailBlacklisted' => false,
-						'smsBlacklisted'   => false,
-					) )
-				);
-
-				$response = wp_remote_post( $url, $args );
-
-				if ( is_wp_error( $response ) ) {
-					$result['message'] = $settings['error_message'];
-
-					return $result;
-				}
-
-				if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
-					$result['success'] = true;
-					$result['message'] = $settings['success_message'];
-
-					return $result;
-				}
-
-				$body              = json_decode( wp_remote_retrieve_body( $response ), true );
-				$result['message'] = $body['message'];
-
-				return $result;
-				break;
-
-			default;
-				break;
+		if ( $body['status'] === 'pending' ) {
+			return true;
 		}
 
 		return false;
 	}
+
+	/**
+	 * Handle the request for sendinblue.
+	 * https://developers.sendinblue.com/reference#createcontact
+	 *
+	 * @param array $form_settings Form settings.
+	 *
+	 * @return bool
+	 */
+	private function sib_subscribe( $form_settings ) {
+
+		$api_key   = $form_settings['provider_settings']['access_key'];
+		$list_id   = $form_settings['provider_settings']['list_id'];
+		$form_data = $form_settings['data'];
+		$email     = $form_data['email'];
+		unset( $form_data['email'] );
+
+		$url = 'https://api.sendinblue.com/v3/contacts';
+
+		$args = array(
+			'method'  => 'POST',
+			'headers' => array(
+				'content-type' => 'application/json',
+				'api-key'      => $api_key
+			),
+			'body'    => json_encode( array(
+				'email'            => $email,
+				'listIds'          => array( (int) $list_id ),
+				'attributes'       => $form_data,
+				'emailBlacklisted' => false,
+				'smsBlacklisted'   => false,
+			) )
+		);
+
+		$response = wp_remote_post( $url, $args );
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
 }
