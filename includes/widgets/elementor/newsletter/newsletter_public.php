@@ -55,7 +55,13 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 
 		$form_fields = array();
 		foreach ( $data as $field_name => $field_value ) {
-			$form_fields[ $field_name ] = $field_value;
+			if( is_array( $data[ $field_name ] ) ){
+				foreach ( $data[ $field_name ] as $filed => $value ){
+					$form_fields[ $field_name.'['.$filed.']' ] = $value;
+				}
+			} else {
+				$form_fields[ $field_name ] = $field_value;
+			}
 		}
 
 		$form_settings = array(
@@ -120,6 +126,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$api_key   = $form_settings['provider_settings']['access_key'];
 		$list_id   = $form_settings['provider_settings']['list_id'];
 		$form_data = $form_settings['data'];
+
 		$email     = $form_data['email'];
 		unset( $form_data['email'] );
 
@@ -140,6 +147,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$response = wp_remote_post( $url, $args );
 		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 
+		print_r($body);
 		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 			return false;
 		}

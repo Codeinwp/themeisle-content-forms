@@ -70,24 +70,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$repeater = new Repeater();
 
 		$repeater->add_control(
-			'label',
-			array(
-				'label'   => __( 'Label', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$repeater->add_control(
-			'placeholder',
-			array(
-				'label'   => __( 'Placeholder', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$repeater->add_control(
 			'requirement',
 			array(
 				'label'        => __( 'Required', 'textdomain' ),
@@ -139,6 +121,24 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			]
 		);
 
+		$repeater->add_control(
+			'label',
+			array(
+				'label'   => __( 'Label', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '',
+			)
+		);
+
+		$repeater->add_control(
+			'placeholder',
+			array(
+				'label'   => __( 'Placeholder', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '',
+			)
+		);
+
 		$this->add_specific_fields_for_repeater( $repeater );
 
 		$default_fields = $this->get_default_config();
@@ -154,6 +154,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'title_field' => '{{{ label }}}',
 			)
 		);
+
+
 
 		$this->add_specific_form_fields();
 		$this->end_controls_section();
@@ -866,6 +868,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		if ( ! empty( $field['key'] ) ){
 			$key = $field['key'];
 		}
+		if ( $key === 'ADDRESS'){
+			$key = 'ADDRESS[addr1]';
+		}
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 
 		$required = '';
@@ -910,6 +915,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			}
 			echo '</label>';
 		}
+
 		switch ( $field['type'] ) {
 			case 'textarea':
 				echo '<textarea name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . ' ' . $required . ' placeholder="' . esc_attr( $placeholder ) . '" cols="30" rows="5"></textarea>';
@@ -921,6 +927,27 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
 				break;
 		}
+
+		if( array_key_exists('field_map', $field ) && $field['field_map'] === 'address'  ){
+			$address_fields = array( 'addr2', 'city', 'state', 'zip', 'country');
+			foreach ( $address_fields as $address_item ){
+				$field_name = 'data[' . $form_id . '][ADDRESS[' . $address_item . ']]';
+
+				if( $display_label !== 'hide' ) {
+					echo '<label for="' . esc_attr( $field_name ) . '">';
+					echo wp_kses_post( $field[ $address_item . '_label'] );
+					if ( ! empty( $field['label'] ) && $field['requirement'] === 'required' ) {
+						echo '<span class="required-mark"> *</span>';
+					}
+					echo '</label>';
+				}
+
+				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $field[ $address_item . '_placeholder'] ) . '">';
+			}
+
+		}
+
+
 		echo '</fieldset>';
 	}
 
