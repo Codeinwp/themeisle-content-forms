@@ -213,20 +213,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'separator'   => 'before'
 			)
 		);
-
-//		$default = array_key_exists('submit_button_label', $this->strings ) ? $this->strings['submit_button_label'] : esc_html__( 'Submit', 'textdomain' );
-//		$this->add_control(
-//			'submit_label',
-//			array(
-//				'type'        => 'text',
-//				'label'       => esc_html__( 'Submit', 'textdomain' ),
-//				'default'     => $default,
-//				'description' => esc_html__( 'The Call To Action label', 'textdomain' )
-//			)
-//		);
-
-
-
+		
 		$this->end_controls_section();
 	}
 

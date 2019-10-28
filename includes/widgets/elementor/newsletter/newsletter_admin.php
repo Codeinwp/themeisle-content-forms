@@ -204,7 +204,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			'submit_label',
 			array(
 				'type'        => 'text',
-				'label'       => esc_html__( 'Submit Label', 'textdomain' ),
+				'label'       => esc_html__( 'Submit', 'textdomain' ),
 				'default'     => esc_html__( 'Join Newsletter', 'textdomain' ),
 			)
 		);
@@ -317,117 +317,6 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			)
 		);
 
-//		$this->get_form_settings();
-//		$this->add_control(
-//			'mailchimp_fields_map',
-//			[
-//				'label' => __( 'Field Mapping', 'elementor-pro' ),
-//				'type' => Fields_Map::CONTROL_TYPE,
-//				'separator' => 'before',
-//				'fields' => [
-//					[
-//						'name' => 'remote_id',
-//						'type' => Controls_Manager::HIDDEN,
-//					],
-//					[
-//						'name' => 'local_id',
-//						'type' => Controls_Manager::SELECT,
-//					],
-//				],
-//				'condition' => [
-//					'list_id!' => '',
-//				],
-//			]
-//		);
-
 		$this->end_controls_section();
-
-//		$field_types = array(
-//			'email'     => __( 'Email', 'textdomain' ),
-//			'fname'    => __( 'First Name', 'textdomain' ),
-//			'lname'    => __( 'Last Name', 'textdomain' ),
-//			'address' => __( 'Address', 'textdomain' ),
-//			'phone' => __( 'Phone', 'textdomain' ),
-//			'birthday' => __( 'Birth Day', 'textdomain' ),
-//		);
-//
-//
-//		$repeater->add_control(
-//			'field_map',
-//			array(
-//				'label'   => __( 'Map field to', 'textdomain' ),
-//				'type'    => Controls_Manager::SELECT,
-//				'options' => $field_types,
-//				'default' => 'text'
-//			)
-//		);
-//
-//		$config = array(
-//			'addr2' => array(
-//				'label' => array( 'label' => __( 'Line 2 Label', 'textdomain' ) , 'default' => __('Address Line 2', 'textdomain' ) ),
-//				'placeholder' => array( 'label' => __( 'Line 2 Placeholder', 'textdomain' ) , 'default' => __('Address Line 2', 'textdomain' ) ),
-//				'width' => array( 'label' => __( 'Line 2 Width', 'textdomain' ) , 'default' => '100'),
-//			),
-//			'city' => array(
-//				'label' => array( 'label' => __( 'City Label', 'textdomain' ) , 'default' => __('City', 'textdomain' ) ),
-//				'placeholder' => array( 'label' => __( 'City Placeholder', 'textdomain' ) , 'default' => __('City', 'textdomain' ) ),
-//				'width' => array( 'label' => __( 'City Width', 'textdomain' ) , 'default' => '100'),
-//			),
-//			'state' => array(
-//				'label' => array( 'label' => __( 'State Label', 'textdomain' ) , 'default' => __('State/Province/Region', 'textdomain' ) ),
-//				'placeholder' => array( 'label' => __( 'State Placeholder', 'textdomain' ) , 'default' => __('State/Province/Region', 'textdomain' ) ),
-//				'width' => array( 'label' => __( 'State Width', 'textdomain' ) , 'default' => '100'),
-//			),
-//			'zip' => array(
-//				'label' => array( 'label' => __( 'Zip Code Label', 'textdomain' ) , 'default' => __('Postal / Zip Code', 'textdomain' ) ),
-//				'placeholder' => array( 'label' => __( 'Zip Code Placeholder', 'textdomain' ) , 'default' => __('Postal / Zip Code', 'textdomain' ) ),
-//				'width' => array( 'label' => __( 'Zip Code Width', 'textdomain' ) , 'default' => '100'),
-//			),
-//			'country' => array(
-//				'label' => array( 'label' => __( 'Country Label', 'textdomain' ) , 'default' => __('Country', 'textdomain' ) ),
-//				'placeholder' => array( 'label' => __( ' Country Placeholder', 'textdomain' ) , 'default' => __('Country', 'textdomain' ) ),
-//				'width' => array( 'label' => __( 'Country Width', 'textdomain' ) , 'default' => '100'),
-//			),
-//		);
-//
-//		foreach ( $config as $main_field => $field_value ){
-//			foreach ( $field_value as $specific_field => $field_data ){
-//				$key = $main_field . '_' . $specific_field;
-//				if( $specific_field !== 'width' ){
-//					$repeater->add_control(
-//						$key,
-//						array(
-//							'label'   => $field_data['label'],
-//							'type'    => Controls_Manager::TEXT,
-//							'default' => $field_data['default'],
-//							'condition' => [
-//								'field_map' => 'address',
-//							],
-//						)
-//					);
-//				} else {
-//					$repeater->add_responsive_control(
-//						$key,
-//						array(
-//							'label'   => $field_data['label'],
-//							'type'    => Controls_Manager::SELECT,
-//							'options' => [
-//								'100' => '100%',
-//								'75'  => '75%',
-//								'66'  => '66%',
-//								'50'  => '50%',
-//								'33'  => '33%',
-//								'25'  => '25%',
-//							],
-//							'default' =>  $field_data['default'],
-//							'condition' => [
-//								'field_map' => 'address',
-//							],
-//						)
-//					);
-//				}
-//			}
-//		}
-
 	}
 }

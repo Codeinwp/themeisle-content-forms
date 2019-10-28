@@ -103,7 +103,41 @@ class Registration_Admin extends Elementor_Widget_Base{
 	 * Add specific settings for Newsletter widget.
 	 */
 	function add_specific_settings_controls() {
-		$this->strings['submit_button_label'] = esc_html__( 'Register', 'textdomain' );
+		$this->add_control(
+			'submit_label',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Submit', 'textdomain' ),
+				'default'     => esc_html__( 'Register', 'textdomain' ),
+			)
+		);
+
+		$this->add_responsive_control(
+			'align_submit',
+			[
+				'label'     => __( 'Alignment', 'textdomain' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'toggle'    => false,
+				'default'   => 'left',
+				'options'   => [
+					'left'   => [
+						'title' => __( 'Left', 'textdomain' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'textdomain' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'  => [
+						'title' => __( 'Right', 'textdomain' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
+				],
+			]
+		);
 	}
 
 	/**

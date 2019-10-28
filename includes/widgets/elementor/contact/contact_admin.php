@@ -7,6 +7,7 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
 
+use Elementor\Controls_Manager;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
 /**
@@ -133,6 +134,42 @@ class Contact_Admin extends Elementor_Widget_Base {
 				'default'     => get_bloginfo( 'admin_email' ),
 				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
 			)
+		);
+
+		$this->add_control(
+			'submit_label',
+			array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Submit', 'textdomain' ),
+				'default'     => esc_html__( 'Submit', 'textdomain' ),
+			)
+		);
+
+		$this->add_responsive_control(
+			'align_submit',
+			[
+				'label'     => __( 'Alignment', 'textdomain' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'toggle'    => false,
+				'default'   => 'left',
+				'options'   => [
+					'left'   => [
+						'title' => __( 'Left', 'textdomain' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'textdomain' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'  => [
+						'title' => __( 'Right', 'textdomain' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+				'selectors' => [
+					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
+				],
+			]
 		);
 	}
 
