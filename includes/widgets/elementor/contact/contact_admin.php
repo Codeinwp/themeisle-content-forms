@@ -135,4 +135,11 @@ class Contact_Admin extends Elementor_Widget_Base {
 			)
 		);
 	}
+
+	/**
+	 * Add specific widget settings.
+	 */
+	function add_widget_specific_settings() {
+		return false;
+	}
 }

@@ -8,6 +8,9 @@ input, textarea {
     border: 1px solid #cccccc;
     border-radius: 3px;
 }
+.content-form-newsletter select.country{
+    line-height: normal;
+}
 fieldset {
     border: none;
     margin: 0;

@@ -45,6 +45,8 @@ class Form_Manager{
 			'nonce'   => wp_create_nonce( 'wp_rest' ),
 		) );
 
+		wp_register_style( 'content-forms', plugins_url( '/assets/content-forms.css', __FILE__ ), array(), TI_CONTENT_FORMS_VERSION );
+
 		/**
 		 * Use this filter to force the js loading on all pages.
 		 * Otherwise, it will be loaded only if a content form is present

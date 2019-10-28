@@ -147,7 +147,6 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$response = wp_remote_post( $url, $args );
 		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 
-		print_r($body);
 		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 			return false;
 		}

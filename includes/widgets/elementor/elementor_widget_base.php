@@ -53,6 +53,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->register_form_fields();
 		$this->register_settings_controls();
 		$this->register_style_controls();
+		$this->add_widget_specific_settings();
 	}
 
 	/**
@@ -162,6 +163,13 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
+	 * Add widget specific settings.
+	 *
+	 * @return mixed
+	 */
+	abstract function add_widget_specific_settings();
+
+	/**
 	 * Get form fields default values.
 	 *
 	 * @return array
@@ -174,6 +182,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * @var Object $repeater Repeater instance.
 	 */
 	abstract function add_specific_fields_for_repeater( $repeater );
+
 
 	/**
 	 * Add Widget specific form fields.
@@ -201,46 +210,22 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'label'        => __( 'Hide Label', 'textdomain' ),
 				'return_value' => 'hide',
 				'default'      => '',
+				'separator'   => 'before'
 			)
 		);
 
-		$default = array_key_exists('submit_button_label', $this->strings ) ? $this->strings['submit_button_label'] : esc_html__( 'Submit', 'textdomain' );
-		$this->add_control(
-			'submit_label',
-			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Submit', 'textdomain' ),
-				'default'     => $default,
-				'description' => esc_html__( 'The Call To Action label', 'textdomain' )
-			)
-		);
+//		$default = array_key_exists('submit_button_label', $this->strings ) ? $this->strings['submit_button_label'] : esc_html__( 'Submit', 'textdomain' );
+//		$this->add_control(
+//			'submit_label',
+//			array(
+//				'type'        => 'text',
+//				'label'       => esc_html__( 'Submit', 'textdomain' ),
+//				'default'     => $default,
+//				'description' => esc_html__( 'The Call To Action label', 'textdomain' )
+//			)
+//		);
 
-		$this->add_responsive_control(
-			'align_submit',
-			[
-				'label'     => __( 'Alignment', 'textdomain' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'toggle'    => false,
-				'default'   => 'left',
-				'options'   => [
-					'left'   => [
-						'title' => __( 'Left', 'textdomain' ),
-						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'textdomain' ),
-						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
-						'title' => __( 'Right', 'textdomain' ),
-						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'selectors' => [
-					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
-				],
-			]
-		);
+
 
 		$this->end_controls_section();
 	}
@@ -391,7 +376,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'field_typography',
-				'selector' => '{{WRAPPER}} fieldset > input, {{WRAPPER}} fieldset > textarea, {{WRAPPER}} fieldset > button',
+				'selector' => '{{WRAPPER}} fieldset > input, {{WRAPPER}} fieldset select, {{WRAPPER}} fieldset > textarea, {{WRAPPER}} fieldset > button',
 				'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
 			]
 		);
@@ -419,6 +404,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'    => 'text-align: {{VALUE}}',
+					'{{WRAPPER}} fieldset select'    => 'text-align: {{VALUE}}',
 					'{{WRAPPER}} fieldset > textarea' => 'text-align: {{VALUE}}'
 				],
 			]
@@ -431,6 +417,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
 					'{{WRAPPER}} fieldset > input'    => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset select'    => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -453,6 +440,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'                 => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > input::placeholder'    => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select'                 => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select::placeholder'    => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea'              => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea::placeholder' => 'color: {{VALUE}};',
 				],
@@ -472,6 +461,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'default'   => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'    => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select'    => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea' => 'background-color: {{VALUE}};',
 				],
 				'separator' => 'before',
@@ -485,6 +475,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'    => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select'    => 'border-color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea' => 'border-color: {{VALUE}};',
 				],
 				'separator' => 'before',
@@ -506,6 +497,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'    => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} fieldset select'    => 'border-style: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea' => 'border-style: {{VALUE}};'
 				],
 			]
@@ -520,6 +512,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'size_units'  => [ 'px' ],
 				'selectors'   => [
 					'{{WRAPPER}} fieldset > input'    => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset select'    => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -533,6 +526,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
 					'{{WRAPPER}} fieldset > input'    => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset select'    => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -555,6 +549,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus'                 => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > input::placeholder:focus'    => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select:focus'                 => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select::placeholder:focus'    => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea:focus'              => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea::placeholder:focus' => 'color: {{VALUE}};',
 				],
@@ -573,6 +569,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'default'   => '#ffffff',
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus'    => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select:focus'    => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'background-color: {{VALUE}};',
 				],
 				'separator' => 'before',
@@ -586,6 +583,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus'    => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset select:focus'    => 'border-color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-color: {{VALUE}};',
 				],
 				'separator' => 'before',
@@ -607,6 +605,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input:focus'    => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} fieldset select:focus'    => 'border-style: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-style: {{VALUE}};'
 				],
 			]
@@ -621,6 +620,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'size_units'  => [ 'px' ],
 				'selectors'   => [
 					'{{WRAPPER}} fieldset > input:focus'    => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset select:focus'    => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -634,6 +634,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
 					'{{WRAPPER}} fieldset > input:focus'    => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset select:focus'    => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -803,10 +804,10 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		echo '<fieldset class="submit-form ' . esc_attr( $this->form_type ) . '">';
 		echo '<button type="submit" name="submit" value="submit-' . esc_attr( $this->form_type ) . '-' . esc_attr( $form_id ) . '" class="' . $this->get_render_attribute_string( 'button' ) . '">';
 		echo esc_html( $btn_label );
-		if ( ! empty( $instance['button_icon'] ) ) {
+		if ( ! empty( $settings['button_icon'] ) ) {
 			echo '<span ' . $this->get_render_attribute_string( 'content-wrapper' ) . '>';
 			echo '<span ' . $this->get_render_attribute_string( 'icon-align' ) . '>';
-			echo '<i class="' . esc_attr( $instance['button_icon'] ) . '"></i>';
+			echo '<i class="' . esc_attr( $settings['button_icon'] ) . '"></i>';
 			echo '</span>';
 			echo '</span>';
 		}
@@ -826,7 +827,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	protected function maybe_load_widget_style() {
 		if ( Plugin::$instance->editor->is_edit_mode() === true && apply_filters( 'themeisle_content_forms_register_default_style', true ) ) {
 			echo '<style>';
-			echo file_get_contents( plugin_dir_path( __FILE__ ) . '/assets/content-forms.css' );
+			echo file_get_contents( plugin_dir_path( TI_CONTENT_FORMS_FILE ) . '/assets/content-forms.css' );
 			echo '</style>';
 		} else {
 			// if `themeisle_content_forms_register_default_style` is false, the style won't be registered anyway
@@ -863,32 +864,15 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * @param bool $is_preview Is preview flag.
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
-		$item_index = $field['_id'];
-		$key        = Elementor_Widget_Manager::get_field_key_name( $field );
-		if ( ! empty( $field['key'] ) ){
-			$key = $field['key'];
-		}
-		if ( $key === 'ADDRESS'){
-			$key = 'ADDRESS[addr1]';
-		}
-		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 
-		$required = '';
-		$form_id  = $this->get_data( 'id' );
-		$settings = $this->get_settings();
-		$display_label = $settings[ 'hide_label' ];
+		$field_id      = $field['_id'];
+		$key           = Elementor_Widget_Manager::get_field_key_name( $field );
+		$form_id       = $this->get_data( 'id' );
+		$field_name    = 'data[' . $form_id . '][' . $key . ']';
+		$disabled      = $is_preview ? 'disabled="disabled"' : '';
+		$required      = $field['requirement'] === 'required' ? 'required="required"' : '';
+		$placeholder   = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 
-		if ( $field['requirement'] === 'required' ) {
-			$required = 'required="required"';
-		}
-
-		//in case this is a preview, we need to disable the actual inputs and transform the labels in inputs
-		$disabled = '';
-		if ( $is_preview ) {
-			$disabled = 'disabled="disabled"';
-		}
-
-		$field_name = 'data[' . $form_id . '][' . $key . ']';
 
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'content-form-field-' . $field['type'] );
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'elementor-column elementor-col-' . $field['field_width'] );
@@ -902,19 +886,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			]
 		] );
 
-		$this->add_inline_editing_attributes( $item_index . '_label', 'none' );
-
-
-		echo '<fieldset ' . $this->get_render_attribute_string( 'fieldset' . $field['_id'] ) . '>';
-
-		if( $display_label !== 'hide' ) {
-			echo '<label for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $item_index ) . '>';
-			echo wp_kses_post( $field['label'] );
-			if ( ! empty( $field['label'] ) && $field['requirement'] === 'required' ) {
-				echo '<span class="required-mark"> *</span>';
-			}
-			echo '</label>';
-		}
+		echo '<fieldset ' . $this->get_render_attribute_string( 'fieldset' . $field_id ) . '>';
+		$this->maybe_render_field_label( $field );
 
 		switch ( $field['type'] ) {
 			case 'textarea':
@@ -927,29 +900,94 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
 				break;
 		}
+		echo '</fieldset>';
 
-		if( array_key_exists('field_map', $field ) && $field['field_map'] === 'address'  ){
-			$address_fields = array( 'addr2', 'city', 'state', 'zip', 'country');
-			foreach ( $address_fields as $address_item ){
-				$field_name = 'data[' . $form_id . '][ADDRESS[' . $address_item . ']]';
+		$this->maybe_render_newsletter_address( $field, $is_preview );
+	}
 
-				if( $display_label !== 'hide' ) {
-					echo '<label for="' . esc_attr( $field_name ) . '">';
-					echo wp_kses_post( $field[ $address_item . '_label'] );
-					if ( ! empty( $field['label'] ) && $field['requirement'] === 'required' ) {
-						echo '<span class="required-mark"> *</span>';
-					}
-					echo '</label>';
+	/**
+	 * When using MailChimp, additional fields are required for the address field/
+	 *
+	 * @param array $field Field data.
+	 * @return bool
+	 */
+	private function maybe_render_newsletter_address( $field, $is_preview ){
+		if( ! array_key_exists('field_map', $field ) || $field['field_map'] !== 'address[addr1]'  ){
+			return false;
+		}
+
+		$form_id    = $this->get_data( 'id' );
+		$settings      = $this->get_settings();
+		$display_label = $settings['hide_label'];
+		$disabled      = $is_preview ? 'disabled="disabled"' : '';
+		$required      = $field['requirement'] === 'required' ? 'required="required"' : '';
+
+
+		$address_fields = array( 'addr2', 'city', 'state', 'zip', 'country');
+		foreach ( $address_fields as $address_item ) {
+			$field_name = 'data[' . $form_id . '][ADDRESS[' . $address_item . ']]';
+			$this->add_render_attribute( 'fieldset' . $field['_id'] . $address_item, 'class', 'elementor-column elementor-col-' . $field[ $address_item . '_width' ] );
+
+
+			echo '<fieldset class="elementor-field-group elementor-column elementor-col-' . $field[ $address_item . '_width' ] . '">';
+
+			if ( $display_label !== 'hide' ) {
+				echo '<label for="' . esc_attr( $field_name ) . '" >';
+				echo wp_kses_post( $field[ $address_item . '_label' ] );
+				if ( $field['requirement'] === 'required' ) {
+					echo '<span class="required-mark"> *</span>';
 				}
+				echo '</label>';
+			}
 
+			if( $address_item === 'country' ){
+				echo '<div class="elementor-select-wrapper">';
+				echo '<select class="country" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . '><option value="" selected=""></option><option value="164">USA</option><option value="286">Aaland Islands</option><option value="274">Afghanistan</option><option value="2">Albania</option><option value="3">Algeria</option><option value="178">American Samoa</option><option value="4">Andorra</option><option value="5">Angola</option><option value="176">Anguilla</option><option value="175">Antigua And Barbuda</option><option value="6">Argentina</option><option value="7">Armenia</option><option value="179">Aruba</option><option value="8">Australia</option><option value="9">Austria</option><option value="10">Azerbaijan</option><option value="11">Bahamas</option><option value="12">Bahrain</option><option value="13">Bangladesh</option><option value="14">Barbados</option><option value="15">Belarus</option><option value="16">Belgium</option><option value="17">Belize</option><option value="18">Benin</option><option value="19">Bermuda</option><option value="20">Bhutan</option><option value="21">Bolivia</option><option value="22">Bosnia and Herzegovina</option><option value="23">Botswana</option><option value="181">Bouvet Island</option><option value="24">Brazil</option><option value="180">Brunei Darussalam</option><option value="25">Bulgaria</option><option value="26">Burkina Faso</option><option value="27">Burundi</option><option value="28">Cambodia</option><option value="29">Cameroon</option><option value="30">Canada</option><option value="31">Cape Verde</option><option value="32">Cayman Islands</option><option value="33">Central African Republic</option><option value="34">Chad</option><option value="35">Chile</option><option value="36">China</option><option value="185">Christmas Island</option><option value="37">Colombia</option><option value="204">Comoros</option><option value="38">Congo</option><option value="183">Cook Islands</option><option value="268">Costa Rica</option><option value="275">Cote D\'Ivoire</option><option value="40">Croatia</option><option value="276">Cuba</option><option value="298">Curacao</option><option value="41">Cyprus</option><option value="42">Czech Republic</option><option value="43">Denmark</option><option value="44">Djibouti</option><option value="289">Dominica</option><option value="187">Dominican Republic</option><option value="233">East Timor</option><option value="45">Ecuador</option><option value="46">Egypt</option><option value="47">El Salvador</option><option value="48">Equatorial Guinea</option><option value="49">Eritrea</option><option value="50">Estonia</option><option value="51">Ethiopia</option><option value="189">Falkland Islands</option><option value="191">Faroe Islands</option><option value="52">Fiji</option><option value="53">Finland</option><option value="54">France</option><option value="193">French Guiana</option><option value="277">French Polynesia</option><option value="56">Gabon</option><option value="57">Gambia</option><option value="58">Georgia</option><option value="59">Germany</option><option value="60">Ghana</option><option value="194">Gibraltar</option><option value="61">Greece</option><option value="195">Greenland</option><option value="192">Grenada</option><option value="196">Guadeloupe</option><option value="62">Guam</option><option value="198">Guatemala</option><option value="270">Guernsey</option><option value="63">Guinea</option><option value="65">Guyana</option><option value="200">Haiti</option><option value="66">Honduras</option><option value="67">Hong Kong</option><option value="68">Hungary</option><option value="69">Iceland</option><option value="70">India</option><option value="71">Indonesia</option><option value="278">Iran</option><option value="279">Iraq</option><option value="74">Ireland</option><option value="75">Israel</option><option value="76">Italy</option><option value="202">Jamaica</option><option value="78">Japan</option><option value="288">Jersey  (Channel Islands)</option><option value="79">Jordan</option><option value="80">Kazakhstan</option><option value="81">Kenya</option><option value="203">Kiribati</option><option value="82">Kuwait</option><option value="83">Kyrgyzstan</option><option value="84">Lao People\'s Democratic Republic</option><option value="85">Latvia</option><option value="86">Lebanon</option><option value="87">Lesotho</option><option value="88">Liberia</option><option value="281">Libya</option><option value="90">Liechtenstein</option><option value="91">Lithuania</option><option value="92">Luxembourg</option><option value="208">Macau</option><option value="93">Macedonia</option><option value="94">Madagascar</option><option value="95">Malawi</option><option value="96">Malaysia</option><option value="97">Maldives</option><option value="98">Mali</option><option value="99">Malta</option><option value="207">Marshall Islands</option><option value="210">Martinique</option><option value="100">Mauritania</option><option value="212">Mauritius</option><option value="241">Mayotte</option><option value="101">Mexico</option><option value="102">Moldova, Republic of</option><option value="103">Monaco</option><option value="104">Mongolia</option><option value="290">Montenegro</option><option value="294">Montserrat</option><option value="105">Morocco</option><option value="106">Mozambique</option><option value="242">Myanmar</option><option value="107">Namibia</option><option value="108">Nepal</option><option value="109">Netherlands</option><option value="110">Netherlands Antilles</option><option value="213">New Caledonia</option><option value="111">New Zealand</option><option value="112">Nicaragua</option><option value="113">Niger</option><option value="114">Nigeria</option><option value="217">Niue</option><option value="214">Norfolk Island</option><option value="272">North Korea</option><option value="116">Norway</option><option value="117">Oman</option><option value="118">Pakistan</option><option value="222">Palau</option><option value="282">Palestine</option><option value="119">Panama</option><option value="219">Papua New Guinea</option><option value="120">Paraguay</option><option value="121">Peru</option><option value="122">Philippines</option><option value="221">Pitcairn</option><option value="123">Poland</option><option value="124">Portugal</option><option value="126">Qatar</option><option value="315">Republic of Kosovo</option><option value="127">Reunion</option><option value="128">Romania</option><option value="129">Russia</option><option value="130">Rwanda</option><option value="205">Saint Kitts and Nevis</option><option value="206">Saint Lucia</option><option value="237">Saint Vincent and the Grenadines</option><option value="132">Samoa (Independent)</option><option value="227">San Marino</option><option value="133">Saudi Arabia</option><option value="134">Senegal</option><option value="266">Serbia</option><option value="135">Seychelles</option><option value="136">Sierra Leone</option><option value="137">Singapore</option><option value="302">Sint Maarten</option><option value="138">Slovakia</option><option value="139">Slovenia</option><option value="223">Solomon Islands</option><option value="140">Somalia</option><option value="141">South Africa</option><option value="257">South Georgia and the South Sandwich Islands</option><option value="142">South Korea</option><option value="311">South Sudan</option><option value="143">Spain</option><option value="144">Sri Lanka</option><option value="293">Sudan</option><option value="146">Suriname</option><option value="225">Svalbard and Jan Mayen Islands</option><option value="147">Swaziland</option><option value="148">Sweden</option><option value="149">Switzerland</option><option value="285">Syria</option><option value="152">Taiwan</option><option value="260">Tajikistan</option><option value="153">Tanzania</option><option value="154">Thailand</option><option value="155">Togo</option><option value="232">Tonga</option><option value="234">Trinidad and Tobago</option><option value="156">Tunisia</option><option value="157">Turkey</option><option value="287">Turks &amp; Caicos Islands</option><option value="159">Uganda</option><option value="161">Ukraine</option><option value="162">United Arab Emirates</option><option value="262">United Kingdom</option><option value="163">Uruguay</option><option value="165">Uzbekistan</option><option value="239">Vanuatu</option><option value="166">Vatican City State (Holy See)</option><option value="167">Venezuela</option><option value="168">Vietnam</option><option value="169">Virgin Islands (British)</option><option value="238">Virgin Islands (U.S.)</option><option value="188">Western Sahara</option><option value="170">Yemen</option><option value="173">Zambia</option><option value="174">Zimbabwe</option></select>';
+				echo '</div>';
+			} else {
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $field[ $address_item . '_placeholder'] ) . '">';
 			}
 
+			echo '</fieldset>';
+		}
+		return true;
+	}
+
+	/**
+	 * Maybe render field label
+	 *
+	 * @var array $field Field data.
+	 *
+	 * @return true
+	 */
+	private function maybe_render_field_label( $field ){
+
+		if ( empty( $field['label'] ) ){
+			return false;
 		}
 
+		$settings      = $this->get_settings();
+		$display_label = $settings['hide_label'];
+		if( $display_label === 'hide' ) {
+			return false;
+		}
 
-		echo '</fieldset>';
+		$field_id   = $field['_id'];
+		$key        = Elementor_Widget_Manager::get_field_key_name( $field );
+		$form_id    = $this->get_data( 'id' );
+		$field_name = 'data[' . $form_id . '][' . $key . ']';
+
+
+		echo '<label for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $field_id ) . '>';
+			echo wp_kses_post( $field['label'] );
+			if ( $field['requirement'] === 'required' ) {
+				echo '<span class="required-mark"> *</span>';
+			}
+		echo '</label>';
+
+		return true;
 	}
+
 
 	/**
 	 * Display method for the form's footer

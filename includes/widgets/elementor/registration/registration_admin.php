@@ -105,4 +105,11 @@ class Registration_Admin extends Elementor_Widget_Base{
 	function add_specific_settings_controls() {
 		$this->strings['submit_button_label'] = esc_html__( 'Register', 'textdomain' );
 	}
+
+	/**
+	 * Add specific widget settings.
+	 */
+	function add_widget_specific_settings() {
+		return false;
+	}
 }
