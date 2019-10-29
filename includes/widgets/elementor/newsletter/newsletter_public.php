@@ -37,9 +37,13 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		/**
 		 * Email address is required for this type of form
 		 */
-		if ( empty( $data['EMAIL'] ) || ! is_email( $data['EMAIL'] ) ) {
-			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
+		if( empty( $data['EMAIL'] ) ){
+			$return['message'] = esc_html__( 'The email field cannot be empty.', 'textdomain' );
+			return $return;
+		}
 
+		if ( ! is_email( $data['EMAIL'] ) ) {
+			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 			return $return;
 		}
 
@@ -87,21 +91,22 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	private function subscribe_mail( $form_settings, $result ) {
 
 		$provider_name = $form_settings['provider_settings']['provider'];
-		$submit = false;
+		$result['success'] = false;
+		$result['message'] = $form_settings['strings']['error_message'];
+
 		if ( $provider_name === 'mailchimp' ) {
-			$submit = $this->mailchimp_subscribe( $form_settings );
+			$result = $this->mailchimp_subscribe( $form_settings, $result );
 		}
 
 		if ( $provider_name === 'sendinblue' ) {
-			$submit = $this->sib_subscribe( $form_settings );
+			$result = $this->sib_subscribe( $form_settings, $result );
 		}
 
-		$result['success'] = false;
-		$result['message'] = $form_settings['strings']['error_message'];
-		if ( $submit === true ) {
-			$result['success'] = true;
-			$result['message'] = $form_settings['strings']['success_message'];
-		}
+
+//		if ( $submit === true ) {
+//			$result['success'] = true;
+//			$result['message'] = $form_settings['strings']['success_message'];
+//		}
 
 		return $result;
 	}
@@ -114,7 +119,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	 *
 	 * @return bool
 	 */
-	private function mailchimp_subscribe( $form_settings ) {
+	private function mailchimp_subscribe( $form_settings, $result ) {
 
 		$api_key   = $form_settings['provider_settings']['access_key'];
 		$list_id   = $form_settings['provider_settings']['list_id'];
@@ -138,17 +143,20 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 
 
 		$response = wp_remote_post( $url, $args );
-		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
-
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-			return false;
+			$result['success'] = false;
+			$result['message']  = $body['detail'];
+			return $result;
 		}
 
 		if ( $body['status'] === 'pending' ) {
-			return true;
+			$result['message'] = $form_settings['strings']['success_message'];
+			$result['success'] = true;
+			return $result;
 		}
 
-		return false;
+		return $result;
 	}
 
 	/**
@@ -159,7 +167,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	 *
 	 * @return bool
 	 */
-	private function sib_subscribe( $form_settings ) {
+	private function sib_subscribe( $form_settings, $result ) {
 
 		$api_key   = $form_settings['provider_settings']['access_key'];
 		$list_id   = $form_settings['provider_settings']['list_id'];
@@ -185,16 +193,19 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		);
 
 		$response = wp_remote_post( $url, $args );
-
 		if ( is_wp_error( $response ) ) {
-			return false;
+			return $result;
 		}
 
 		if ( 400 != wp_remote_retrieve_response_code( $response ) ) {
-			return true;
+			$result['message'] = $form_settings['strings']['success_message'];
+			$result['success'] = true;
+			return $result;
 		}
 
-		return false;
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$result['message']     = $body['message'];
+		return $result;
 	}
 
 }

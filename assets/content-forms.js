@@ -183,7 +183,7 @@ and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
      */
     var addContentFormNotice = function (notice, type, $form) {
         var noticeStatus = 'content-form-success';
-        var $currentNotice = $form.find('.content-form-notice');
+        var $currentNotice = $form.find('.content-form-notice-wrapper');
         if (notice.success === false || (notice.status >= 400 && notice.status < 500) ) {
             noticeStatus = 'content-form-error';
         }
