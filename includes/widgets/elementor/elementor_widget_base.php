@@ -684,13 +684,16 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->maybe_load_widget_style();
 
 		$this->render_form_header( $form_id );
+		$has_errors = $this->maybe_render_form_errors();
+		$disabled   = $has_errors === true ? 'disabled="disabled"' : '';
+
 		foreach ( $fields as $index => $field ) {
 			$this->render_form_field( $field );
 		}
 
 		$btn_label = !empty( $settings['submit_label'] ) ? $settings['submit_label'] : esc_html__( 'Submit', 'textdomain' );
 		echo '<fieldset class="submit-form ' . esc_attr( $this->form_type ) . '">';
-		echo '<button type="submit" name="submit" value="submit-' . esc_attr( $this->form_type ) . '-' . esc_attr( $form_id ) . '" class="' . $this->get_render_attribute_string( 'button' ) . '">';
+		echo '<button type="submit" name="submit" ' . $disabled . ' value="submit-' . esc_attr( $this->form_type ) . '-' . esc_attr( $form_id ) . '" class="' . $this->get_render_attribute_string( 'button' ) . '">';
 		echo esc_html( $btn_label );
 		if ( ! empty( $settings['button_icon'] ) ) {
 			echo '<span ' . $this->get_render_attribute_string( 'content-wrapper' ) . '>';
@@ -702,6 +705,81 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		echo '</button>';
 		echo '</fieldset>';
 		$this->render_form_footer();
+	}
+
+	/**
+	 * Display form configuration errors.
+	 *
+	 * @return bool
+	 */
+	private function maybe_render_form_errors(){
+		$has_error = false;
+		if( !current_user_can('manage_options') ){
+			return $has_error;
+		}
+
+		if( $this->form_type === 'newsletter' ){
+			$settings = $this->get_settings();
+			echo '<div class="content-forms-required">';
+
+			if( array_key_exists('access_key', $settings ) && empty( $settings['access_key'] ) ){
+				echo '<p>';
+				printf(
+					esc_html__( 'The %s setting is required!', 'textdomain' ),
+					'<strong>Access Key</strong>'
+				);
+				echo '</p>';
+				$has_error = true;
+			}
+
+			if( array_key_exists('list_id', $settings ) && empty( $settings['list_id'] ) ){
+				echo '<p>';
+				printf(
+					esc_html__( 'The %s setting is required!', 'textdomain' ),
+					'<strong>List id</strong>'
+				);
+				echo '</p>';
+				$has_error = true;
+			}
+
+			$provider = $settings['provider'];
+			$form_fields = $settings[$provider.'_form_fields'];
+			$mapping = array();
+			foreach ( $form_fields as $field ){
+				$field_map = $field[$provider.'_field_map'];
+				if( in_array( $field_map, $mapping ) ){
+					echo '<p>';
+					printf(
+						esc_html__( 'The %s field is mapped to multiple form fields. Please check your field settings.', 'textdomain' ),
+						'<strong>'.$field_map.'</strong>'
+					);
+					echo '</p>';
+					$has_error = true;
+				}
+				array_push($mapping, $field_map );
+			}
+
+			echo '</div>';
+
+			return $has_error;
+		}
+
+		if( $this->form_type === 'contact' ){
+			$settings = $this->get_settings();
+
+			if( array_key_exists('to_send_email', $settings ) && empty( $settings['to_send_email'] ) ){
+				echo '<p>';
+				printf(
+					esc_html__( 'The %s setting is required!', 'textdomain' ),
+					'<strong>Send to Email Addresss</strong>'
+				);
+				echo '</p>';
+				$has_error = true;
+			}
+
+		}
+
+		return $has_error;
 	}
 
 	/**

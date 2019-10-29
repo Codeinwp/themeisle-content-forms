@@ -28,33 +28,24 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
 
-		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
+		if ( empty( $data['USER_EMAIL'] ) || ! is_email( $data['USER_EMAIL'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
 		}
 
-		$email = sanitize_email( $data['email'] );
 
-		unset( $data['email'] );
+		$settings['user_email'] = sanitize_email( $data['USER_EMAIL'] );
+		$settings['user_login'] = !empty( $data['USER_LOGIN'] ) ? $data['USER_LOGIN'] : $data['email'];
+		$settings['user_pass'] = ! empty( $data['USER_PASS'] ) ? $data['USER_PASS'] : wp_generate_password(
+			$length = 12,
+			$include_standard_special_chars = false
+		);
+		$settings['display_name'] = ! empty( $data['DISPLAY_NAME'] ) ? $data['DISPLAY_NAME'] : '';
+		$settings['first_name'] = ! empty( $data['FIRST_NAME'] ) ? $data['FIRST_NAME'] : '';
+		$settings['last_name'] = ! empty( $data['LAST_NAME'] ) ? $data['LAST_NAME'] : '';
 
-		if ( empty( $data['username'] ) ) {
-			$username = $email;
-		} else {
-			$username = sanitize_user( $data['username'] );
-		}
-
-		unset( $data['username'] );
-
-		// if there is no password we will auto-generate one
-		$password = null;
-
-		if ( ! empty( $data['password'] ) ) {
-			$password = $data['password'];
-			unset( $data['password'] );
-		}
-
-		$return = $this->_register_user( $return, $email, $username, $password, $data );
+		$return = $this->_register_user( $return, $settings );
 
 		return $return;
 	}
@@ -70,7 +61,7 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 	 *
 	 * @return array mixed
 	 */
-	private function _register_user( $return, $user_email, $user_name, $password = null, $extra_data = array() ) {
+	private function _register_user( $return, $settings ) {
 
 		if ( ! get_option( 'users_can_register' ) ) {
 			$return['message'] = esc_html__( 'This website does not allow registrations at this moment!' );
@@ -78,38 +69,24 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 			return $return;
 		}
 
-		if ( ! validate_username( $user_name ) ) {
+		if ( ! validate_username( $settings['user_login'] ) ) {
 			$return['message'] = esc_html__( 'Invalid user name' );
 
 			return $return;
 		}
 
-		if ( username_exists( $user_name ) ) {
+		if ( username_exists( $settings['user_login'] ) ) {
 			$return['message'] = esc_html__( 'Username already exists' );
 
 			return $return;
 		}
 
-		if ( email_exists( $user_email ) ) {
+		if ( email_exists( $settings['user_email'] ) ) {
 			$return['message'] = esc_html__( 'This email is already registered' );
 			return $return;
 		}
 
-		// no pass? ok
-		if ( empty( $password ) ) {
-			$password = wp_generate_password(
-				$length = 12,
-				$include_standard_special_chars = false
-			);
-		}
-
-		$userdata = array(
-			'user_login' => $user_name,
-			'user_email' => $user_email,
-			'user_pass'  => $password
-		);
-
-		$user_id = wp_insert_user( $userdata );
+		$user_id = wp_insert_user( $settings );
 
 		if ( ! is_wp_error( $user_id ) ) {
 
@@ -120,7 +97,7 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 			}
 
 			$return['success'] = true;
-			$return['message'] = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name . '!';
+			$return['message'] = esc_html__( 'Welcome, ', 'textdomain' ) . $settings['user_login'] . '!';
 		}
 
 		return $return;

@@ -158,6 +158,24 @@ class Registration_Admin extends Elementor_Widget_Base{
 			)
 		);
 
+		$field_types = array(
+			'first_name' => __('First Name', 'textdomain'),
+			'last_name' => __('Last Name', 'textdomain'),
+			'user_pass' => __('Password', 'textdomain'),
+			'user_login' => __('Username', 'textdomain'),
+			'user_email' => __('Email', 'textdomain'),
+			'display_name' => __('Display Name', 'textdomain'),
+		);
+		$repeater->add_control(
+			'field_map',
+			array(
+				'label'   => __( 'Map field to', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => $field_types,
+				'default' => 'text'
+			)
+		);
+
 		$default_fields = $this->get_default_config();
 		$this->add_control(
 			'form_fields',
