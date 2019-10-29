@@ -8,6 +8,7 @@
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Newsletter;
 
 use Elementor\Controls_Manager;
+use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
 /**
@@ -43,17 +44,18 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	 * @return array
 	 */
 	function get_default_config() {
-		return array(
-			array(
-				'key'         => 'email',
-				'type'        => 'email',
-				'label'       => esc_html__( 'Email', 'textdomain' ),
-				'require'     => 'required',
-				'placeholder' => esc_html__( 'Email', 'textdomain' ),
-				'field_width' => '100',
-				'field_map'   => 'email',
-			)
-		);
+		return [
+			[
+				'key'                  => 'email',
+				'type'                 => 'email',
+				'label'                => esc_html__( 'Email', 'textdomain' ),
+				'requirement'          => 'required',
+				'placeholder'          => esc_html__( 'Email', 'textdomain' ),
+				'field_width'          => '100',
+				'mailchimp_field_map'  => 'email',
+				'sendinblue_field_map'  => 'email',
+			]
+		];
 	}
 
 	/**
@@ -71,6 +73,56 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	 * @param Object $repeater Repeater instance.
 	 */
 	function add_specific_fields_for_repeater( $repeater ) {
+
+	}
+
+	/**
+	 * Add necessary fields for sendinblue subscribe form.
+	 *
+	 * @param object $repeater Repeater object.
+	 */
+	private function add_sendinblue_fields( $repeater ) {
+		$field_types = array(
+			'email'          => __( 'Email', 'textdomain' ),
+			'name'          => __( 'Name', 'textdomain' ),
+			'surname'          => __( 'Surname', 'textdomain' ),
+		);
+		$repeater->add_control(
+			'sendinblue_field_map',
+			array(
+				'label'   => __( 'Map field to', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => $field_types,
+				'default' => 'text'
+			)
+		);
+
+		$repeater->remove_control('mailchimp_field_map');
+
+		$default_fields = $this->get_default_config();
+		$this->add_control(
+			'sendinblue_form_fields',
+			array(
+				'label'       => __( 'Form Fields', 'textdomain' ),
+				'type'        => Controls_Manager::REPEATER,
+				'show_label'  => false,
+				'separator'   => 'before',
+				'fields'      => array_values( $repeater->get_controls() ),
+				'default'     => $default_fields,
+				'title_field' => '{{{ label }}}',
+				'condition'   => [
+					'provider' => 'sendinblue'
+				]
+			)
+		);
+	}
+
+	/**
+	 * Add necessary fields for mailchimp subscribe form.
+	 *
+	 * @param object $repeater Repeater object.
+	 */
+	private function add_mailchimp_fields( $repeater ){
 		$field_types = array(
 			'email'          => __( 'Email', 'textdomain' ),
 			'fname'          => __( 'First Name', 'textdomain' ),
@@ -80,7 +132,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			'birthday'       => __( 'Birth Day', 'textdomain' ),
 		);
 		$repeater->add_control(
-			'field_map',
+			'mailchimp_field_map',
 			array(
 				'label'   => __( 'Map field to', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
@@ -126,7 +178,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 							'type'    => Controls_Manager::TEXT,
 							'default' => $field_data['default'],
 							'condition' => [
-								'field_map' => 'address',
+								'mailchimp_field_map' => 'address',
 							],
 						)
 					);
@@ -146,20 +198,112 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 							],
 							'default' =>  $field_data['default'],
 							'condition' => [
-								'field_map' => 'address',
+								'mailchimp_field_map' => 'address',
 							],
 						)
 					);
 				}
 			}
 		}
+
+
+
+		$default_fields = $this->get_default_config();
+		$this->add_control(
+			'mailchimp_form_fields',
+			array(
+				'label'       => __( 'Form Fields', 'textdomain' ),
+				'type'        => Controls_Manager::REPEATER,
+				'show_label'  => false,
+				'separator'   => 'before',
+				'fields'      => array_values( $repeater->get_controls() ),
+				'default'     => $default_fields,
+				'title_field' => '{{{ label }}}',
+				'condition'   => [
+					'provider' => 'mailchimp'
+				]
+			)
+		);
 	}
 
 	/**
 	 * Add specific form fields for Newsletter widget.
 	 */
 	function add_specific_form_fields() {
-		return false;
+
+		$repeater = new Repeater();
+
+		$repeater->add_control(
+			'requirement',
+			array(
+				'label'        => __( 'Required', 'textdomain' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'return_value' => 'required',
+			)
+		);
+
+		$field_types = array(
+			'text'     => __( 'Text', 'textdomain' ),
+			'password' => __( 'Password', 'textdomain' ),
+			'email'    => __( 'Email', 'textdomain' ),
+			'textarea' => __( 'Textarea', 'textdomain' ),
+		);
+		$repeater->add_control(
+			'type',
+			array(
+				'label'   => __( 'Type', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => $field_types,
+				'default' => 'text'
+			)
+		);
+
+		$repeater->add_control(
+			'key',
+			array(
+				'label' => __( 'Key', 'textdomain' ),
+				'type'  => Controls_Manager::HIDDEN
+			)
+		);
+
+		$repeater->add_responsive_control(
+			'field_width',
+			[
+				'label'   => __( 'Field Width', 'textdomain' ),
+				'type'    => Controls_Manager::SELECT,
+				'options' => [
+					'100' => '100%',
+					'75'  => '75%',
+					'66'  => '66%',
+					'50'  => '50%',
+					'33'  => '33%',
+					'25'  => '25%',
+				],
+				'default' => '100',
+			]
+		);
+
+		$repeater->add_control(
+			'label',
+			array(
+				'label'   => __( 'Label', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '',
+			)
+		);
+
+		$repeater->add_control(
+			'placeholder',
+			array(
+				'label'   => __( 'Placeholder', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'default' => '',
+			)
+		);
+
+		$this->add_mailchimp_fields( $repeater );
+		$this->add_sendinblue_fields( $repeater );
+
 	}
 
 	/**
@@ -274,12 +418,9 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	function add_widget_specific_settings() {
 
 		$this->start_controls_section(
-			'mailchimp_form_fields',
+			'provider_settings',
 			array(
-				'label' => __( 'MailChimp', 'textdomain' ),
-				'condition' => [
-					'provider' => 'mailchimp',
-				],
+				'label' => __( 'Provider Settings', 'textdomain' ),
 			)
 		);
 
@@ -288,31 +429,15 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			array(
 				'type'        => 'text',
 				'label'       => esc_html__( 'Access Key', 'textdomain' ),
-				'description' =>
-					sprintf(
-						esc_html__( 'You can create or found your MailChimp API key by following %s', 'textdomain' ),
-						sprintf(
-							'<a target="_blank" href="https://mailchimp.com/help/about-api-keys/">%s</a>',
-							esc_html__('this documentation.', 'neve')
-						)
-					),
-				'required' => true
+				'required'    => true
 			)
 		);
 
 		$this->add_control(
 			'list_id',
 			array(
-				'type'  => 'text',
-				'label' => esc_html__( 'List ID', 'textdomain' ),
-				'description' =>
-					sprintf(
-						esc_html__( 'Check %s to find the list id.', 'textdomain' ),
-						sprintf(
-							'<a target="_blank" href="https://mailchimp.com/help/find-audience-id/">%s</a>',
-							esc_html__('this documentation.', 'neve')
-						)
-					),
+				'type'     => 'text',
+				'label'    => esc_html__( 'List ID', 'textdomain' ),
 				'required' => true
 			)
 		);

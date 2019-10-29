@@ -67,94 +67,94 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'label' => __( 'Fields', 'textdomain' )
 			)
 		);
-
-		$repeater = new Repeater();
-
-		$repeater->add_control(
-			'requirement',
-			array(
-				'label'        => __( 'Required', 'textdomain' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'return_value' => 'required',
-				'default'      => '',
-			)
-		);
-
-		$field_types = array(
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
-		);
-
-		$repeater->add_control(
-			'type',
-			array(
-				'label'   => __( 'Type', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text'
-			)
-		);
-
-		$repeater->add_control(
-			'key',
-			array(
-				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN
-			)
-		);
-
-		$repeater->add_responsive_control(
-			'field_width',
-			[
-				'label'   => __( 'Field Width', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => [
-					'100' => '100%',
-					'75'  => '75%',
-					'66'  => '66%',
-					'50'  => '50%',
-					'33'  => '33%',
-					'25'  => '25%',
-				],
-				'default' => '100',
-			]
-		);
-
-		$repeater->add_control(
-			'label',
-			array(
-				'label'   => __( 'Label', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$repeater->add_control(
-			'placeholder',
-			array(
-				'label'   => __( 'Placeholder', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$this->add_specific_fields_for_repeater( $repeater );
-
-		$default_fields = $this->get_default_config();
-		$this->add_control(
-			'form_fields',
-			array(
-				'label'       => __( 'Form Fields', 'textdomain' ),
-				'type'        => Controls_Manager::REPEATER,
-				'show_label'  => false,
-				'separator'   => 'before',
-				'fields'      => array_values( $repeater->get_controls() ),
-				'default'     => $default_fields,
-				'title_field' => '{{{ label }}}',
-			)
-		);
+//
+//		$repeater = new Repeater();
+//
+//		$repeater->add_control(
+//			'requirement',
+//			array(
+//				'label'        => __( 'Required', 'textdomain' ),
+//				'type'         => Controls_Manager::SWITCHER,
+//				'return_value' => 'required',
+//				'default'      => '',
+//			)
+//		);
+//
+//		$field_types = array(
+//			'text'     => __( 'Text', 'textdomain' ),
+//			'password' => __( 'Password', 'textdomain' ),
+//			'email'    => __( 'Email', 'textdomain' ),
+//			'textarea' => __( 'Textarea', 'textdomain' ),
+//		);
+//
+//		$repeater->add_control(
+//			'type',
+//			array(
+//				'label'   => __( 'Type', 'textdomain' ),
+//				'type'    => Controls_Manager::SELECT,
+//				'options' => $field_types,
+//				'default' => 'text'
+//			)
+//		);
+//
+//		$repeater->add_control(
+//			'key',
+//			array(
+//				'label' => __( 'Key', 'textdomain' ),
+//				'type'  => Controls_Manager::HIDDEN
+//			)
+//		);
+//
+//		$repeater->add_responsive_control(
+//			'field_width',
+//			[
+//				'label'   => __( 'Field Width', 'textdomain' ),
+//				'type'    => Controls_Manager::SELECT,
+//				'options' => [
+//					'100' => '100%',
+//					'75'  => '75%',
+//					'66'  => '66%',
+//					'50'  => '50%',
+//					'33'  => '33%',
+//					'25'  => '25%',
+//				],
+//				'default' => '100',
+//			]
+//		);
+//
+//		$repeater->add_control(
+//			'label',
+//			array(
+//				'label'   => __( 'Label', 'textdomain' ),
+//				'type'    => Controls_Manager::TEXT,
+//				'default' => '',
+//			)
+//		);
+//
+//		$repeater->add_control(
+//			'placeholder',
+//			array(
+//				'label'   => __( 'Placeholder', 'textdomain' ),
+//				'type'    => Controls_Manager::TEXT,
+//				'default' => '',
+//			)
+//		);
+//
+//		$this->add_specific_fields_for_repeater( $repeater );
+//
+//		$default_fields = $this->get_default_config();
+//		$this->add_control(
+//			'form_fields',
+//			array(
+//				'label'       => __( 'Form Fields', 'textdomain' ),
+//				'type'        => Controls_Manager::REPEATER,
+//				'show_label'  => false,
+//				'separator'   => 'before',
+//				'fields'      => array_values( $repeater->get_controls() ),
+//				'default'     => $default_fields,
+//				'title_field' => '{{{ label }}}',
+//			)
+//		);
 
 
 
@@ -778,7 +778,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	protected function render() {
 		$form_id  = $this->get_data( 'id' );
 		$settings = $this->get_settings();
-		$fields   = $settings['form_fields'];
+		$fields   = array_key_exists( 'provider', $settings ) ? $settings[ $settings['provider'] . '_form_fields' ]: $settings['form_fields'];
 
 		$this->maybe_load_widget_style();
 
@@ -852,8 +852,10 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
 
+		$settings = $this->get_settings();
+		$provider   = array_key_exists( 'provider', $settings ) ? $settings['provider']: '';
 		$field_id      = $field['_id'];
-		$key           = Elementor_Widget_Manager::get_field_key_name( $field );
+		$key           = Elementor_Widget_Manager::get_field_key_name( $field, $provider );
 		$key           = $key === 'ADDRESS' ? $key = 'ADDRESS[addr1]' : $key;
 		$form_id       = $this->get_data( 'id' );
 		$field_name    = 'data[' . $form_id . '][' . $key . ']';
@@ -871,7 +873,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 						'elementor-align-icon-' . $instance['button_icon_align'],
 					'elementor-button-icon',
 				],
-			]
+		 	]
 		] );
 
 		echo '<fieldset ' . $this->get_render_attribute_string( 'fieldset' . $field_id ) . '>';
@@ -900,7 +902,12 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * @return bool
 	 */
 	private function maybe_render_newsletter_address( $field, $is_preview ){
-		if( ! array_key_exists('field_map', $field ) || $field['field_map'] !== 'address'  ){
+		$settings      = $this->get_settings();
+		if( ! array_key_exists('provider', $settings ) || $settings['provider'] !== 'mailchimp'  ){
+			return false;
+		}
+
+		if( ! array_key_exists($settings['provider'] . '_field_map', $field ) || $field[$settings['provider'].'_field_map'] !== 'address'  ){
 			return false;
 		}
 
@@ -960,8 +967,10 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			return false;
 		}
 
+		$settings = $this->get_settings();
+		$provider   = array_key_exists( 'provider', $settings ) ? $settings['provider']: '';
 		$field_id   = $field['_id'];
-		$key        = Elementor_Widget_Manager::get_field_key_name( $field );
+		$key        = Elementor_Widget_Manager::get_field_key_name( $field, $provider );
 		$form_id    = $this->get_data( 'id' );
 		$field_name = 'data[' . $form_id . '][' . $key . ']';
 

@@ -77,12 +77,14 @@ class Elementor_Widget_Manager {
 	 * Get the field key based on form attributes.
 	 *
 	 * @param array $field Field data.
+	 * @param string $provider Provider name.
 	 *
 	 * @return string
 	 */
-	public static function get_field_key_name( $field ){
-		if( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ){
-			return strtoupper( $field['field_map'] );
+	public static function get_field_key_name( $field, $provider ){
+		$field_map_name = !empty($provider) ? $provider . '_field_map' : 'field_map';
+		if( array_key_exists( $field_map_name, $field ) && ! empty( $field[$field_map_name] ) ){
+			return strtoupper( $field[$field_map_name] );
 		}
 
 		if( ! empty( $field['label'] ) ){

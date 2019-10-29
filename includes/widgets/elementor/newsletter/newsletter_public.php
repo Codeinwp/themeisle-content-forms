@@ -164,8 +164,8 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$api_key   = $form_settings['provider_settings']['access_key'];
 		$list_id   = $form_settings['provider_settings']['list_id'];
 		$form_data = $form_settings['data'];
-		$email     = $form_data['email'];
-		unset( $form_data['email'] );
+		$email     = $form_data['EMAIL'];
+		unset( $form_data['EMAIL'] );
 
 		$url = 'https://api.sendinblue.com/v3/contacts';
 
