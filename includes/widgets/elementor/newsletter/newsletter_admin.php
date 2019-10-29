@@ -68,15 +68,6 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	}
 
 	/**
-	 * Additional fields for repeater.
-	 *
-	 * @param Object $repeater Repeater instance.
-	 */
-	function add_specific_fields_for_repeater( $repeater ) {
-
-	}
-
-	/**
 	 * Add necessary fields for sendinblue subscribe form.
 	 *
 	 * @param object $repeater Repeater object.
