@@ -37,7 +37,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		/**
 		 * Email address is required for this type of form
 		 */
-		if ( empty( $data['email'] ) || ! is_email( $data['email'] ) ) {
+		if ( empty( $data['EMAIL'] ) || ! is_email( $data['EMAIL'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
@@ -55,13 +55,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 
 		$form_fields = array();
 		foreach ( $data as $field_name => $field_value ) {
-			if( is_array( $data[ $field_name ] ) ){
-				foreach ( $data[ $field_name ] as $filed => $value ){
-					$form_fields[ $field_name.'['.$filed.']' ] = $value;
-				}
-			} else {
-				$form_fields[ $field_name ] = $field_value;
-			}
+			$form_fields[ $field_name ] = $field_value;
 		}
 
 		$form_settings = array(
@@ -93,7 +87,6 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	private function subscribe_mail( $form_settings, $result ) {
 
 		$provider_name = $form_settings['provider_settings']['provider'];
-
 		$submit = false;
 		if ( $provider_name === 'mailchimp' ) {
 			$submit = $this->mailchimp_subscribe( $form_settings );
@@ -126,9 +119,8 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$api_key   = $form_settings['provider_settings']['access_key'];
 		$list_id   = $form_settings['provider_settings']['list_id'];
 		$form_data = $form_settings['data'];
-
-		$email     = $form_data['email'];
-		unset( $form_data['email'] );
+		$email     = $form_data['EMAIL'];
+		unset( $form_data['EMAIL'] );
 
 		$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
 
@@ -143,6 +135,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 				'merge_fields'  => $form_data,
 			) )
 		);
+
 
 		$response = wp_remote_post( $url, $args );
 		$body     = json_decode( wp_remote_retrieve_body( $response ), true );

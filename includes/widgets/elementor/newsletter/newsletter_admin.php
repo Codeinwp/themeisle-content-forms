@@ -75,7 +75,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			'email'          => __( 'Email', 'textdomain' ),
 			'fname'          => __( 'First Name', 'textdomain' ),
 			'lname'          => __( 'Last Name', 'textdomain' ),
-			'address[addr1]' => __( 'Address', 'textdomain' ),
+			'address'        => __( 'Address', 'textdomain' ),
 			'phone'          => __( 'Phone', 'textdomain' ),
 			'birthday'       => __( 'Birth Day', 'textdomain' ),
 		);
@@ -126,7 +126,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 							'type'    => Controls_Manager::TEXT,
 							'default' => $field_data['default'],
 							'condition' => [
-								'field_map' => 'address[addr1]',
+								'field_map' => 'address',
 							],
 						)
 					);
@@ -146,7 +146,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 							],
 							'default' =>  $field_data['default'],
 							'condition' => [
-								'field_map' => 'address[addr1]',
+								'field_map' => 'address',
 							],
 						)
 					);
