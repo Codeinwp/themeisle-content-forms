@@ -82,9 +82,8 @@ class Elementor_Widget_Manager {
 	 * @return string
 	 */
 	public static function get_field_key_name( $field, $provider ) {
-		$field_map_name = ! empty( $provider ) ? $provider . '_field_map' : 'field_map';
-		if ( array_key_exists( $field_map_name, $field ) && ! empty( $field[ $field_map_name ] ) ) {
-			return strtoupper( $field[ $field_map_name ] );
+		if ( array_key_exists( 'field_map', $field ) && ! empty( $field[ 'field_map' ] ) ) {
+			return strtoupper( $field[ 'field_map' ] );
 		}
 
 		if ( ! empty( $field['label'] ) ) {

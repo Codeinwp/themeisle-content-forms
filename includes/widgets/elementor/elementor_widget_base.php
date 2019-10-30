@@ -747,7 +747,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			$form_fields = $settings[ $provider . '_form_fields' ];
 			$mapping     = array();
 			foreach ( $form_fields as $field ) {
-				$field_map = $field[ $provider . '_field_map' ];
+				$field_map = $field[ 'field_map' ];
 				if ( in_array( $field_map, $mapping ) ) {
 					echo '<p>';
 					printf(
@@ -887,7 +887,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			return false;
 		}
 
-		if ( ! array_key_exists( $settings['provider'] . '_field_map', $field ) || $field[ $settings['provider'] . '_field_map' ] !== 'address' ) {
+		if ( ! array_key_exists( 'field_map', $field ) || $field[ 'field_map' ] !== 'address' ) {
 			return false;
 		}
 
