@@ -11,12 +11,14 @@ use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_base.php';
+
 /**
  * Class Registration_Admin
  *
  * @package ThemeIsle\ContentForms\Includes\Widgets\Elementor\Registration
  */
-class Registration_Admin extends Elementor_Widget_Base{
+class Registration_Admin extends Elementor_Widget_Base {
 
 	/**
 	 * The type of current widget form.
@@ -78,7 +80,7 @@ class Registration_Admin extends Elementor_Widget_Base{
 				'require'     => 'required',
 				'placeholder' => esc_html__( 'Password', 'textdomain' ),
 				'field_width' => '100',
-			)
+			),
 		);
 	}
 
@@ -111,7 +113,7 @@ class Registration_Admin extends Elementor_Widget_Base{
 				'label'   => __( 'Type', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 
@@ -119,7 +121,7 @@ class Registration_Admin extends Elementor_Widget_Base{
 			'key',
 			array(
 				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN
+				'type'  => Controls_Manager::HIDDEN,
 			)
 		);
 
@@ -159,12 +161,12 @@ class Registration_Admin extends Elementor_Widget_Base{
 		);
 
 		$field_types = array(
-			'first_name' => __('First Name', 'textdomain'),
-			'last_name' => __('Last Name', 'textdomain'),
-			'user_pass' => __('Password', 'textdomain'),
-			'user_login' => __('Username', 'textdomain'),
-			'user_email' => __('Email', 'textdomain'),
-			'display_name' => __('Display Name', 'textdomain'),
+			'first_name'   => __( 'First Name', 'textdomain' ),
+			'last_name'    => __( 'Last Name', 'textdomain' ),
+			'user_pass'    => __( 'Password', 'textdomain' ),
+			'user_login'   => __( 'Username', 'textdomain' ),
+			'user_email'   => __( 'Email', 'textdomain' ),
+			'display_name' => __( 'Display Name', 'textdomain' ),
 		);
 		$repeater->add_control(
 			'field_map',
@@ -172,7 +174,7 @@ class Registration_Admin extends Elementor_Widget_Base{
 				'label'   => __( 'Map field to', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 
@@ -198,9 +200,9 @@ class Registration_Admin extends Elementor_Widget_Base{
 		$this->add_control(
 			'submit_label',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Submit', 'textdomain' ),
-				'default'     => esc_html__( 'Register', 'textdomain' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Submit', 'textdomain' ),
+				'default' => esc_html__( 'Register', 'textdomain' ),
 			)
 		);
 

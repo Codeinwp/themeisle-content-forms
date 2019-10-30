@@ -7,6 +7,8 @@ namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Registration;
 
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
 
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
+
 class Registration_Public extends Elementor_Widget_Actions_Base {
 
 	/**
@@ -34,16 +36,15 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 			return $return;
 		}
 
-
-		$settings['user_email'] = sanitize_email( $data['USER_EMAIL'] );
-		$settings['user_login'] = !empty( $data['USER_LOGIN'] ) ? $data['USER_LOGIN'] : $data['email'];
-		$settings['user_pass'] = ! empty( $data['USER_PASS'] ) ? $data['USER_PASS'] : wp_generate_password(
-			$length = 12,
+		$settings['user_email']             = sanitize_email( $data['USER_EMAIL'] );
+		$settings['user_login']             = ! empty( $data['USER_LOGIN'] ) ? $data['USER_LOGIN'] : $data['email'];
+		$settings['user_pass']              = ! empty( $data['USER_PASS'] ) ? $data['USER_PASS'] : wp_generate_password(
+			$length                         = 12,
 			$include_standard_special_chars = false
 		);
 		$settings['display_name'] = ! empty( $data['DISPLAY_NAME'] ) ? $data['DISPLAY_NAME'] : '';
-		$settings['first_name'] = ! empty( $data['FIRST_NAME'] ) ? $data['FIRST_NAME'] : '';
-		$settings['last_name'] = ! empty( $data['LAST_NAME'] ) ? $data['LAST_NAME'] : '';
+		$settings['first_name']   = ! empty( $data['FIRST_NAME'] ) ? $data['FIRST_NAME'] : '';
+		$settings['last_name']    = ! empty( $data['LAST_NAME'] ) ? $data['LAST_NAME'] : '';
 
 		$return = $this->_register_user( $return, $settings );
 

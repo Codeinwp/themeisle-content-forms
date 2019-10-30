@@ -1,15 +1,13 @@
 {
   "name": "codeinwp/themeisle-content-forms",
+  "description": "ThemeIsle Content Forms.",
   "version": "1.2.1",
-  "description": "ThemeIsle Content Forms ",
-  "keywords": [
-    "wordpress"
-  ],
+  "type": "library",
+  "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/Codeinwp/themeisle-content-forms",
-  "license": "GPL-2.0-or-later",
   "authors": [
     {
-      "name": "ThemeIsle team",
+      "name": "ThemeIsle",
       "email": "friends@themeisle.com",
       "homepage": "https://themeisle.com"
     }
@@ -18,6 +16,14 @@
     "files": [
       "load.php"
     ]
+  },
+  "require-dev": {
+    "wptrt/wpthemereview": "*",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0"
+  },
+  "scripts": {
+    "format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
+    "lint": "phpcs --standard=phpcs.xml"
   },
   "support": {
     "issues": "https://github.com/Codeinwp/themeisle-content-forms/issues"

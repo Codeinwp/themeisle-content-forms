@@ -54,8 +54,8 @@ abstract class ElementorWidget extends Widget_Base {
 	static function get_widget_settings( $widget_id, $post_id ) {
 
 		$document = Plugin::$instance->documents->get( $post_id );
-		$el_data = $document->get_elements_data();
-		$el_data = apply_filters( 'elementor/frontend/builder_content_data', $el_data, $post_id );
+		$el_data  = $document->get_elements_data();
+		$el_data  = apply_filters( 'elementor/frontend/builder_content_data', $el_data, $post_id );
 
 		if ( ! empty( $el_data ) ) {
 			return self::get_widget_data_by_id( $widget_id, $el_data );
@@ -211,7 +211,7 @@ abstract class ElementorWidget extends Widget_Base {
 				'label'   => __( 'Type', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 
@@ -219,7 +219,7 @@ abstract class ElementorWidget extends Widget_Base {
 			'key',
 			array(
 				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN
+				'type'  => Controls_Manager::HIDDEN,
 			)
 		);
 
@@ -367,7 +367,7 @@ abstract class ElementorWidget extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-column'          => 'padding-right: calc( {{SIZE}}{{UNIT}}/2 ); padding-left: calc( {{SIZE}}{{UNIT}}/2 );',
+					'{{WRAPPER}} .elementor-column' => 'padding-right: calc( {{SIZE}}{{UNIT}}/2 ); padding-left: calc( {{SIZE}}{{UNIT}}/2 );',
 					'{{WRAPPER}} .content-form .submit-form' => 'padding-right: calc( {{SIZE}}{{UNIT}}/2 ); padding-left: calc( {{SIZE}}{{UNIT}}/2 );',
 				],
 			]
@@ -388,7 +388,7 @@ abstract class ElementorWidget extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-column'          => 'margin-bottom: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-column' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 					'{{WRAPPER}} .content-form .submit-form' => 'margin-bottom: {{SIZE}}{{UNIT}};',
 				],
 			]
@@ -418,11 +418,11 @@ abstract class ElementorWidget extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'body.rtl {{WRAPPER}} fieldset > label'       => 'padding-left: {{SIZE}}{{UNIT}};',
+					'body.rtl {{WRAPPER}} fieldset > label' => 'padding-left: {{SIZE}}{{UNIT}};',
 					// for the label position = inline option
 					'body:not(.rtl) {{WRAPPER}} fieldset > label' => 'padding-right: {{SIZE}}{{UNIT}};',
 					// for the label position = inline option
-					'body {{WRAPPER}} fieldset > label'           => 'padding-bottom: {{SIZE}}{{UNIT}};',
+					'body {{WRAPPER}} fieldset > label' => 'padding-bottom: {{SIZE}}{{UNIT}};',
 					// for the label position = above option
 				],
 			]
@@ -505,13 +505,14 @@ abstract class ElementorWidget extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'    => 'text-align: {{VALUE}}',
-					'{{WRAPPER}} fieldset > textarea' => 'text-align: {{VALUE}}'
+					'{{WRAPPER}} fieldset > textarea' => 'text-align: {{VALUE}}',
 				],
 			]
 		);
 
 		$this->add_responsive_control(
-			'field-text-padding', [
+			'field-text-padding',
+			[
 				'label'      => __( 'Text Padding', 'textdomain' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
@@ -537,9 +538,9 @@ abstract class ElementorWidget extends Widget_Base {
 				'label'     => __( 'Text Color', 'textdomain' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} fieldset > input'                 => 'color: {{VALUE}};',
-					'{{WRAPPER}} fieldset > input::placeholder'    => 'color: {{VALUE}};',
-					'{{WRAPPER}} fieldset > textarea'              => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input'    => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input::placeholder' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea' => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea::placeholder' => 'color: {{VALUE}};',
 				],
 				'scheme'    => [
@@ -548,7 +549,6 @@ abstract class ElementorWidget extends Widget_Base {
 				],
 			]
 		);
-
 
 		$this->add_control(
 			'field_background_color',
@@ -592,7 +592,7 @@ abstract class ElementorWidget extends Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} fieldset > input'    => 'border-style: {{VALUE}};',
-					'{{WRAPPER}} fieldset > textarea' => 'border-style: {{VALUE}};'
+					'{{WRAPPER}} fieldset > textarea' => 'border-style: {{VALUE}};',
 				],
 			]
 		);
@@ -639,9 +639,9 @@ abstract class ElementorWidget extends Widget_Base {
 				'label'     => __( 'Text Color', 'textdomain' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} fieldset > input:focus'                 => 'color: {{VALUE}};',
-					'{{WRAPPER}} fieldset > input::placeholder:focus'    => 'color: {{VALUE}};',
-					'{{WRAPPER}} fieldset > textarea:focus'              => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input::placeholder:focus' => 'color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea::placeholder:focus' => 'color: {{VALUE}};',
 				],
 				'scheme'    => [
@@ -658,7 +658,7 @@ abstract class ElementorWidget extends Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '#ffffff',
 				'selectors' => [
-					'{{WRAPPER}} fieldset > input:focus'    => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input:focus' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'background-color: {{VALUE}};',
 				],
 				'separator' => 'before',
@@ -671,7 +671,7 @@ abstract class ElementorWidget extends Widget_Base {
 				'label'     => __( 'Border Color', 'textdomain' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} fieldset > input:focus'    => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} fieldset > input:focus' => 'border-color: {{VALUE}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-color: {{VALUE}};',
 				],
 				'separator' => 'before',
@@ -692,8 +692,8 @@ abstract class ElementorWidget extends Widget_Base {
 					'groove' => _x( 'Groove', 'Border Control', 'textdomain' ),
 				],
 				'selectors' => [
-					'{{WRAPPER}} fieldset > input:focus'    => 'border-style: {{VALUE}};',
-					'{{WRAPPER}} fieldset > textarea:focus' => 'border-style: {{VALUE}};'
+					'{{WRAPPER}} fieldset > input:focus' => 'border-style: {{VALUE}};',
+					'{{WRAPPER}} fieldset > textarea:focus' => 'border-style: {{VALUE}};',
 				],
 			]
 		);
@@ -706,7 +706,7 @@ abstract class ElementorWidget extends Widget_Base {
 				'placeholder' => '',
 				'size_units'  => [ 'px' ],
 				'selectors'   => [
-					'{{WRAPPER}} fieldset > input:focus'    => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > input:focus' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -719,7 +719,7 @@ abstract class ElementorWidget extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} fieldset > input:focus'    => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} fieldset > input:focus' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 					'{{WRAPPER}} fieldset > textarea:focus' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
@@ -785,7 +785,8 @@ abstract class ElementorWidget extends Widget_Base {
 		);
 
 		$this->add_group_control(
-			Group_Control_Border::get_type(), [
+			Group_Control_Border::get_type(),
+			[
 				'name'        => 'button_border',
 				'placeholder' => '1px',
 				'default'     => '1px',
@@ -991,7 +992,7 @@ abstract class ElementorWidget extends Widget_Base {
 	private function render_form_field( $field, $is_preview = false ) {
 		$item_index = $field['_id'];
 		$key        = ! empty( $field['label'] ) ? sanitize_title( $field['label'] ) : ( ! empty( $field['placeholder'] ) ? sanitize_title( $field['placeholder'] ) : 'field_' . $item_index );
-		if ( ! empty( $field['key'] ) ){
+		if ( ! empty( $field['key'] ) ) {
 			$key = $field['key'];
 		}
 		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
@@ -1013,18 +1014,19 @@ abstract class ElementorWidget extends Widget_Base {
 
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'content-form-field-' . $field['type'] );
 		$this->add_render_attribute( 'fieldset' . $field['_id'], 'class', 'elementor-column elementor-col-' . $field['field_width'] );
-		$this->add_render_attribute( [
-			'icon-align' => [
-				'class' => [
-					empty( $instance['button_icon_align'] ) ? '' :
-						'elementor-align-icon-' . $instance['button_icon_align'],
-					'elementor-button-icon',
+		$this->add_render_attribute(
+			[
+				'icon-align' => [
+					'class' => [
+						empty( $instance['button_icon_align'] ) ? '' :
+							'elementor-align-icon-' . $instance['button_icon_align'],
+						'elementor-button-icon',
+					],
 				],
 			]
-		] );
+		);
 
 		$this->add_inline_editing_attributes( $item_index . '_label', 'none' );
-
 
 		echo '<fieldset ' . $this->get_render_attribute_string( 'fieldset' . $field['_id'] ) . '>';
 

@@ -11,6 +11,7 @@ use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_base.php';
 /**
  * Class Contact_Admin
  */
@@ -114,7 +115,7 @@ class Contact_Admin extends Elementor_Widget_Base {
 				'label'   => __( 'Type', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 
@@ -122,7 +123,7 @@ class Contact_Admin extends Elementor_Widget_Base {
 			'key',
 			array(
 				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN
+				'type'  => Controls_Manager::HIDDEN,
 			)
 		);
 
@@ -184,18 +185,18 @@ class Contact_Admin extends Elementor_Widget_Base {
 		$this->add_control(
 			'success_message',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Success message', 'textdomain' ),
-				'default'     => esc_html__( 'Your message has been sent!', 'textdomain' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Success message', 'textdomain' ),
+				'default' => esc_html__( 'Your message has been sent!', 'textdomain' ),
 			)
 		);
 
 		$this->add_control(
 			'error_message',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Error message', 'textdomain' ),
-				'default'     => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Error message', 'textdomain' ),
+				'default' => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
 			)
 		);
 
@@ -212,9 +213,9 @@ class Contact_Admin extends Elementor_Widget_Base {
 		$this->add_control(
 			'submit_label',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Submit', 'textdomain' ),
-				'default'     => esc_html__( 'Submit', 'textdomain' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Submit', 'textdomain' ),
+				'default' => esc_html__( 'Submit', 'textdomain' ),
 			)
 		);
 

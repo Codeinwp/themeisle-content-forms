@@ -36,9 +36,9 @@ class NewsletterForm extends Base {
 	 */
 	public function make_form_config( $config ) {
 		return array(
-			'id'                           => 'newsletter',
-			'icon'                         => 'eicon-align-left',
-			'title'                        => esc_html__( 'Newsletter Form' ),
+			'id'       => 'newsletter',
+			'icon'     => 'eicon-align-left',
+			'title'    => esc_html__( 'Newsletter Form' ),
 
 			'controls' => array(
 				'provider'     => array(
@@ -47,36 +47,36 @@ class NewsletterForm extends Base {
 					'description' => esc_html__( 'Where to send the email?', 'textdomain' ),
 					'options'     => array(
 						'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
-						'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' )
-					)
+						'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' ),
+					),
 				),
 				'access_key'   => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Access Key', 'textdomain' ),
 					'description' => esc_html__( 'Provide an access key for the selected service', 'textdomain' ),
-					'required' => true
+					'required'    => true,
 				),
 				'list_id'      => array(
-					'type'  => 'text',
-					'label' => esc_html__( 'List ID', 'textdomain' ),
+					'type'        => 'text',
+					'label'       => esc_html__( 'List ID', 'textdomain' ),
 					'description' => esc_html__( 'The List ID (based on the seleced service) where we should subscribe the user', 'textdomain' ),
-					'required' => true
+					'required'    => true,
 				),
 				'submit_label' => array(
 					'type'    => 'text',
 					'label'   => esc_html__( 'Submit Label', 'textdomain' ),
 					'default' => esc_html__( 'Join Newsletter', 'textdomain' ),
-				)
+				),
 			),
 
-			'fields' => array(
+			'fields'   => array(
 				'email' => array(
 					'type'        => 'email',
 					'label'       => esc_html__( 'Email', 'textdomain' ),
 					'default'     => esc_html__( 'Email', 'textdomain' ),
 					'placeholder' => esc_html__( 'Email', 'textdomain' ),
-					'require'     => 'required'
-				)
+					'require'     => 'required',
+				),
 			),
 
 		);
@@ -152,38 +152,38 @@ class NewsletterForm extends Base {
 				$args = array(
 					'method'  => 'PUT',
 					'headers' => array(
-						'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key )
+						'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
 					),
-					'body'    => json_encode( array(
-						'email_address' => $email,
-						'status'        => $status
-					) )
+					'body'    => json_encode(
+						array(
+							'email_address' => $email,
+							'status'        => $status,
+						)
+					),
 				);
 
 				$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
 
 				$response = wp_remote_post( $url, $args );
-				$body = json_decode( wp_remote_retrieve_body( $response ), true );
+				$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 
 				if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 					$result['success'] = false;
-					$result['message']    = $body['detail'];
+					$result['message'] = $body['detail'];
 					return $result;
 				}
 
-
 				if ( $body['status'] == $status ) {
 					$result['success'] = true;
-					$result['message']     = $this->notices['success'];
+					$result['message'] = $this->notices['success'];
 				} else {
 					$result['success'] = false;
-					$result['message']    = $this->notices['error'];
+					$result['message'] = $this->notices['error'];
 				}
 
 				return $result;
 				break;
 			case 'sendinblue':
-
 				$url = 'https://api.sendinblue.com/v3/contacts';
 
 				// https://developers.sendinblue.com/reference#createcontact
@@ -191,20 +191,22 @@ class NewsletterForm extends Base {
 					'method'  => 'POST',
 					'headers' => array(
 						'content-type' => 'application/json',
-						'api-key'      => $api_key
+						'api-key'      => $api_key,
 					),
-					'body'    => json_encode( array(
-						'email'            => $email,
-						'listIds'          => array( (int) $list_id ),
-						'emailBlacklisted' => false,
-						'smsBlacklisted'   => false,
-					) )
+					'body'    => json_encode(
+						array(
+							'email'            => $email,
+							'listIds'          => array( (int) $list_id ),
+							'emailBlacklisted' => false,
+							'smsBlacklisted'   => false,
+						)
+					),
 				);
 
 				$response = wp_remote_post( $url, $args );
 
 				if ( is_wp_error( $response ) ) {
-					$result['message']     = $this->notices['error'];
+					$result['message'] = $this->notices['error'];
 					return $result;
 				}
 
@@ -214,8 +216,8 @@ class NewsletterForm extends Base {
 					return $result;
 				}
 
-				$body = json_decode( wp_remote_retrieve_body( $response ), true );
-				$result['message']     = $body['message'];
+				$body              = json_decode( wp_remote_retrieve_body( $response ), true );
+				$result['message'] = $body['message'];
 				return $result;
 				break;
 

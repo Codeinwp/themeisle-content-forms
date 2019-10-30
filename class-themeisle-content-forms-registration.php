@@ -37,33 +37,33 @@ class RegistrationForm extends Base {
 	public function make_form_config( $config ) {
 
 		return array(
-			'id'    => $this->get_type(),
-			'icon'  => 'eicon-align-left',
-			'title' => esc_html__( 'User Registration Form' ),
+			'id'       => $this->get_type(),
+			'icon'     => 'eicon-align-left',
+			'title'    => esc_html__( 'User Registration Form' ),
 
-			'fields' => array(
+			'fields'   => array(
 				'username' => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'User Name', 'textdomain' ),
 					'default'     => esc_html__( 'User Name', 'textdomain' ),
 					'placeholder' => esc_html__( 'User Name', 'textdomain' ),
 					'require'     => 'required',
-					'validation'  => ''// name a function which should allow only letters and numbers
+					'validation'  => '', // name a function which should allow only letters and numbers
 				),
 				'email'    => array(
 					'type'        => 'email',
 					'label'       => esc_html__( 'Email', 'textdomain' ),
 					'default'     => esc_html__( 'Email', 'textdomain' ),
 					'placeholder' => esc_html__( 'Email', 'textdomain' ),
-					'require'     => 'required'
+					'require'     => 'required',
 				),
 				'password' => array(
 					'type'        => 'password',
 					'label'       => esc_html__( 'Password', 'textdomain' ),
 					'default'     => esc_html__( 'Password', 'textdomain' ),
 					'placeholder' => esc_html__( 'Password', 'textdomain' ),
-					'require'     => 'required'
-				)
+					'require'     => 'required',
+				),
 			),
 
 			'controls' => array(
@@ -71,9 +71,9 @@ class RegistrationForm extends Base {
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
 					'default'     => esc_html__( 'Register', 'textdomain' ),
-					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
-				)
-			)
+					'description' => esc_html__( 'The Call To Action label', 'textdomain' ),
+				),
+			),
 		);
 	}
 
@@ -160,8 +160,8 @@ class RegistrationForm extends Base {
 
 		// no pass? ok
 		if ( empty( $password ) ) {
-			$password = wp_generate_password(
-				$length = 12,
+			$password                           = wp_generate_password(
+				$length                         = 12,
 				$include_standard_special_chars = false
 			);
 		}
@@ -169,7 +169,7 @@ class RegistrationForm extends Base {
 		$userdata = array(
 			'user_login' => $user_name,
 			'user_email' => $user_email,
-			'user_pass'  => $password
+			'user_pass'  => $password,
 		);
 
 		$user_id = wp_insert_user( $userdata );
@@ -183,7 +183,7 @@ class RegistrationForm extends Base {
 			}
 
 			$return['success'] = true;
-			$return['message']     = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
+			$return['message'] = esc_html__( 'Welcome, ', 'textdomain' ) . $user_name;
 		}
 
 		return $return;

@@ -20,7 +20,7 @@ class BeaverModuleNewsletter extends BeaverModule {
 				'description' => esc_html__( 'A simple newsletter form.', 'textdomain' ),
 				'category'    => esc_html__( 'Orbit Fox Modules', 'textdomain' ),
 				'dir'         => dirname( __FILE__ ),
-				'url'         => plugin_dir_url( __FILE__ )
+				'url'         => plugin_dir_url( __FILE__ ),
 			)
 		);
 	}

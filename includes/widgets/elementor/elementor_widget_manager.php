@@ -24,7 +24,7 @@ class Elementor_Widget_Manager {
 	/**
 	 * Initialization Function
 	 */
-	public function init(){
+	public function init() {
 		// Register Orbit Fox Category in Elementor Dashboard
 		add_action( 'elementor/elements/categories_registered', array( $this, 'add_elementor_widget_categories' ) );
 
@@ -53,8 +53,9 @@ class Elementor_Widget_Manager {
 	/**
 	 * Register Elementor Widgets that are added in Orbit Fox.
 	 */
-	public function register_elementor_widget(){
-		foreach ( self::$forms as $form ){
+	public function register_elementor_widget() {
+		foreach ( self::$forms as $form ) {
+			require_once $form . '/' . $form . '_admin.php';
 			$widget = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Admin';
 			Plugin::instance()->widgets_manager->register_widget_type( new $widget() );
 		}
@@ -63,13 +64,12 @@ class Elementor_Widget_Manager {
 	/**
 	 * Register Elementor Widgets actions.
 	 */
-	public function register_widgets_actions(){
-		foreach ( self::$forms as $form ){
-			$admin_class  = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Public';
-			if( class_exists( $admin_class ) ){
-				$admin = new $admin_class();
-				$admin->init();
-			}
+	public function register_widgets_actions() {
+		foreach ( self::$forms as $form ) {
+			require_once $form . '/' . $form . '_public.php';
+			$admin_class = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Public';
+			$admin       = new $admin_class();
+			$admin->init();
 		}
 	}
 
@@ -81,20 +81,20 @@ class Elementor_Widget_Manager {
 	 *
 	 * @return string
 	 */
-	public static function get_field_key_name( $field, $provider ){
-		$field_map_name = !empty($provider) ? $provider . '_field_map' : 'field_map';
-		if( array_key_exists( $field_map_name, $field ) && ! empty( $field[$field_map_name] ) ){
-			return strtoupper( $field[$field_map_name] );
+	public static function get_field_key_name( $field, $provider ) {
+		$field_map_name = ! empty( $provider ) ? $provider . '_field_map' : 'field_map';
+		if ( array_key_exists( $field_map_name, $field ) && ! empty( $field[ $field_map_name ] ) ) {
+			return strtoupper( $field[ $field_map_name ] );
 		}
 
-		if( ! empty( $field['label'] ) ){
+		if ( ! empty( $field['label'] ) ) {
 			return sanitize_title( $field['label'] );
 		}
 
-		if( ! empty( $field['placeholder'] ) ){
+		if ( ! empty( $field['placeholder'] ) ) {
 			return sanitize_title( $field['placeholder'] );
 		}
 
-		return 'field_'.$field['_id'];
+		return 'field_' . $field['_id'];
 	}
 }

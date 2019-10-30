@@ -18,7 +18,8 @@ foreach ( $controls as $control_name => $control ) {
 			printf(
 				esc_html__( 'The %s setting is required!', 'textdomain' ),
 				'<strong>' . $control['label'] . '</strong>'
-			); ?>
+			);
+			?>
 		</div>
 		<?php
 	}
@@ -31,7 +32,7 @@ $module->render_form_header( $module->node );
 $fields = $module->get_setting( 'fields' );
 
 foreach ( $fields as $key => $field ) {
-	$module->render_form_field( (array)$field );
+	$module->render_form_field( (array) $field );
 }
 
 $controls = $form_settings['controls'];
@@ -41,7 +42,8 @@ $btn_label = esc_html__( 'Submit', 'textdomain' );
 
 if ( ! empty( $settings->submit_label ) ) {
 	$btn_label = $settings->submit_label;
-} ?>
+}
+?>
 <fieldset>
 	<button type="submit" name="submit" value="submit-<?php echo $module->get_type(); ?>-<?php echo $module->node; ?>">
 		<?php echo $btn_label; ?>

@@ -10,6 +10,8 @@ namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Newsletter;
 
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
 
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
+
 /**
  * Class Newsletter_Public
  */
@@ -37,7 +39,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		/**
 		 * Email address is required for this type of form
 		 */
-		if( empty( $data['EMAIL'] ) ){
+		if ( empty( $data['EMAIL'] ) ) {
 			$return['message'] = esc_html__( 'The email field cannot be empty.', 'textdomain' );
 			return $return;
 		}
@@ -72,7 +74,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 			'strings'           => array(
 				'error_message'   => $settings['error_message'],
 				'success_message' => $settings['success_message'],
-			)
+			),
 		);
 
 		$return = $this->subscribe_mail( $form_settings, $return );
@@ -90,7 +92,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 	 */
 	private function subscribe_mail( $form_settings, $result ) {
 
-		$provider_name = $form_settings['provider_settings']['provider'];
+		$provider_name     = $form_settings['provider_settings']['provider'];
 		$result['success'] = false;
 		$result['message'] = $form_settings['strings']['error_message'];
 
@@ -102,11 +104,10 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 			$result = $this->sib_subscribe( $form_settings, $result );
 		}
 
-
-//		if ( $submit === true ) {
-//			$result['success'] = true;
-//			$result['message'] = $form_settings['strings']['success_message'];
-//		}
+		//      if ( $submit === true ) {
+		//          $result['success'] = true;
+		//          $result['message'] = $form_settings['strings']['success_message'];
+		//      }
 
 		return $result;
 	}
@@ -132,21 +133,22 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$args = array(
 			'method'  => 'PUT',
 			'headers' => array(
-				'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key )
+				'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
 			),
-			'body'    => json_encode( array(
-				'email_address' => $email,
-				'status'        => 'pending',
-				'merge_fields'  => $form_data,
-			) )
+			'body'    => json_encode(
+				array(
+					'email_address' => $email,
+					'status'        => 'pending',
+					'merge_fields'  => $form_data,
+				)
+			),
 		);
 
-
 		$response = wp_remote_post( $url, $args );
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
 			$result['success'] = false;
-			$result['message']  = $body['detail'];
+			$result['message'] = $body['detail'];
 			return $result;
 		}
 
@@ -181,15 +183,17 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 			'method'  => 'POST',
 			'headers' => array(
 				'content-type' => 'application/json',
-				'api-key'      => $api_key
+				'api-key'      => $api_key,
 			),
-			'body'    => json_encode( array(
-				'email'            => $email,
-				'listIds'          => array( (int) $list_id ),
-				'attributes'       => $form_data,
-				'emailBlacklisted' => false,
-				'smsBlacklisted'   => false,
-			) )
+			'body'    => json_encode(
+				array(
+					'email'            => $email,
+					'listIds'          => array( (int) $list_id ),
+					'attributes'       => $form_data,
+					'emailBlacklisted' => false,
+					'smsBlacklisted'   => false,
+				)
+			),
 		);
 
 		$response = wp_remote_post( $url, $args );
@@ -203,8 +207,8 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 			return $result;
 		}
 
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-		$result['message']     = $body['message'];
+		$body              = json_decode( wp_remote_retrieve_body( $response ), true );
+		$result['message'] = $body['message'];
 		return $result;
 	}
 

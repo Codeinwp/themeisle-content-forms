@@ -10,6 +10,7 @@ namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Manager;
 
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
 
 /**
  * Class Contact_Public
@@ -37,11 +38,11 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
 
-	    $settings = $this->get_widget_settings( $widget_id, $post_id );
+		$settings = $this->get_widget_settings( $widget_id, $post_id );
 
-	    if( empty( $settings ) ){
-	        return $return;
-        }
+		if ( empty( $settings ) ) {
+			return $return;
+		}
 
 		/**
 		 * Bail if there is nowhere to send the email.
@@ -51,21 +52,21 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 			return $return;
 		}
 
-		foreach( $settings['form_fields'] as $field ) {
-			$key = Elementor_Widget_Manager::get_field_key_name($field);
+		foreach ( $settings['form_fields'] as $field ) {
+			$key = Elementor_Widget_Manager::get_field_key_name( $field );
 
 			if ( 'required' === $field['requirement'] && empty( $data[ $key ] ) ) {
-                $return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain'), $key );
-                return $return;
+				$return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain' ), $key );
+				return $return;
 			}
-			if( 'email' === $field['type']  && ! is_email( $data[$key] ) ){
+			if ( 'email' === $field['type'] && ! is_email( $data[ $key ] ) ) {
 				$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 				return $return;
 			}
 		}
 
-		$from    = isset( $data['email'] ) ? $data['email'] : null;
-		$name    = isset( $data['name'] ) ? $data['name'] : null;
+		$from = isset( $data['email'] ) ? $data['email'] : null;
+		$name = isset( $data['name'] ) ? $data['name'] : null;
 
 		// prepare settings for submit
 		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $data );
@@ -149,10 +150,11 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 			</thead>
 			<tbody>
 			<?php
-			foreach ( $data as $key => $value ) { ?>
+			foreach ( $data as $key => $value ) {
+				?>
 				<tr>
 					<td>
-						<strong><?php echo esc_html( $key ) ?> : </strong>
+						<strong><?php echo esc_html( $key ); ?> : </strong>
 						<p><?php echo esc_html( $value ); ?></p>
 					</td>
 				</tr>
@@ -162,7 +164,7 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 			<tr>
 				<td>
 					<hr/>
-					<?php esc_html_e( 'You received this email because your email address is set in the content form settings on ', 'textdomain' ) ?>
+					<?php esc_html_e( 'You received this email because your email address is set in the content form settings on ', 'textdomain' ); ?>
 					<a href="<?php echo esc_url( get_site_url() ); ?>"><?php bloginfo( 'name' ); ?></a>
 				</td>
 			</tr>

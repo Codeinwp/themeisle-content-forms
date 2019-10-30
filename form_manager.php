@@ -8,17 +8,23 @@ namespace ThemeIsle\ContentForms;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Manager;
 use ThemeIsle\ContentForms\Includes\Admin\Server;
 
+define( 'TI_CONTENT_FORMS_VERSION', '1.0.0' );
+define( 'TI_CONTENT_FORMS_NAMESPACE', 'content-forms/v1' );
+define( 'TI_CONTENT_FORMS_FILE', __FILE__ );
+define( 'TI_CONTENT_FORMS_PATH', dirname( __FILE__ ) );
+define( 'TI_CONTENT_FORMS_DIR_PATH', dirname( __DIR__ ) );
+
 /**
  * Class Form_Manager
  *
  * @package ThemeIsle\ContentForms
  */
-class Form_Manager{
+class Form_Manager {
 
 	/**
 	 * Initialization function.
 	 */
-	public function init(){
+	public function init() {
 		$this->load_hooks();
 		$this->make();
 	}
@@ -26,9 +32,10 @@ class Form_Manager{
 	/**
 	 * Load hooks and filters.
 	 */
-	private function load_hooks(){
+	private function load_hooks() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		require_once 'includes/admin/server.php';
 		$rest_server = new Server();
 		$rest_server->register_hooks();
 	}
@@ -36,14 +43,18 @@ class Form_Manager{
 	/**
 	 * Enqueue scripts and styles.
 	 */
-	public function enqueue_scripts(){
+	public function enqueue_scripts() {
 
 		wp_register_script( 'content-forms', plugins_url( '/assets/content-forms.js', TI_CONTENT_FORMS_FILE ), array( 'jquery' ), TI_CONTENT_FORMS_VERSION, true );
 
-		wp_localize_script( 'content-forms', 'contentFormsSettings', array(
-			'restUrl' => esc_url_raw( rest_url() . 'content-forms/v1/' ),
-			'nonce'   => wp_create_nonce( 'wp_rest' ),
-		) );
+		wp_localize_script(
+			'content-forms',
+			'contentFormsSettings',
+			array(
+				'restUrl' => esc_url_raw( rest_url() . 'content-forms/v1/' ),
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
+			)
+		);
 
 		wp_register_style( 'content-forms', plugins_url( '/assets/content-forms.css', __FILE__ ), array(), TI_CONTENT_FORMS_VERSION );
 
@@ -69,6 +80,7 @@ class Form_Manager{
 	 */
 	private function make() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
+			require_once 'includes/widgets/elementor/elementor_widget_manager.php';
 			$elementor_manager = new Elementor_Widget_Manager();
 			$elementor_manager->init();
 		}

@@ -5,34 +5,12 @@
  * @package     ThemeIsle\ContentForms
  */
 
+require_once 'form_manager.php';
 
 
-//
-define( 'TI_CONTENT_FORMS_VERSION', '1.0.0' );
-define( 'TI_CONTENT_FORMS_NAMESPACE', 'content-forms/v1');
-define( 'TI_CONTENT_FORMS_FILE', __FILE__ );
-define( 'TI_CONTENT_FORMS_PATH', dirname(__FILE__) );
-define( 'TI_CONTENT_FORMS_DIR_PATH', dirname(__DIR__) );
-//
-/*
- * Load the necessary resource for this library
- */
-function themeisle_content_forms_load() {
 
-	require_once 'form_manager.php';
-	require_once 'includes/admin/server.php';
 
-	if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-		require_once 'includes/widgets/elementor/elementor_widget_manager.php';
-		require_once 'includes/widgets/elementor/elementor_widget_base.php';
-		require_once 'includes/widgets/elementor/elementor_widget_actions_base.php';
-		require_once 'includes/widgets/elementor/contact/contact_public.php';
-		require_once 'includes/widgets/elementor/contact/contact_admin.php';
-		require_once 'includes/widgets/elementor/newsletter/newsletter_public.php';
-		require_once 'includes/widgets/elementor/newsletter/newsletter_admin.php';
-		require_once 'includes/widgets/elementor/registration/registration_public.php';
-		require_once 'includes/widgets/elementor/registration/registration_admin.php';
-	}
+
 //
 //
 //
@@ -64,8 +42,6 @@ function themeisle_content_forms_load() {
 //
 //	// Register CSS & JS assets + localizations
 //	add_action( 'wp_enqueue_scripts', 'themeisle_content_forms_register_public_assets' );
-}
-add_action( 'init', 'themeisle_content_forms_load', 9 );
 
 //
 //if ( ! function_exists( 'themeisle_content_forms_register_public_assets' ) ) :

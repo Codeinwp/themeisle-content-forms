@@ -63,7 +63,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 				'title'       => $this->get_title(),
 				'description' => isset( $this->forms_config['description'] ) ? $this->forms_config['description'] : '',
 				'sections'    => array(),
-			)
+			),
 		);
 
 		// is important to keep the order of fields from the main config
@@ -78,7 +78,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 							'label'        => esc_html__( 'Field', 'textdomain' ),
 							'form'         => 'field',
 							'preview_text' => 'label',
-							'default'      => $fields
+							'default'      => $fields,
 						),
 					),
 				);
@@ -86,7 +86,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 			} elseif ( 'controls' === $key ) {
 				$args['general']['sections']['controls'] = array(
 					'title'  => esc_html__( 'Form Settings', 'textdomain' ),
-					'fields' => $controls
+					'fields' => $controls,
 				);
 			}
 		}
@@ -94,7 +94,8 @@ abstract class BeaverModule extends \FLBuilderModule {
 		\FLBuilder::register_module( get_called_class(), $args );
 
 		\FLBuilder::register_settings_form(
-			'field', array(
+			'field',
+			array(
 				'title' => esc_html__( 'Field', 'textdomain' ),
 				'tabs'  => array(
 					'general' => array(
@@ -112,19 +113,19 @@ abstract class BeaverModule extends \FLBuilderModule {
 										'label'   => esc_html__( 'Type', 'textdomain' ),
 										'options' => array(
 											'text'     => esc_html__( 'Text' ),
-											'email'     => esc_html__( 'Email' ),
+											'email'    => esc_html__( 'Email' ),
 											'textarea' => esc_html__( 'Textarea', 'textdomain' ),
 											'password' => esc_html__( 'Password', 'textdomain' ),
-										)
+										),
 									),
 									'required' => array(
 										'type'    => 'select',
 										'label'   => esc_html__( 'Is required?', 'textdomain' ),
 										'options' => array(
 											'required' => esc_html__( 'Required', 'textdomain' ),
-											'optional' => esc_html__( 'Optional', 'textdomain' )
-										)
-									)
+											'optional' => esc_html__( 'Optional', 'textdomain' ),
+										),
+									),
 								),
 							),
 						),
@@ -214,9 +215,9 @@ abstract class BeaverModule extends \FLBuilderModule {
 	 *
 	 * @return string Widget icon.
 	 */
-//	public function get_icon() {
-//		return $this->icon;
-//	}
+	//  public function get_icon() {
+	//      return $this->icon;
+	//  }
 
 	/**
 	 * Set the widget title property
@@ -252,35 +253,40 @@ abstract class BeaverModule extends \FLBuilderModule {
 		$required = '';
 		$form_id  = $this->node;
 
-
 		if ( $field['required'] === 'required' ) {
 			$required = 'required="required"';
 		}
 
 		$field_name = 'data[' . $form_id . '][' . $key . ']'; ?>
-		<fieldset class="content-form-field-<?php echo $field['type'] ?>">
+		<fieldset class="content-form-field-<?php echo $field['type']; ?>">
 
-			<label for="<?php echo $field_name ?>">
+			<label for="<?php echo $field_name; ?>">
 				<?php echo $field['label']; ?>
 			</label>
 
 			<?php
 			switch ( $field['type'] ) {
-				case 'textarea': ?>
-					<textarea name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
+				case 'textarea':
+					?>
+					<textarea name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>"
 						<?php echo $required; ?>
-						      cols="30" rows="5"></textarea>
-					<?php break;
-				case 'password': ?>
-					<input type="password" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
-						<?php echo $required; ?>>
-					<?php break;
-				default: ?>
-					<input type="text" name="<?php echo $field_name ?>" id="<?php echo $field_name ?>"
+							  cols="30" rows="5"></textarea>
+					<?php
+					break;
+				case 'password':
+					?>
+					<input type="password" name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>"
 						<?php echo $required; ?>>
 					<?php
 					break;
-			} ?>
+				default:
+					?>
+					<input type="text" name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>"
+						<?php echo $required; ?>>
+					<?php
+					break;
+			}
+			?>
 		</fieldset>
 		<?php
 	}

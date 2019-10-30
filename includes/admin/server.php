@@ -9,7 +9,7 @@ namespace ThemeIsle\ContentForms\Includes\Admin;
  * Class Server
  * @package ThemeIsle\ContentForms\Rest
  */
-class Server extends \WP_Rest_Controller{
+class Server extends \WP_Rest_Controller {
 
 	/**
 	 * Initialize the rest functionality.
@@ -28,7 +28,7 @@ class Server extends \WP_Rest_Controller{
 			'/check',
 			array(
 				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'rest_check' )
+				'callback' => array( $this, 'rest_check' ),
 			)
 		);
 
@@ -36,9 +36,9 @@ class Server extends \WP_Rest_Controller{
 			TI_CONTENT_FORMS_NAMESPACE,
 			'/submit',
 			array(
-				'methods'             => \WP_REST_Server::CREATABLE,
-				'callback'            => array( $this, 'submit_form' ),
-				'args'                => array(
+				'methods'  => \WP_REST_Server::CREATABLE,
+				'callback' => array( $this, 'submit_form' ),
+				'args'     => array(
 					'form_type' => array(
 						'type'        => 'string',
 						'required'    => true,
@@ -63,7 +63,7 @@ class Server extends \WP_Rest_Controller{
 						'type'        => 'string',
 						'required'    => true,
 						'description' => __( 'The form identifier.', 'textdomain' ),
-					)
+					),
 				),
 			)
 		);
@@ -92,7 +92,7 @@ class Server extends \WP_Rest_Controller{
 		if ( ! wp_verify_nonce( $nonce, 'content-form-' . $form_id ) ) {
 			return new \WP_REST_Response(
 				array(
-					'success'    => false,
+					'success' => false,
 					'message' => esc_html__( 'Invalid nonce', 'textdomain' ),
 				),
 				400
@@ -104,19 +104,19 @@ class Server extends \WP_Rest_Controller{
 		if ( empty( $data[ $form_id ] ) ) {
 			return new \WP_REST_Response(
 				array(
-					'success'    => false,
+					'success' => false,
 					'message' => esc_html__( 'Invalid Data ', 'textdomain' ) . $form_id,
 				),
 				400
 			);
 		}
 
-		$data         = $data[ $form_id ];
-		$post_id      = $request->get_param( 'post_id' );
-		$form_type    = $request->get_param( 'form_type' );
-		$return       = array(
+		$data      = $data[ $form_id ];
+		$post_id   = $request->get_param( 'post_id' );
+		$form_type = $request->get_param( 'form_type' );
+		$return    = array(
 			'success' => false,
-			'message' => esc_html__( 'Something went wrong', 'textdomain' )
+			'message' => esc_html__( 'Something went wrong', 'textdomain' ),
 		);
 
 		/**
@@ -125,7 +125,7 @@ class Server extends \WP_Rest_Controller{
 		 */
 		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id );
 		$status = 200;
-		if ( $return['success'] === false ){
+		if ( $return['success'] === false ) {
 			$status = 400;
 		}
 		return new \WP_REST_Response(

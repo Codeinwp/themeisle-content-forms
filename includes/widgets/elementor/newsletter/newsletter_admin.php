@@ -11,10 +11,12 @@ use Elementor\Controls_Manager;
 use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_base.php';
+
 /**
  * Class Newsletter_Admin
  */
-class Newsletter_Admin extends Elementor_Widget_Base{
+class Newsletter_Admin extends Elementor_Widget_Base {
 
 	/**
 	 * The type of current widget form.
@@ -53,8 +55,8 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'placeholder'          => esc_html__( 'Email', 'textdomain' ),
 				'field_width'          => '100',
 				'mailchimp_field_map'  => 'email',
-				'sendinblue_field_map'  => 'email',
-			]
+				'sendinblue_field_map' => 'email',
+			],
 		];
 	}
 
@@ -74,9 +76,9 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	 */
 	private function add_sendinblue_fields( $repeater ) {
 		$field_types = array(
-			'email'          => __( 'Email', 'textdomain' ),
-			'name'          => __( 'Name', 'textdomain' ),
-			'surname'          => __( 'Surname', 'textdomain' ),
+			'email'   => __( 'Email', 'textdomain' ),
+			'name'    => __( 'Name', 'textdomain' ),
+			'surname' => __( 'Surname', 'textdomain' ),
 		);
 		$repeater->add_control(
 			'sendinblue_field_map',
@@ -84,11 +86,11 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'label'   => __( 'Map field to', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 
-		$repeater->remove_control('mailchimp_field_map');
+		$repeater->remove_control( 'mailchimp_field_map' );
 
 		$default_fields = $this->get_default_config();
 		$this->add_control(
@@ -102,8 +104,8 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'default'     => $default_fields,
 				'title_field' => '{{{ label }}}',
 				'condition'   => [
-					'provider' => 'sendinblue'
-				]
+					'provider' => 'sendinblue',
+				],
 			)
 		);
 	}
@@ -113,14 +115,14 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 	 *
 	 * @param object $repeater Repeater object.
 	 */
-	private function add_mailchimp_fields( $repeater ){
+	private function add_mailchimp_fields( $repeater ) {
 		$field_types = array(
-			'email'          => __( 'Email', 'textdomain' ),
-			'fname'          => __( 'First Name', 'textdomain' ),
-			'lname'          => __( 'Last Name', 'textdomain' ),
-			'address'        => __( 'Address', 'textdomain' ),
-			'phone'          => __( 'Phone', 'textdomain' ),
-			'birthday'       => __( 'Birth Day', 'textdomain' ),
+			'email'    => __( 'Email', 'textdomain' ),
+			'fname'    => __( 'First Name', 'textdomain' ),
+			'lname'    => __( 'Last Name', 'textdomain' ),
+			'address'  => __( 'Address', 'textdomain' ),
+			'phone'    => __( 'Phone', 'textdomain' ),
+			'birthday' => __( 'Birth Day', 'textdomain' ),
 		);
 		$repeater->add_control(
 			'mailchimp_field_map',
@@ -128,46 +130,91 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'label'   => __( 'Map field to', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 		$config = array(
-			'addr2' => array(
-				'label' => array( 'label' => __( 'Line 2 Label', 'textdomain' ) , 'default' => __('Address Line 2', 'textdomain' ) ),
-				'placeholder' => array( 'label' => __( 'Line 2 Placeholder', 'textdomain' ) , 'default' => __('Address Line 2', 'textdomain' ) ),
-				'width' => array( 'label' => __( 'Line 2 Width', 'textdomain' ) , 'default' => '100'),
+			'addr2'   => array(
+				'label'       => array(
+					'label'   => __( 'Line 2 Label', 'textdomain' ),
+					'default' => __( 'Address Line 2', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'Line 2 Placeholder', 'textdomain' ),
+					'default' => __( 'Address Line 2', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'Line 2 Width', 'textdomain' ),
+					'default' => '100',
+				),
 			),
-			'city' => array(
-				'label' => array( 'label' => __( 'City Label', 'textdomain' ) , 'default' => __('City', 'textdomain' ) ),
-				'placeholder' => array( 'label' => __( 'City Placeholder', 'textdomain' ) , 'default' => __('City', 'textdomain' ) ),
-				'width' => array( 'label' => __( 'City Width', 'textdomain' ) , 'default' => '100'),
+			'city'    => array(
+				'label'       => array(
+					'label'   => __( 'City Label', 'textdomain' ),
+					'default' => __( 'City', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'City Placeholder', 'textdomain' ),
+					'default' => __( 'City', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'City Width', 'textdomain' ),
+					'default' => '100',
+				),
 			),
-			'state' => array(
-				'label' => array( 'label' => __( 'State Label', 'textdomain' ) , 'default' => __('State/Province/Region', 'textdomain' ) ),
-				'placeholder' => array( 'label' => __( 'State Placeholder', 'textdomain' ) , 'default' => __('State/Province/Region', 'textdomain' ) ),
-				'width' => array( 'label' => __( 'State Width', 'textdomain' ) , 'default' => '100'),
+			'state'   => array(
+				'label'       => array(
+					'label'   => __( 'State Label', 'textdomain' ),
+					'default' => __( 'State/Province/Region', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'State Placeholder', 'textdomain' ),
+					'default' => __( 'State/Province/Region', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'State Width', 'textdomain' ),
+					'default' => '100',
+				),
 			),
-			'zip' => array(
-				'label' => array( 'label' => __( 'Zip Code Label', 'textdomain' ) , 'default' => __('Postal / Zip Code', 'textdomain' ) ),
-				'placeholder' => array( 'label' => __( 'Zip Code Placeholder', 'textdomain' ) , 'default' => __('Postal / Zip Code', 'textdomain' ) ),
-				'width' => array( 'label' => __( 'Zip Code Width', 'textdomain' ) , 'default' => '100'),
+			'zip'     => array(
+				'label'       => array(
+					'label'   => __( 'Zip Code Label', 'textdomain' ),
+					'default' => __( 'Postal / Zip Code', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'Zip Code Placeholder', 'textdomain' ),
+					'default' => __( 'Postal / Zip Code', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'Zip Code Width', 'textdomain' ),
+					'default' => '100',
+				),
 			),
 			'country' => array(
-				'label' => array( 'label' => __( 'Country Label', 'textdomain' ) , 'default' => __('Country', 'textdomain' ) ),
-				'placeholder' => array( 'label' => __( ' Country Placeholder', 'textdomain' ) , 'default' => __('Country', 'textdomain' ) ),
-				'width' => array( 'label' => __( 'Country Width', 'textdomain' ) , 'default' => '100'),
+				'label'       => array(
+					'label'   => __( 'Country Label', 'textdomain' ),
+					'default' => __( 'Country', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( ' Country Placeholder', 'textdomain' ),
+					'default' => __( 'Country', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'Country Width', 'textdomain' ),
+					'default' => '100',
+				),
 			),
 		);
-		foreach ( $config as $main_field => $field_value ){
-			foreach ( $field_value as $specific_field => $field_data ){
+		foreach ( $config as $main_field => $field_value ) {
+			foreach ( $field_value as $specific_field => $field_data ) {
 				$key = $main_field . '_' . $specific_field;
-				if( $specific_field !== 'width' ){
+				if ( $specific_field !== 'width' ) {
 					$repeater->add_control(
 						$key,
 						array(
-							'label'   => $field_data['label'],
-							'type'    => Controls_Manager::TEXT,
-							'default' => $field_data['default'],
+							'label'     => $field_data['label'],
+							'type'      => Controls_Manager::TEXT,
+							'default'   => $field_data['default'],
 							'condition' => [
 								'mailchimp_field_map' => 'address',
 							],
@@ -177,9 +224,9 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 					$repeater->add_responsive_control(
 						$key,
 						array(
-							'label'   => $field_data['label'],
-							'type'    => Controls_Manager::SELECT,
-							'options' => [
+							'label'     => $field_data['label'],
+							'type'      => Controls_Manager::SELECT,
+							'options'   => [
 								'100' => '100%',
 								'75'  => '75%',
 								'66'  => '66%',
@@ -187,7 +234,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 								'33'  => '33%',
 								'25'  => '25%',
 							],
-							'default' =>  $field_data['default'],
+							'default'   => $field_data['default'],
 							'condition' => [
 								'mailchimp_field_map' => 'address',
 							],
@@ -196,8 +243,6 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				}
 			}
 		}
-
-
 
 		$default_fields = $this->get_default_config();
 		$this->add_control(
@@ -211,8 +256,8 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'default'     => $default_fields,
 				'title_field' => '{{{ label }}}',
 				'condition'   => [
-					'provider' => 'mailchimp'
-				]
+					'provider' => 'mailchimp',
+				],
 			)
 		);
 	}
@@ -245,7 +290,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 				'label'   => __( 'Type', 'textdomain' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => $field_types,
-				'default' => 'text'
+				'default' => 'text',
 			)
 		);
 
@@ -253,7 +298,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			'key',
 			array(
 				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN
+				'type'  => Controls_Manager::HIDDEN,
 			)
 		);
 
@@ -305,61 +350,61 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 		$this->add_control(
 			'provider',
 			[
-				'type'        => 'select',
-				'label'       => esc_html__( 'Subscribe to', 'textdomain' ),
-				'options'     => [
+				'type'      => 'select',
+				'label'     => esc_html__( 'Subscribe to', 'textdomain' ),
+				'options'   => [
 					'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
 					'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' ),
 				],
-				'default'     => 'mailchimp',
-				'separator'   => 'after',
+				'default'   => 'mailchimp',
+				'separator' => 'after',
 			]
 		);
 
 		$this->add_control(
 			'success_message',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Success message', 'textdomain' ),
-				'default'     => esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Success message', 'textdomain' ),
+				'default' => esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
 			)
 		);
 
 		$this->add_control(
 			'error_message',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Error message', 'textdomain' ),
-				'default'     => esc_html__( 'Action failed!', 'textdomain' ),
-				'separator'   => 'after'
+				'type'      => 'text',
+				'label'     => esc_html__( 'Error message', 'textdomain' ),
+				'default'   => esc_html__( 'Action failed!', 'textdomain' ),
+				'separator' => 'after',
 			)
 		);
 
 		$this->add_control(
 			'submit_label',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Submit', 'textdomain' ),
-				'default'     => esc_html__( 'Join Newsletter', 'textdomain' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Submit', 'textdomain' ),
+				'default' => esc_html__( 'Join Newsletter', 'textdomain' ),
 			)
 		);
 
 		$this->add_control(
 			'button_icon',
 			[
-				'label' => __( 'Icon', 'elementor-pro' ),
-				'type' => Controls_Manager::ICON,
+				'label'       => __( 'Icon', 'elementor-pro' ),
+				'type'        => Controls_Manager::ICON,
 				'label_block' => true,
-				'default' => '',
+				'default'     => '',
 			]
 		);
 
 		$this->add_control(
 			'button_icon_indent',
 			[
-				'label' => __( 'Icon Spacing', 'elementor-pro' ),
-				'type' => Controls_Manager::SLIDER,
-				'range' => [
+				'label'     => __( 'Icon Spacing', 'elementor-pro' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => [
 					'px' => [
 						'max' => 100,
 					],
@@ -418,9 +463,9 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 		$this->add_control(
 			'access_key',
 			array(
-				'type'        => 'text',
-				'label'       => esc_html__( 'Access Key', 'textdomain' ),
-				'required'    => true
+				'type'     => 'text',
+				'label'    => esc_html__( 'Access Key', 'textdomain' ),
+				'required' => true,
 			)
 		);
 
@@ -429,7 +474,7 @@ class Newsletter_Admin extends Elementor_Widget_Base{
 			array(
 				'type'     => 'text',
 				'label'    => esc_html__( 'List ID', 'textdomain' ),
-				'required' => true
+				'required' => true,
 			)
 		);
 

@@ -37,7 +37,7 @@ abstract class Elementor_Widget_Actions_Base {
 		$elements_data = apply_filters( 'elementor/frontend/builder_content_data', $elements_data, $post_id );
 		if ( ! empty( $elements_data ) ) {
 			$data = self::get_widget_data_by_id( $widget_id, $elements_data );
-			if( array_key_exists( 'settings', $data ) ){
+			if ( array_key_exists( 'settings', $data ) ) {
 				return $data['settings'];
 			}
 		}
@@ -80,7 +80,7 @@ abstract class Elementor_Widget_Actions_Base {
 	 * Initialization function.
 	 */
 	public function init() {
-		add_filter( 'content_forms_submit_' . $this->form_type , array( $this, 'rest_submit_form' ), 10, 4 );
+		add_filter( 'content_forms_submit_' . $this->form_type, array( $this, 'rest_submit_form' ), 10, 4 );
 	}
 
 	/**

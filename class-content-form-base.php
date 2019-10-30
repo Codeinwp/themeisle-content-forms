@@ -99,26 +99,25 @@ abstract class ContentFormBase {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
 
 			$widget_type = $this->get_type();
-			$widget = array();
-			if( $widget_type === 'contact' ){
+			$widget      = array();
+			if ( $widget_type === 'contact' ) {
 				require_once( __DIR__ . '/class-themeisle-elementor-contact-widget.php' );
 				$widget = new \ThemeIsle\ContentForms\Elementor_Contact_Widget();
 			}
 
-			if( $widget_type === 'newsletter' ){
+			if ( $widget_type === 'newsletter' ) {
 				require_once( __DIR__ . '/class-themeisle-elementor-newsletter-widget.php' );
 				$widget = new \ThemeIsle\ContentForms\Elementor_Newsletter_Widget();
 			}
 
-			if( $widget_type === 'registration' ){
+			if ( $widget_type === 'registration' ) {
 				require_once( __DIR__ . '/class-themeisle-elementor-registration-widget.php' );
 				$widget = new \ThemeIsle\ContentForms\Elementor_Registration_Widget();
 			}
 
-			if( !empty( $widget ) ){
+			if ( ! empty( $widget ) ) {
 				\Elementor\Plugin::instance()->widgets_manager->register_widget_type( $widget );
 			}
-
 		}
 	}
 
@@ -135,7 +134,7 @@ abstract class ContentFormBase {
 				array(
 					'id'                   => 'content_form_' . $this->get_type(),
 					'type'                 => $this->get_type(),
-					'content_forms_config' => $this->get_config()
+					'content_forms_config' => $this->get_config(),
 				)
 			);
 
@@ -155,7 +154,7 @@ abstract class ContentFormBase {
 				array(
 					'id'                   => 'content_form_' . $this->get_type(),
 					'type'                 => $this->get_type(),
-					'content_forms_config' => $this->get_config()
+					'content_forms_config' => $this->get_config(),
 				)
 			);
 		}
@@ -175,11 +174,14 @@ abstract class ContentFormBase {
 
 		if ( ! isset( $categories['obfx-elementor-widgets'] ) ) {
 
-			$category_args = apply_filters( 'content_forms_category_args', array(
-				'slug' => 'obfx-elementor-widgets',
-				'title' => __( 'Orbit Fox Addons', 'textdomain' ),
-				'icon'  => 'fa fa-plug',
-			) );
+			$category_args = apply_filters(
+				'content_forms_category_args',
+				array(
+					'slug'  => 'obfx-elementor-widgets',
+					'title' => __( 'Orbit Fox Addons', 'textdomain' ),
+					'icon'  => 'fa fa-plug',
+				)
+			);
 
 			\Elementor\Plugin::instance()->elements_manager->add_category(
 				$category_args['slug'],
