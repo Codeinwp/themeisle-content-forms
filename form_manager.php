@@ -5,6 +5,7 @@
 
 namespace ThemeIsle\ContentForms;
 
+use ThemeIsle\ContentForms\Includes\Widgets\Beaver\Beaver_Widget_Manager;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Manager;
 use ThemeIsle\ContentForms\Includes\Admin\Server;
 
@@ -83,6 +84,12 @@ class Form_Manager {
 			require_once 'includes/widgets/elementor/elementor_widget_manager.php';
 			$elementor_manager = new Elementor_Widget_Manager();
 			$elementor_manager->init();
+		}
+
+		if ( class_exists( '\FLBuilderModel' ) ) {
+			require_once 'includes/widgets/beaver/beaver_widget_manager.php';
+			$beaver_manager = new Beaver_Widget_Manager();
+			$beaver_manager->register_beaver_module();
 		}
 	}
 

@@ -1,13 +1,14 @@
 <?php
 
-namespace ThemeIsle\ContentForms;
+namespace ThemeIsle\ContentForms\Includes\Widgets\Beaver;
 
 /**
  * This class is used to create an Beaver module based on a ContentForms config
  * Class BeaverModule
  * @package ThemeIsle\ContentForms
  */
-abstract class BeaverModule extends \FLBuilderModule {
+abstract class Beaver_Widget_Base extends \FLBuilderModule {
+
 
 	public $name;
 
@@ -15,7 +16,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 	public $icon;
 
-	protected $forms_config = array();
+	protected $form_config = array();
 
 	public function __construct( $data ) {
 
@@ -28,9 +29,10 @@ abstract class BeaverModule extends \FLBuilderModule {
 	}
 
 	public function register_widget() {
+
 		$fields = array();
 
-		foreach ( $this->forms_config['fields'] as $key => $field ) {
+		foreach ( $this->form_config['fields'] as $key => $field ) {
 			$fields[] = array(
 				'key'      => $key,
 				'label'    => isset( $field['default'] ) ? $field['default'] : '',
@@ -41,8 +43,8 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 		$controls = array();
 
-		if ( ! empty( $this->forms_config['controls'] ) ) {
-			foreach ( $this->forms_config['controls'] as $key => $control ) {
+		if ( ! empty( $this->form_config['controls'] ) ) {
+			foreach ( $this->form_config['controls'] as $key => $control ) {
 				$control_settings = array(
 					'type'        => $control['type'],
 					'label'       => $control['label'],
@@ -60,14 +62,13 @@ abstract class BeaverModule extends \FLBuilderModule {
 
 		$args = array(
 			'general' => array( // Tab
-				'title'       => $this->get_title(),
-				'description' => isset( $this->forms_config['description'] ) ? $this->forms_config['description'] : '',
+				'title'       => $this->get_name(),
+				'description' => isset( $this->form_config['description'] ) ? $this->form_config['description'] : '',
 				'sections'    => array(),
 			),
 		);
 
-		// is important to keep the order of fields from the main config
-		foreach ( $this->forms_config as $key => $val ) {
+		foreach ( $this->form_config as $key => $val ) {
 			if ( 'fields' === $key ) {
 				$args['general']['sections']['settings'] = array(
 					'title'  => esc_html__( 'Fields', 'textdomain' ),
@@ -142,22 +143,19 @@ abstract class BeaverModule extends \FLBuilderModule {
 	 */
 	public function setup_attributes( $data = array() ) {
 
-		if ( ! empty( $data['content_forms_config'] ) ) {
-			$this->forms_config = $data['content_forms_config'];
-		} else {
-			$this->forms_config = apply_filters( 'content_forms_config_for_' . $this->get_type(), $this->forms_config );
-		}
+		$this->form_config = apply_filters( 'content_form_config_for_' . $this->get_type(), $this->form_config );
+
 
 		if ( ! empty( $data['id'] ) ) {
 			$this->set_name( $data['id'] );
 		}
 
-		if ( ! empty( $this->forms_config['title'] ) ) {
-			$this->set_title( $this->forms_config['title'] );
+		if ( ! empty( $this->form_config['title'] ) ) {
+			$this->set_title( $this->form_config['title'] );
 		}
 
-		if ( ! empty( $this->forms_config['icon'] ) ) {
-			$this->set_icon( $this->forms_config['icon'] );
+		if ( ! empty( $this->form_config['icon'] ) ) {
+			$this->set_icon( $this->form_config['icon'] );
 		}
 	}
 
@@ -249,46 +247,7 @@ abstract class BeaverModule extends \FLBuilderModule {
 	}
 
 	public function render_form_field( $field ) {
-		$key      = ! empty( $field['key'] ) ? $field['key'] : sanitize_title( $field['label'] );
-		$required = '';
-		$form_id  = $this->node;
-
-		if ( $field['required'] === 'required' ) {
-			$required = 'required="required"';
-		}
-
-		$field_name = 'data[' . $form_id . '][' . $key . ']'; ?>
-		<fieldset class="content-form-field-<?php echo $field['type']; ?>">
-
-			<label for="<?php echo $field_name; ?>">
-				<?php echo $field['label']; ?>
-			</label>
-
-			<?php
-			switch ( $field['type'] ) {
-				case 'textarea':
-					?>
-					<textarea name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>"
-						<?php echo $required; ?>
-							  cols="30" rows="5"></textarea>
-					<?php
-					break;
-				case 'password':
-					?>
-					<input type="password" name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>"
-						<?php echo $required; ?>>
-					<?php
-					break;
-				default:
-					?>
-					<input type="text" name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>"
-						<?php echo $required; ?>>
-					<?php
-					break;
-			}
-			?>
-		</fieldset>
-		<?php
+		echo 'sss';
 	}
 
 	public function render_form_footer() {
