@@ -29,12 +29,13 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 	 * @return mixed
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
-
 		if ( empty( $data['USER_EMAIL'] ) || ! is_email( $data['USER_EMAIL'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
 		}
+
+		$widget_settings = $this->get_widget_settings( $widget_id, $post_id );
 
 		$settings['user_email']             = sanitize_email( $data['USER_EMAIL'] );
 		$settings['user_login']             = ! empty( $data['USER_LOGIN'] ) ? $data['USER_LOGIN'] : $data['email'];
@@ -45,6 +46,7 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 		$settings['display_name'] = ! empty( $data['DISPLAY_NAME'] ) ? $data['DISPLAY_NAME'] : '';
 		$settings['first_name']   = ! empty( $data['FIRST_NAME'] ) ? $data['FIRST_NAME'] : '';
 		$settings['last_name']    = ! empty( $data['LAST_NAME'] ) ? $data['LAST_NAME'] : '';
+		$settings['role']         = array_key_exists( 'user_role', $widget_settings ) ?  $widget_settings['user_role'] : 'subscriber';
 
 		$return = $this->_register_user( $return, $settings );
 

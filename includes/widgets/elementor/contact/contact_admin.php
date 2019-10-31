@@ -8,7 +8,6 @@
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
 
 use Elementor\Controls_Manager;
-use Elementor\Repeater;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_base.php';
@@ -87,9 +86,11 @@ class Contact_Admin extends Elementor_Widget_Base {
 
 	/**
 	 * No other required fields for this widget.
+	 *
+	 * @return bool
 	 */
 	function add_specific_form_fields() {
-
+		return false;
 	}
 
 	/**
@@ -166,6 +167,16 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * Add specific widget settings.
 	 */
 	function add_widget_specific_settings() {
+		return false;
+	}
+
+	/**
+	 * Add repeater specific fields.
+	 *
+	 * @param Object $repeater Repeater instance.
+	 * @return bool
+	 */
+	function add_repeater_specific_fields( $repeater ) {
 		return false;
 	}
 }
