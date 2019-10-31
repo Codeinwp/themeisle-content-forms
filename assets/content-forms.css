@@ -9,6 +9,7 @@ input, textarea {
     border-radius: 3px;
 }
 .content-form-newsletter select.country{
+    width: 100%;
     line-height: normal;
 }
 fieldset {

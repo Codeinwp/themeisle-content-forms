@@ -88,109 +88,109 @@ class Registration_Admin extends Elementor_Widget_Base {
 	 * Add specific form fields for Registration Widget.
 	 */
 	function add_specific_form_fields() {
-		$repeater = new Repeater();
-
-		$repeater->add_control(
-			'requirement',
-			array(
-				'label'        => __( 'Required', 'textdomain' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'return_value' => 'required',
-				'default'      => '',
-			)
-		);
-
-		$field_types = array(
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
-		);
-
-		$repeater->add_control(
-			'type',
-			array(
-				'label'   => __( 'Type', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text',
-			)
-		);
-
-		$repeater->add_control(
-			'key',
-			array(
-				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN,
-			)
-		);
-
-		$repeater->add_responsive_control(
-			'field_width',
-			[
-				'label'   => __( 'Field Width', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => [
-					'100' => '100%',
-					'75'  => '75%',
-					'66'  => '66%',
-					'50'  => '50%',
-					'33'  => '33%',
-					'25'  => '25%',
-				],
-				'default' => '100',
-			]
-		);
-
-		$repeater->add_control(
-			'label',
-			array(
-				'label'   => __( 'Label', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$repeater->add_control(
-			'placeholder',
-			array(
-				'label'   => __( 'Placeholder', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			)
-		);
-
-		$field_types = array(
-			'first_name'   => __( 'First Name', 'textdomain' ),
-			'last_name'    => __( 'Last Name', 'textdomain' ),
-			'user_pass'    => __( 'Password', 'textdomain' ),
-			'user_login'   => __( 'Username', 'textdomain' ),
-			'user_email'   => __( 'Email', 'textdomain' ),
-			'display_name' => __( 'Display Name', 'textdomain' ),
-		);
-		$repeater->add_control(
-			'field_map',
-			array(
-				'label'   => __( 'Map field to', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text',
-			)
-		);
-
-		$default_fields = $this->get_default_config();
-		$this->add_control(
-			'form_fields',
-			array(
-				'label'       => __( 'Form Fields', 'textdomain' ),
-				'type'        => Controls_Manager::REPEATER,
-				'show_label'  => false,
-				'separator'   => 'before',
-				'fields'      => array_values( $repeater->get_controls() ),
-				'default'     => $default_fields,
-				'title_field' => '{{{ label }}}',
-			)
-		);
+//		$repeater = new Repeater();
+//
+//		$repeater->add_control(
+//			'requirement',
+//			array(
+//				'label'        => __( 'Required', 'textdomain' ),
+//				'type'         => Controls_Manager::SWITCHER,
+//				'return_value' => 'required',
+//				'default'      => '',
+//			)
+//		);
+//
+//		$field_types = array(
+//			'text'     => __( 'Text', 'textdomain' ),
+//			'password' => __( 'Password', 'textdomain' ),
+//			'email'    => __( 'Email', 'textdomain' ),
+//			'textarea' => __( 'Textarea', 'textdomain' ),
+//		);
+//
+//		$repeater->add_control(
+//			'type',
+//			array(
+//				'label'   => __( 'Type', 'textdomain' ),
+//				'type'    => Controls_Manager::SELECT,
+//				'options' => $field_types,
+//				'default' => 'text',
+//			)
+//		);
+//
+//		$repeater->add_control(
+//			'key',
+//			array(
+//				'label' => __( 'Key', 'textdomain' ),
+//				'type'  => Controls_Manager::HIDDEN,
+//			)
+//		);
+//
+//		$repeater->add_responsive_control(
+//			'field_width',
+//			[
+//				'label'   => __( 'Field Width', 'textdomain' ),
+//				'type'    => Controls_Manager::SELECT,
+//				'options' => [
+//					'100' => '100%',
+//					'75'  => '75%',
+//					'66'  => '66%',
+//					'50'  => '50%',
+//					'33'  => '33%',
+//					'25'  => '25%',
+//				],
+//				'default' => '100',
+//			]
+//		);
+//
+//		$repeater->add_control(
+//			'label',
+//			array(
+//				'label'   => __( 'Label', 'textdomain' ),
+//				'type'    => Controls_Manager::TEXT,
+//				'default' => '',
+//			)
+//		);
+//
+//		$repeater->add_control(
+//			'placeholder',
+//			array(
+//				'label'   => __( 'Placeholder', 'textdomain' ),
+//				'type'    => Controls_Manager::TEXT,
+//				'default' => '',
+//			)
+//		);
+//
+//		$field_types = array(
+//			'first_name'   => __( 'First Name', 'textdomain' ),
+//			'last_name'    => __( 'Last Name', 'textdomain' ),
+//			'user_pass'    => __( 'Password', 'textdomain' ),
+//			'user_login'   => __( 'Username', 'textdomain' ),
+//			'user_email'   => __( 'Email', 'textdomain' ),
+//			'display_name' => __( 'Display Name', 'textdomain' ),
+//		);
+//		$repeater->add_control(
+//			'field_map',
+//			array(
+//				'label'   => __( 'Map field to', 'textdomain' ),
+//				'type'    => Controls_Manager::SELECT,
+//				'options' => $field_types,
+//				'default' => 'text',
+//			)
+//		);
+//
+//		$default_fields = $this->get_default_config();
+//		$this->add_control(
+//			'form_fields',
+//			array(
+//				'label'       => __( 'Form Fields', 'textdomain' ),
+//				'type'        => Controls_Manager::REPEATER,
+//				'show_label'  => false,
+//				'separator'   => 'before',
+//				'fields'      => array_values( $repeater->get_controls() ),
+//				'default'     => $default_fields,
+//				'title_field' => '{{{ label }}}',
+//			)
+//		);
 	}
 
 	/**

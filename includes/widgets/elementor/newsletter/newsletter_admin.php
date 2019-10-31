@@ -69,268 +69,10 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 	}
 
 	/**
-	 * Add necessary fields for sendinblue subscribe form.
-	 *
-	 * @param object $repeater Repeater object.
-	 */
-	private function add_sendinblue_fields( $repeater ) {
-		$field_types = array(
-			'email'   => __( 'Email', 'textdomain' ),
-			'name'    => __( 'Name', 'textdomain' ),
-			'surname' => __( 'Surname', 'textdomain' ),
-		);
-		$repeater->add_control(
-			'field_map',
-			array(
-				'label'   => __( 'Map field to', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text',
-			)
-		);
-
-		$default_fields = $this->get_default_config();
-		$this->add_control(
-			'sendinblue_form_fields',
-			array(
-				'label'       => __( 'Form Fields', 'textdomain' ),
-				'type'        => Controls_Manager::REPEATER,
-				'show_label'  => false,
-				'separator'   => 'before',
-				'fields'      => array_values( $repeater->get_controls() ),
-				'default'     => $default_fields,
-				'title_field' => '{{{ label }}}',
-				'condition'   => [
-					'provider' => 'sendinblue',
-				],
-			)
-		);
-	}
-
-	/**
-	 * Add necessary fields for mailchimp subscribe form.
-	 *
-	 * @param object $repeater Repeater object.
-	 */
-	private function add_mailchimp_fields( $repeater ) {
-		$field_types = array(
-			'email'    => __( 'Email', 'textdomain' ),
-			'fname'    => __( 'First Name', 'textdomain' ),
-			'lname'    => __( 'Last Name', 'textdomain' ),
-			'address'  => __( 'Address', 'textdomain' ),
-			'phone'    => __( 'Phone', 'textdomain' ),
-			'birthday' => __( 'Birth Day', 'textdomain' ),
-		);
-		$repeater->add_control(
-			'field_map',
-			array(
-				'label'   => __( 'Map field to', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text',
-			)
-		);
-		$config = array(
-			'addr2'   => array(
-				'label'       => array(
-					'label'   => __( 'Line 2 Label', 'textdomain' ),
-					'default' => __( 'Address Line 2', 'textdomain' ),
-				),
-				'placeholder' => array(
-					'label'   => __( 'Line 2 Placeholder', 'textdomain' ),
-					'default' => __( 'Address Line 2', 'textdomain' ),
-				),
-				'width'       => array(
-					'label'   => __( 'Line 2 Width', 'textdomain' ),
-					'default' => '100',
-				),
-			),
-			'city'    => array(
-				'label'       => array(
-					'label'   => __( 'City Label', 'textdomain' ),
-					'default' => __( 'City', 'textdomain' ),
-				),
-				'placeholder' => array(
-					'label'   => __( 'City Placeholder', 'textdomain' ),
-					'default' => __( 'City', 'textdomain' ),
-				),
-				'width'       => array(
-					'label'   => __( 'City Width', 'textdomain' ),
-					'default' => '100',
-				),
-			),
-			'state'   => array(
-				'label'       => array(
-					'label'   => __( 'State Label', 'textdomain' ),
-					'default' => __( 'State/Province/Region', 'textdomain' ),
-				),
-				'placeholder' => array(
-					'label'   => __( 'State Placeholder', 'textdomain' ),
-					'default' => __( 'State/Province/Region', 'textdomain' ),
-				),
-				'width'       => array(
-					'label'   => __( 'State Width', 'textdomain' ),
-					'default' => '100',
-				),
-			),
-			'zip'     => array(
-				'label'       => array(
-					'label'   => __( 'Zip Code Label', 'textdomain' ),
-					'default' => __( 'Postal / Zip Code', 'textdomain' ),
-				),
-				'placeholder' => array(
-					'label'   => __( 'Zip Code Placeholder', 'textdomain' ),
-					'default' => __( 'Postal / Zip Code', 'textdomain' ),
-				),
-				'width'       => array(
-					'label'   => __( 'Zip Code Width', 'textdomain' ),
-					'default' => '100',
-				),
-			),
-			'country' => array(
-				'label'       => array(
-					'label'   => __( 'Country Label', 'textdomain' ),
-					'default' => __( 'Country', 'textdomain' ),
-				),
-				'placeholder' => array(
-					'label'   => __( ' Country Placeholder', 'textdomain' ),
-					'default' => __( 'Country', 'textdomain' ),
-				),
-				'width'       => array(
-					'label'   => __( 'Country Width', 'textdomain' ),
-					'default' => '100',
-				),
-			),
-		);
-		foreach ( $config as $main_field => $field_value ) {
-			foreach ( $field_value as $specific_field => $field_data ) {
-				$key = $main_field . '_' . $specific_field;
-				if ( $specific_field !== 'width' ) {
-					$repeater->add_control(
-						$key,
-						array(
-							'label'     => $field_data['label'],
-							'type'      => Controls_Manager::TEXT,
-							'default'   => $field_data['default'],
-							'condition' => [
-								'mailchimp_field_map' => 'address',
-							],
-						)
-					);
-				} else {
-					$repeater->add_responsive_control(
-						$key,
-						array(
-							'label'     => $field_data['label'],
-							'type'      => Controls_Manager::SELECT,
-							'options'   => [
-								'100' => '100%',
-								'75'  => '75%',
-								'66'  => '66%',
-								'50'  => '50%',
-								'33'  => '33%',
-								'25'  => '25%',
-							],
-							'default'   => $field_data['default'],
-							'condition' => [
-								'mailchimp_field_map' => 'address',
-							],
-						)
-					);
-				}
-			}
-		}
-
-		$default_fields = $this->get_default_config();
-		$this->add_control(
-			'mailchimp_form_fields',
-			array(
-				'label'       => __( 'Form Fields', 'textdomain' ),
-				'type'        => Controls_Manager::REPEATER,
-				'show_label'  => false,
-				'separator'   => 'before',
-				'fields'      => array_values( $repeater->get_controls() ),
-				'default'     => $default_fields,
-				'title_field' => '{{{ label }}}',
-				'condition'   => [
-					'provider' => 'mailchimp',
-				],
-			)
-		);
-	}
-
-	/**
 	 * Add specific form fields for Newsletter widget.
 	 */
 	function add_specific_form_fields() {
-
-		$mailchimp_repeater = new Repeater();
-		$mailchimp_repeater = $this->get_repeater_data($mailchimp_repeater);
-		$this->add_mailchimp_fields( $mailchimp_repeater );
-
-
-		$sendinblue_repeater = new Repeater();
-		$sendinblue_repeater = $this->get_repeater_data($sendinblue_repeater);
-		$this->add_sendinblue_fields( $sendinblue_repeater );
-	}
-
-	private function get_repeater_data( $repeater ){
-		$field_types = [
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
-		];
-
-		$repeater_fields = [
-			'requirement' => [
-				'label'        => __( 'Required', 'textdomain' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'return_value' => 'required',
-			],
-			'type' => [
-				'label'   => __( 'Type', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $field_types,
-				'default' => 'text',
-			],
-			'key' => [
-				'label' => __( 'Key', 'textdomain' ),
-				'type'  => Controls_Manager::HIDDEN,
-			],
-			'field_width' => [
-				'label'   => __( 'Field Width', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => [
-					'100' => '100%',
-					'75'  => '75%',
-					'66'  => '66%',
-					'50'  => '50%',
-					'33'  => '33%',
-					'25'  => '25%',
-				],
-				'default' => '100',
-			],
-			'label' => [
-				'label'   => __( 'Label', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			],
-			'placeholder' => [
-				'label'   => __( 'Placeholder', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
-			]
-		];
-		foreach ( $repeater_fields as $field_id => $field_settings ){
-			if($field_id !== 'field_width' ){
-				$repeater->add_control( $field_id, $field_settings );
-			} else {
-				$repeater->add_responsive_control( $field_id, $field_settings );
-			}
-		}
-
-		return $repeater;
+		return false;
 	}
 
 	/**
@@ -439,7 +181,7 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 
 	/**
 	 * Add widget specific settings.
-	 * //TODO
+	 *
 	 * @return mixed|void
 	 */
 	function add_widget_specific_settings() {
@@ -470,5 +212,132 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 		);
 
 		$this->end_controls_section();
+	}
+
+	/**
+	 * Add repeater specific fields for newsletter widget.
+	 * @param Object $repeater
+	 */
+	function add_repeater_specific_fields( $repeater ) {
+		$repeater->add_control(
+			'field_map',
+			array(
+				'label'   => __( 'Map field to', 'textdomain' ),
+				'type'    => Controls_Manager::TEXT,
+				'separator' => 'after',
+				'description' => esc_html__( 'If you\'re using SendInBlue and you map the field to address, please ignore the additional settings.', 'textdomain' ),
+			)
+		);
+
+		$config = array(
+			'addr2'   => array(
+				'label'       => array(
+					'label'   => __( 'Line 2 Label', 'textdomain' ),
+					'default' => __( 'Address Line 2', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'Line 2 Placeholder', 'textdomain' ),
+					'default' => __( 'Address Line 2', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'Line 2 Width', 'textdomain' ),
+					'default' => '100',
+				),
+			),
+			'city'    => array(
+				'label'       => array(
+					'label'   => __( 'City Label', 'textdomain' ),
+					'default' => __( 'City', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'City Placeholder', 'textdomain' ),
+					'default' => __( 'City', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'City Width', 'textdomain' ),
+					'default' => '100',
+				),
+			),
+			'state'   => array(
+				'label'       => array(
+					'label'   => __( 'State Label', 'textdomain' ),
+					'default' => __( 'State/Province/Region', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'State Placeholder', 'textdomain' ),
+					'default' => __( 'State/Province/Region', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'State Width', 'textdomain' ),
+					'default' => '100',
+				),
+			),
+			'zip'     => array(
+				'label'       => array(
+					'label'   => __( 'Zip Code Label', 'textdomain' ),
+					'default' => __( 'Postal / Zip Code', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( 'Zip Code Placeholder', 'textdomain' ),
+					'default' => __( 'Postal / Zip Code', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'Zip Code Width', 'textdomain' ),
+					'default' => '100',
+				),
+			),
+			'country' => array(
+				'label'       => array(
+					'label'   => __( 'Country Label', 'textdomain' ),
+					'default' => __( 'Country', 'textdomain' ),
+				),
+				'placeholder' => array(
+					'label'   => __( ' Country Placeholder', 'textdomain' ),
+					'default' => __( 'Country', 'textdomain' ),
+				),
+				'width'       => array(
+					'label'   => __( 'Country Width', 'textdomain' ),
+					'default' => '100',
+				),
+			),
+		);
+		foreach ( $config as $main_field => $field_value ) {
+			foreach ( $field_value as $specific_field => $field_data ) {
+				$key = $main_field . '_' . $specific_field;
+				if ( $specific_field !== 'width' ) {
+					$repeater->add_control(
+						$key,
+						array(
+							'label'     => $field_data['label'],
+							'type'      => Controls_Manager::TEXT,
+							'default'   => $field_data['default'],
+							'condition' => [
+								'field_map' => 'address',
+							],
+						)
+					);
+				} else {
+					$repeater->add_responsive_control(
+						$key,
+						array(
+							'label'     => $field_data['label'],
+							'type'      => Controls_Manager::SELECT,
+							'options'   => [
+								'100' => '100%',
+								'75'  => '75%',
+								'66'  => '66%',
+								'50'  => '50%',
+								'33'  => '33%',
+								'25'  => '25%',
+							],
+							'default'   => $field_data['default'],
+							'condition' => [
+								'field_map' => 'address',
+							],
+						)
+					);
+				}
+			}
+		}
 	}
 }

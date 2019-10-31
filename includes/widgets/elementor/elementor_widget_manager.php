@@ -19,7 +19,8 @@ class Elementor_Widget_Manager {
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact', 'newsletter', 'registration' ];
+//	public static $forms = [ 'contact', 'newsletter', 'registration' ];
+	public static $forms = [ 'newsletter' ];
 
 	/**
 	 * Initialization Function
