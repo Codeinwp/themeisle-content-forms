@@ -836,10 +836,10 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				$has_error = true;
 			}
 
-			$form_fields = $settings[ 'form_fields' ];
+			$form_fields = $settings['form_fields'];
 			$mapping     = array();
 			foreach ( $form_fields as $field ) {
-				$field_map = $field[ 'field_map' ];
+				$field_map = $field['field_map'];
 				if ( in_array( $field_map, $mapping ) ) {
 					echo '<p>';
 					printf(
@@ -864,7 +864,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
-					'<strong>'. esc_html__( 'Send to Email Address', 'textdomain' ) .'</strong>'
+					'<strong>' . esc_html__( 'Send to Email Address', 'textdomain' ) . '</strong>'
 				);
 				echo '</p>';
 				$has_error = true;
@@ -979,7 +979,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			return false;
 		}
 
-		if ( ! array_key_exists( 'field_map', $field ) || $field[ 'field_map' ] !== 'address' ) {
+		if ( ! array_key_exists( 'field_map', $field ) || $field['field_map'] !== 'address' ) {
 			return false;
 		}
 

@@ -142,7 +142,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$response = wp_remote_post( $url, $args );
 		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( is_wp_error( $response ) || 200 != wp_remote_retrieve_response_code( $response ) ) {
-			$message = ! empty($body['detail']) && $body['detail'] !== 'null' ? $body['detail'] : $form_settings['strings']['error_message'];
+			$message           = ! empty( $body['detail'] ) && $body['detail'] !== 'null' ? $body['detail'] : $form_settings['strings']['error_message'];
 			$result['success'] = false;
 			$result['message'] = $message;
 			return $result;

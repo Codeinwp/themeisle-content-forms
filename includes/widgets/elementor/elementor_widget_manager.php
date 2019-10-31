@@ -19,7 +19,7 @@ class Elementor_Widget_Manager {
 	 *
 	 * @var $forms
 	 */
-//	public static $forms = [ 'contact', 'newsletter', 'registration' ];
+	//  public static $forms = [ 'contact', 'newsletter', 'registration' ];
 	public static $forms = [ 'newsletter' ];
 
 	/**
@@ -83,8 +83,8 @@ class Elementor_Widget_Manager {
 	 * @return string
 	 */
 	public static function get_field_key_name( $field, $provider ) {
-		if ( array_key_exists( 'field_map', $field ) && ! empty( $field[ 'field_map' ] ) ) {
-			return strtoupper( $field[ 'field_map' ] );
+		if ( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ) {
+			return strtoupper( $field['field_map'] );
 		}
 
 		if ( ! empty( $field['label'] ) ) {

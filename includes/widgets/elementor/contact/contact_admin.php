@@ -90,7 +90,6 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 */
 	function add_specific_form_fields() {
 
-
 	}
 
 	/**

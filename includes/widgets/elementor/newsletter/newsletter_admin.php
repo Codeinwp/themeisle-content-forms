@@ -48,13 +48,13 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 	function get_default_config() {
 		return [
 			[
-				'key'                  => 'email',
-				'type'                 => 'email',
-				'label'                => esc_html__( 'Email', 'textdomain' ),
-				'requirement'          => 'required',
-				'placeholder'          => esc_html__( 'Email', 'textdomain' ),
-				'field_width'          => '100',
-				'field_map'  => 'email',
+				'key'         => 'email',
+				'type'        => 'email',
+				'label'       => esc_html__( 'Email', 'textdomain' ),
+				'requirement' => 'required',
+				'placeholder' => esc_html__( 'Email', 'textdomain' ),
+				'field_width' => '100',
+				'field_map'   => 'email',
 			],
 		];
 	}
@@ -222,9 +222,9 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 		$repeater->add_control(
 			'field_map',
 			array(
-				'label'   => __( 'Map field to', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'separator' => 'after',
+				'label'       => __( 'Map field to', 'textdomain' ),
+				'type'        => Controls_Manager::TEXT,
+				'separator'   => 'after',
 				'description' => esc_html__( 'If you\'re using SendInBlue and you map the field to address, please ignore the additional settings.', 'textdomain' ),
 			)
 		);
