@@ -1,10 +1,8 @@
 <?php
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Beaver\Contact;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 
-use ThemeIsle\ContentForms\Includes\Widgets\Beaver\Beaver_Widget_Base;
-
-require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/beaver/beaver_widget_base.php';
+require_once 'beaver_widget_base.php';
 
 class Contact_Admin extends Beaver_Widget_Base {
 

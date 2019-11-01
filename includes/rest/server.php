@@ -3,7 +3,7 @@
  *
  */
 
-namespace ThemeIsle\ContentForms\Includes\Admin;
+namespace ThemeIsle\ContentForms\Includes\Rest;
 
 /**
  * Class Server
@@ -22,15 +22,6 @@ class Server extends \WP_Rest_Controller {
 	 * Register endpoints.
 	 */
 	public function register_endpoints() {
-
-		register_rest_route(
-			TI_CONTENT_FORMS_NAMESPACE,
-			'/check',
-			array(
-				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => array( $this, 'rest_check' ),
-			)
-		);
 
 		register_rest_route(
 			TI_CONTENT_FORMS_NAMESPACE,
@@ -64,20 +55,14 @@ class Server extends \WP_Rest_Controller {
 						'required'    => true,
 						'description' => __( 'The form identifier.', 'textdomain' ),
 					),
+					'form_builder' => array(
+						'type'  => 'string',
+						'required' => true,
+						'description' => __( 'Form builder.', 'textdomain'),
+					)
 				),
 			)
 		);
-	}
-
-	/**
-	 * Validate response status.
-	 *
-	 * @param \WP_REST_Request $request Rest Request.
-	 *
-	 * @return mixed|\WP_REST_Response
-	 */
-	public function rest_check( \WP_REST_Request $request ) {
-		return rest_ensure_response( 'success' );
 	}
 
 	/**
@@ -114,6 +99,7 @@ class Server extends \WP_Rest_Controller {
 		$data      = $data[ $form_id ];
 		$post_id   = $request->get_param( 'post_id' );
 		$form_type = $request->get_param( 'form_type' );
+		$form_builder = $request->get_param( 'form_builder' );
 		$return    = array(
 			'success' => false,
 			'message' => esc_html__( 'Something went wrong', 'textdomain' ),
@@ -123,7 +109,7 @@ class Server extends \WP_Rest_Controller {
 		 * Each form type should be able to provide its own process of submitting data.
 		 * Must return the success status and a message.
 		 */
-		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id );
+		$return = apply_filters( 'content_forms_submit_' . $form_type, $return, $data, $form_id, $post_id, $form_builder );
 		$status = 200;
 		if ( $return['success'] === false ) {
 			$status = 400;

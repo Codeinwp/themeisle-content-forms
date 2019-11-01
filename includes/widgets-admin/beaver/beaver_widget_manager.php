@@ -3,7 +3,7 @@
  *
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Beaver;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 
 /**
  * Class Beaver_Widget_Manager\
@@ -26,8 +26,8 @@ class Beaver_Widget_Manager{
 		}
 
 		foreach ( self::$forms as $form ) {
-			require_once $form . '/' . $form . '_admin.php';
-			$classname = '\ThemeIsle\ContentForms\Includes\Widgets\Beaver\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Admin';
+			require_once $form . '_admin.php';
+			$classname = '\ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver\\' . ucwords( $form ) . '_Admin';
 			$module = new $classname(
 				array(
 					'id'                   => 'content_form_' . $form,

@@ -5,40 +5,43 @@
  * @package ContentForms
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
 use ThemeIsle\ContentForms\Form_Manager;
-use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
+use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
-require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
 
 /**
  * Class Contact_Public
  *
  * @package ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact
  */
-class Contact_Public extends Elementor_Widget_Actions_Base {
+class Contact_Public extends Widget_Actions_Base {
 
 	/**
-	 * The type of current widget form.
-	 *
-	 * @var string
+     * Get current form type.
+     *
+	 * @return string
 	 */
-	public $form_type = 'contact';
+	function get_form_type() {
+		return 'contact';
+	}
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
 	 *
-	 * @param $return array
-	 * @param $data array Must contain the following keys: `email`, `name`, `message` but it can also have extra keys
-	 * @param $widget_id string
-	 * @param $post_id string
+	 * @param array $return Return format.
+	 * @param array $data Form data.
+	 * @param string $widget_id Widget id.
+	 * @param int $post_id Post id.
+     * @param string $builder Page builder.
 	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
+	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 
-		$settings = $this->get_widget_settings( $widget_id, $post_id );
+		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 
 		if ( empty( $settings ) ) {
 			return $return;
@@ -83,10 +86,10 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 	/**
 	 * Mail sender method
 	 *
-	 * @param $mailto
-	 * @param $mailfrom
-	 * @param $name
-	 * @param array $extra_data
+	 * @param string $mailto Recipient email.
+	 * @param string $mailfrom Sender email.
+	 * @param string $name Name field.
+	 * @param array $extra_data Form data.
 	 *
 	 * @return bool
 	 */
@@ -175,4 +178,6 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 		<?php
 		return ob_get_clean();
 	}
+
+
 }

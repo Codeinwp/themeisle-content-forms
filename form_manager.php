@@ -5,9 +5,11 @@
 
 namespace ThemeIsle\ContentForms;
 
-use ThemeIsle\ContentForms\Includes\Widgets\Beaver\Beaver_Widget_Manager;
-use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Manager;
-use ThemeIsle\ContentForms\Includes\Admin\Server;
+
+use ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver\Beaver_Widget_Manager;
+use ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor\Elementor_Widget_Actions_Base;
+use ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor\Elementor_Widget_Manager;
+use ThemeIsle\ContentForms\Includes\Rest\Server;
 
 define( 'TI_CONTENT_FORMS_VERSION', '1.0.0' );
 define( 'TI_CONTENT_FORMS_NAMESPACE', 'content-forms/v1' );
@@ -23,6 +25,13 @@ define( 'TI_CONTENT_FORMS_DIR_PATH', dirname( __DIR__ ) );
 class Form_Manager {
 
 	/**
+	 * Type of Widget Forms.
+	 *
+	 * @var $forms
+	 */
+	public static $forms = [ 'contact'/*, 'newsletter', 'registration'*/ ];
+
+	/**
 	 * Initialization function.
 	 */
 	public function init() {
@@ -34,12 +43,30 @@ class Form_Manager {
 	 * Load hooks and filters.
 	 */
 	private function load_hooks() {
+		// Enqueue scripts and styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		require_once 'includes/admin/server.php';
+		// Register the actions that forms do
+		add_action( 'rest_api_init', array( $this, 'register_widgets_actions' ) );
+
+		require_once 'includes/rest/server.php';
 		$rest_server = new Server();
 		$rest_server->register_hooks();
 	}
+
+	/**
+	 * Register Elementor Widgets actions.
+	 */
+	public function register_widgets_actions() {
+		foreach ( self::$forms as $form ) {
+			require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/' . $form . '_public.php';
+			$admin_class = '\ThemeIsle\ContentForms\Includes\Widgets_Public\\' . ucwords( $form ) . '_Public';
+			$admin       = new $admin_class();
+			$admin->init();
+		}
+	}
+
+
 
 	/**
 	 * Enqueue scripts and styles.
@@ -81,13 +108,13 @@ class Form_Manager {
 	 */
 	private function make() {
 		if ( defined( 'ELEMENTOR_PATH' ) && class_exists( 'Elementor\Widget_Base' ) ) {
-			require_once 'includes/widgets/elementor/elementor_widget_manager.php';
+			require_once 'includes/widgets-admin/elementor/elementor_widget_manager.php';
 			$elementor_manager = new Elementor_Widget_Manager();
 			$elementor_manager->init();
 		}
 
 		if ( class_exists( '\FLBuilderModel' ) ) {
-			require_once 'includes/widgets/beaver/beaver_widget_manager.php';
+			require_once 'includes/widgets-admin/beaver/beaver_widget_manager.php';
 			$beaver_manager = new Beaver_Widget_Manager();
 			$beaver_manager->register_beaver_module();
 		}
@@ -119,5 +146,7 @@ class Form_Manager {
 
 		return 'field_' . $field['_id'];
 	}
+
+
 
 }

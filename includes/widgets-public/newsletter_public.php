@@ -6,35 +6,38 @@
  */
 
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Newsletter;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
-use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
+use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
 
 /**
  * Class Newsletter_Public
  */
-class Newsletter_Public extends Elementor_Widget_Actions_Base {
+class Newsletter_Public extends Widget_Actions_Base {
 
 	/**
-	 * The type of current widget form.
+	 * Get current form type.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	public $form_type = 'newsletter';
+	function get_form_type() {
+		return 'newsletter';
+	}
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
 	 *
-	 * @param $return array
-	 * @param $data array Must contain the following keys: `email` but it can also have extra keys
-	 * @param $widget_id string
-	 * @param $post_id string
+	 * @param array $return Return format.
+	 * @param array $data Form data.
+	 * @param string $widget_id Widget id.
+	 * @param int $post_id Post id.
+	 * @param string $builder Page builder.
 	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
+	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 
 		/**
 		 * Email address is required for this type of form
@@ -52,7 +55,7 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		/**
 		 * Get form settings and bail if there is no access key or list id.
 		 */
-		$settings = $this->get_widget_settings( $widget_id, $post_id );
+		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 		if ( empty( $settings['access_key'] ) || empty( $settings['list_id'] ) ) {
 			$return['message'] = esc_html__( 'Wrong email configuration! Please contact administration!', 'textdomain' );
 
@@ -207,5 +210,4 @@ class Newsletter_Public extends Elementor_Widget_Actions_Base {
 		$result['message'] = $body['message'];
 		return $result;
 	}
-
 }

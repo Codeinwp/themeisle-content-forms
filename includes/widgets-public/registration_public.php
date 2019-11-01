@@ -3,39 +3,42 @@
  *
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Registration;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
-use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
+use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
 
-class Registration_Public extends Elementor_Widget_Actions_Base {
+class Registration_Public extends Widget_Actions_Base {
 
 	/**
-	 * The type of current widget form.
+	 * Get current form type.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	public $form_type = 'registration';
+	function get_form_type() {
+		return 'registration';
+	}
 
 	/**
 	 * This method is passed to the rest controller and it is responsible for submitting the data.
 	 *
-	 * @param $return array
-	 * @param $data array Must contain the following keys: `email`, `name` but it can also have extra keys
-	 * @param $widget_id string
-	 * @param $post_id string
+	 * @param array $return Return format.
+	 * @param array $data Form data.
+	 * @param string $widget_id Widget id.
+	 * @param int $post_id Post id.
+	 * @param string $builder Page builder.
 	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function rest_submit_form( $return, $data, $widget_id, $post_id ) {
+	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 		if ( empty( $data['USER_EMAIL'] ) || ! is_email( $data['USER_EMAIL'] ) ) {
 			$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 
 			return $return;
 		}
 
-		$widget_settings = $this->get_widget_settings( $widget_id, $post_id );
+		$widget_settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
 
 		$settings['user_email']             = sanitize_email( $data['USER_EMAIL'] );
 		$settings['user_login']             = ! empty( $data['USER_LOGIN'] ) ? $data['USER_LOGIN'] : $data['email'];
@@ -56,11 +59,8 @@ class Registration_Public extends Elementor_Widget_Actions_Base {
 	/**
 	 * Add a new user for the given details
 	 *
-	 * @param array $return
-	 * @param string $user_email
-	 * @param string $user_name
-	 * @param null $password
-	 * @param array $extra_data
+	 * @param array $return Return array.
+	 * @param array $settings Settings array.
 	 *
 	 * @return array mixed
 	 */

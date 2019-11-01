@@ -5,7 +5,7 @@
  * @package ContentForms
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor;
 
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;

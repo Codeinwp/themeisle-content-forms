@@ -1,6 +1,6 @@
 <?php
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Beaver;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 
 use ThemeIsle\ContentForms\Form_Manager;
 
@@ -57,6 +57,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$this->module_settings = $this->set_module_settings();
 
 		parent::__construct( $data );
+
+		wp_enqueue_script( 'content-forms' );
+		wp_enqueue_style( 'content-forms' );
 	}
 
 	/**

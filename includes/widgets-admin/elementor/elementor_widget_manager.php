@@ -5,7 +5,7 @@
  * @package ContentForms
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor;
 
 use Elementor\Plugin;
 
@@ -31,8 +31,6 @@ class Elementor_Widget_Manager {
 		// Register Orbit Fox Elementor Widgets
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 
-		// Register the actions that forms do
-		add_action( 'rest_api_init', array( $this, 'register_widgets_actions' ) );
 	}
 
 	/**
@@ -55,21 +53,9 @@ class Elementor_Widget_Manager {
 	 */
 	public function register_elementor_widget() {
 		foreach ( self::$forms as $form ) {
-			require_once $form . '/' . $form . '_admin.php';
-			$widget = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Admin';
+			require_once $form . '_admin.php';
+			$widget = '\ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor\\' . ucwords( $form ) . '_Admin';
 			Plugin::instance()->widgets_manager->register_widget_type( new $widget() );
-		}
-	}
-
-	/**
-	 * Register Elementor Widgets actions.
-	 */
-	public function register_widgets_actions() {
-		foreach ( self::$forms as $form ) {
-			require_once $form . '/' . $form . '_public.php';
-			$admin_class = '\ThemeIsle\ContentForms\Includes\Widgets\Elementor\\' . ucwords( $form ) . '\\' . ucwords( $form ) . '_Public';
-			$admin       = new $admin_class();
-			$admin->init();
 		}
 	}
 }

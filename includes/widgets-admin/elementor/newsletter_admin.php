@@ -5,13 +5,11 @@
  * @package ContentForms
  */
 
-namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Newsletter;
+namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor;
 
 use Elementor\Controls_Manager;
-use Elementor\Repeater;
-use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Base;
 
-require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_base.php';
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-admin/elementor/elementor_widget_base.php';
 
 /**
  * Class Newsletter_Admin
