@@ -67,6 +67,8 @@ class Contact_Admin extends Beaver_Widget_Base {
 				)
 			),
 			'submit_label' => esc_html__( 'Submit', 'textdomain' ),
+			'success_message' => esc_html__( 'Your message has been sent!', 'textdomain' ),
+			'error_message' => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
 		);
 
 		if( array_key_exists( $field, $default ) ){

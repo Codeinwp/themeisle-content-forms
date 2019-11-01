@@ -154,6 +154,16 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$controls = apply_filters(
 			$this->form_type . '_controls_fields',
 			array(
+				'success_message' => array(
+					'type' => 'text',
+					'label'   => esc_html__( 'Success message', 'textdomain' ),
+					'default' => $this->get_default('success_message'),
+				),
+				'error_message' => array(
+					'type' => 'text',
+					'label'   => esc_html__( 'Error message', 'textdomain' ),
+					'default' => $this->get_default('error_message'),
+				),
 				'hide_label'      => array(
 					'type'        =>  'select',
 					'label'       => __( 'Hide Label', 'textdomain' ),
@@ -175,7 +185,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'default' => 'left',
 					'preview' => array( //TODO
 						'type'       => 'css',
-						'selector'   => '.my-selector',
+						'selector'   => '.submit-form.'.$this->form_type,
 						'property'   => 'text-align',
 					),
 
@@ -225,8 +235,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$field_name = 'data[' . $form_id . '][' . $key . ']';
 		$required = $field['required'] === 'required' ? 'required="required"' : '';
 		$placeholder = array_key_exists( 'placeholder', $field ) ? 'placeholder="'. esc_attr( $field['placeholder'] ) .'"' : '';
+		$width = array_key_exists('field_width', $field ) ? 'style="width:'.$field['field_width'].'%"' : '';
 
-		echo '<fieldset class="content-form-field-'. $field['type'] .'">';
+		echo '<fieldset class="content-form-field-'. esc_attr( $field['type'] ) .'" '. $width .'>';
 		if( $label_visibility === 'show' ){
 			$this->maybe_render_field_label( $field_name, $field );
 		}
