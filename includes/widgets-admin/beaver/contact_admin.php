@@ -1,9 +1,18 @@
 <?php
+/**
+ * Beaver Contact Widget main class.
+ *
+ * @package ContentForms
+ */
 
 namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 
 require_once 'beaver_widget_base.php';
 
+/**
+ * Class Contact_Admin
+ * @package ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver
+ */
 class Contact_Admin extends Beaver_Widget_Base {
 
 

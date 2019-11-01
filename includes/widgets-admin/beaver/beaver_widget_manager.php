@@ -15,7 +15,7 @@ class Beaver_Widget_Manager{
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact' ];
+	public static $forms = [ 'contact', 'newsletter' ];
 
 	/*
 	 * Register beaver modules
