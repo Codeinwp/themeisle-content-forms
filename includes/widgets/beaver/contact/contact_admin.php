@@ -8,6 +8,16 @@ require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/beaver/beaver_widget_bas
 
 class Contact_Admin extends Beaver_Widget_Base {
 
+
+	/**
+	 * Widget name.
+	 *
+	 * @return string
+	 */
+	public function get_widget_name(){
+		return esc_html__( 'Contact Form', 'textdomain' );
+	}
+
 	/**
 	 * Define the form type
 	 * @return string
@@ -16,58 +26,62 @@ class Contact_Admin extends Beaver_Widget_Base {
 		return 'contact';
 	}
 
-	public function __construct() {
-
-		$this->form_config = array(
-			'id'                           => 'contact',
-			'icon'                         => 'eicon-align-left',
-			'title'                        => esc_html__( 'Contact Form' ),
-			'fields' /* or form_fields? */ => array(
-				'name'    => array(
+	/**
+	 * Get default form data.
+	 *
+	 * @param string $field Field name.
+	 * @return array | string | bool
+	 */
+	public function get_default( $field ){
+		$default = array(
+			'fields' => array(
+				array(
+					'key'         => 'name',
+					'label'       => esc_html__( 'Name', 'textdomain' ),
+					'placeholder' => esc_html__( 'Name', 'textdomain' ),
 					'type'        => 'text',
-					'label'       => esc_html__( 'Name' ),
-					'default'     => esc_html__( 'Name' ),
-					'placeholder' => esc_html__( 'Your Name' ),
-					'require'     => 'required'
+					'field_width' => '100',
+					'required' => 'required',
 				),
-				'email'   => array(
+				array(
+					'key'         => 'email',
+					'label'       => esc_html__( 'Email', 'textdomain' ),
+					'placeholder' => esc_html__( 'Email', 'textdomain' ),
 					'type'        => 'email',
-					'label'       => esc_html__( 'Email' ),
-					'default'     => esc_html__( 'Email' ),
-					'placeholder' => esc_html__( 'Email address' ),
-					'require'     => 'required'
+					'field_width' => '100',
+					'required' => 'required',
 				),
-				'phone'   => array(
+				array(
+					'key'         => 'phone',
+					'label'       => esc_html__( 'Phone', 'textdomain' ),
+					'placeholder' => esc_html__( 'Phone', 'textdomain' ),
 					'type'        => 'number',
-					'label'       => esc_html__( 'Phone' ),
-					'default'     => esc_html__( 'Phone' ),
-					'placeholder' => esc_html__( 'Phone Nr' ),
-					'require'     => 'optional'
+					'field_width' => '100',
+					'required' => 'optional',
 				),
-				'message' => array(
+				array(
+					'key'         => 'message',
+					'label'       => esc_html__( 'Message', 'textdomain' ),
+					'placeholder' => esc_html__( 'Message', 'textdomain' ),
 					'type'        => 'textarea',
-					'label'       => esc_html__( 'Message' ),
-					'default'     => esc_html__( 'Message' ),
-					'placeholder' => esc_html__( 'Your message' ),
-					'require'     => 'required'
+					'field_width' => '100',
+					'required' => 'required',
 				)
 			),
-			'controls' /* or settings? */ => array(
-				'to_send_email' => array(
-					'type'        => 'text',
-					'label'       => esc_html__( 'Send to', 'textdomain' ),
-					'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
-					'default'     => get_bloginfo( 'admin_email' )
-				),
-				'submit_label'  => array(
-					'type'        => 'text',
-					'label'       => esc_html__( 'Submit', 'textdomain' ),
-					'default'     => esc_html__( 'Submit', 'textdomain' ),
-					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
-				)
-			)
+			'submit_label' => esc_html__( 'Submit', 'textdomain' ),
 		);
 
+		if( array_key_exists( $field, $default ) ){
+			return $default[$field];
+		}
+		return false;
+	}
+
+	/**
+	 * Contact_Admin constructor.
+	 */
+	public function __construct() {
+		$this->run_hooks();
 		parent::__construct(
 			array(
 				'name'        => esc_html__( 'Contact', 'textdomain' ),
@@ -79,4 +93,29 @@ class Contact_Admin extends Beaver_Widget_Base {
 		);
 	}
 
+	/**
+	 * Run hooks and filters.
+	 */
+	private function run_hooks(){
+		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls'));
+	}
+
+	/**
+	 * Add specific controls for this type of widget.
+	 *
+	 * @param array $fields Fields config.
+	 *
+	 * @return array
+	 */
+	public function add_widget_specific_controls( $fields ) {
+		$fields = array(
+			'to_send_email' =>  array(
+				'type'        => 'text',
+				'label'       => esc_html__( 'Send to', 'textdomain' ),
+				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
+				'default'     => get_bloginfo( 'admin_email' )
+			)
+		) + $fields;
+		return $fields;
+	}
 }

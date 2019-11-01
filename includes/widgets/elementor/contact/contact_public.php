@@ -7,8 +7,8 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets\Elementor\Contact;
 
+use ThemeIsle\ContentForms\Form_Manager;
 use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Actions_Base;
-use ThemeIsle\ContentForms\Includes\Widgets\Elementor\Elementor_Widget_Manager;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
 
@@ -53,7 +53,7 @@ class Contact_Public extends Elementor_Widget_Actions_Base {
 		}
 
 		foreach ( $settings['form_fields'] as $field ) {
-			$key = Elementor_Widget_Manager::get_field_key_name( $field );
+			$key = Form_Manager::get_field_key_name($field);
 
 			if ( 'required' === $field['requirement'] && empty( $data[ $key ] ) ) {
 				$return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain' ), $key );

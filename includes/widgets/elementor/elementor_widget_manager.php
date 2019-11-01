@@ -72,28 +72,4 @@ class Elementor_Widget_Manager {
 			$admin->init();
 		}
 	}
-
-	/**
-	 * Get the field key based on form attributes.
-	 *
-	 * @param array $field Field data.
-	 * @param string $provider Provider name.
-	 *
-	 * @return string
-	 */
-	public static function get_field_key_name( $field, $provider ) {
-		if ( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ) {
-			return strtoupper( $field['field_map'] );
-		}
-
-		if ( ! empty( $field['label'] ) ) {
-			return sanitize_title( $field['label'] );
-		}
-
-		if ( ! empty( $field['placeholder'] ) ) {
-			return sanitize_title( $field['placeholder'] );
-		}
-
-		return 'field_' . $field['_id'];
-	}
 }

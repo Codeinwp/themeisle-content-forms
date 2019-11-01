@@ -80,7 +80,6 @@ class Contact_Admin extends Elementor_Widget_Base {
 				'placeholder' => esc_html__( 'Message', 'textdomain' ),
 				'field_width' => '100',
 			),
-
 		);
 	}
 

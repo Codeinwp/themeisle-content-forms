@@ -1,58 +1,25 @@
 <?php
-/**
- * The module rendering file
- *
- * @$module object
- * @$settings object
- */
-var_dump( $module->get_type() );
-$form_settings = apply_filters( 'content_forms_config_for_' . $module->get_type(), array() );
+//var_dump( $settings );
+//var_dump( $module->get_type() );
+//
+//$form_fields = $settings['fields'];
 
-print_r($form_settings);
-
-/** == Fields Validation == */
-$controls = $form_settings['controls'];
-
-foreach ( $controls as $control_name => $control ) {
-	$control_value = $module->get_setting( $control_name );
-	if ( isset( $control['required'] ) && $control['required'] && empty( $control_value ) ) { ?>
-		<div class="content-forms-required">
-			<?php
-			printf(
-				esc_html__( 'The %s setting is required!', 'textdomain' ),
-				'<strong>' . $control['label'] . '</strong>'
-			);
-			?>
-		</div>
-		<?php
-	}
-}
-
-/** == FORM HEADER == */
 $module->render_form_header( $module->node );
 
-/** == FORM FIELDS == */
-$fields = $module->get_setting( 'fields' );
-
+$fields = $settings->fields;
+$label_visibility = property_exists( $settings, 'hide_label') ? $settings->hide_label : 'show';
 foreach ( $fields as $key => $field ) {
-	$module->render_form_field( (array) $field );
+	$field = (array)$field;
+	$field['_id'] = $key;
+	$module->render_form_field( $field, $label_visibility );
 }
 
-$controls = $form_settings['controls'];
+$btn_label = ! empty( $settings->submit_label ) ? $settings->submit_label : esc_html__( 'Submit', 'textdomain' );
 
-/** == FORM SUBMIT BUTTON == */
-$btn_label = esc_html__( 'Submit', 'textdomain' );
+echo '<fieldset>';
+echo '<button type="submit" name="submit" value="submit-' . esc_attr($module->get_type()) . '-' . esc_attr( $module->node ) .'">';
+echo $btn_label;
+echo '</button>';
+echo  '</fieldset>';
 
-if ( ! empty( $settings->submit_label ) ) {
-	$btn_label = $settings->submit_label;
-}
-?>
-<fieldset>
-	<button type="submit" name="submit" value="submit-<?php echo $module->get_type(); ?>-<?php echo $module->node; ?>">
-		<?php echo $btn_label; ?>
-	</button>
-</fieldset>
-<?php
-
-/** == FORM FOOTER == */
 $module->render_form_footer();

@@ -93,4 +93,31 @@ class Form_Manager {
 		}
 	}
 
+	/**
+	 * Get the field key based on form attributes.
+	 *
+	 * @param array $field Field data.
+	 *
+	 * @return string
+	 */
+	public static function get_field_key_name( $field ) {
+		if ( array_key_exists( 'field_map', $field ) && ! empty( $field['field_map'] ) ) {
+			return strtoupper( $field['field_map'] );
+		}
+
+		if ( array_key_exists( 'key', $field ) && ! empty( $field['key'] ) ) {
+			return $field['key'];
+		}
+
+		if ( ! empty( $field['label'] ) ) {
+			return sanitize_title( $field['label'] );
+		}
+
+		if ( ! empty( $field['placeholder'] ) ) {
+			return sanitize_title( $field['placeholder'] );
+		}
+
+		return 'field_' . $field['_id'];
+	}
+
 }

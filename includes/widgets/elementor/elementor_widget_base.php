@@ -15,6 +15,7 @@ use Elementor\Repeater;
 use Elementor\Scheme_Color;
 use Elementor\Scheme_Typography;
 use Elementor\Widget_Base;
+use ThemeIsle\ContentForms\Form_Manager;
 
 /**
  * Class Elementor_Base
@@ -923,10 +924,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 */
 	private function render_form_field( $field, $is_preview = false ) {
 
-		$settings    = $this->get_settings();
-		$provider    = array_key_exists( 'provider', $settings ) ? $settings['provider'] : '';
 		$field_id    = $field['_id'];
-		$key         = Elementor_Widget_Manager::get_field_key_name( $field, $provider );
+		$key         = Form_Manager::get_field_key_name( $field );
 		$key         = $key === 'ADDRESS' ? $key = 'ADDRESS[addr1]' : $key;
 		$form_id     = $this->get_data( 'id' );
 		$field_name  = 'data[' . $form_id . '][' . $key . ']';
@@ -1037,10 +1036,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			return false;
 		}
 
-		$settings   = $this->get_settings();
-		$provider   = array_key_exists( 'provider', $settings ) ? $settings['provider'] : '';
 		$field_id   = $field['_id'];
-		$key        = Elementor_Widget_Manager::get_field_key_name( $field, $provider );
+		$key        = Form_Manager::get_field_key_name( $field );
 		$form_id    = $this->get_data( 'id' );
 		$field_name = 'data[' . $form_id . '][' . $key . ']';
 
