@@ -20,8 +20,8 @@ require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_ba
 class Contact_Public extends Widget_Actions_Base {
 
 	/**
-     * Get current form type.
-     *
+	 * Get current form type.
+	 *
 	 * @return string
 	 */
 	function get_form_type() {
@@ -35,7 +35,7 @@ class Contact_Public extends Widget_Actions_Base {
 	 * @param array $data Form data.
 	 * @param string $widget_id Widget id.
 	 * @param int $post_id Post id.
-     * @param string $builder Page builder.
+	 * @param string $builder Page builder.
 	 *
 	 * @return array
 	 */
@@ -56,7 +56,7 @@ class Contact_Public extends Widget_Actions_Base {
 		}
 
 		foreach ( $settings['form_fields'] as $field ) {
-			$key = Form_Manager::get_field_key_name($field);
+			$key = Form_Manager::get_field_key_name( $field );
 
 			if ( 'required' === $field['requirement'] && empty( $data[ $key ] ) ) {
 				$return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain' ), $key );

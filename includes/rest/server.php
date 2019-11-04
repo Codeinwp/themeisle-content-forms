@@ -30,36 +30,36 @@ class Server extends \WP_Rest_Controller {
 				'methods'  => \WP_REST_Server::CREATABLE,
 				'callback' => array( $this, 'submit_form' ),
 				'args'     => array(
-					'form_type' => array(
+					'form_type'    => array(
 						'type'        => 'string',
 						'required'    => true,
 						'description' => __( 'What type of form is submitted.', 'textdomain' ),
 					),
-					'nonce'     => array(
+					'nonce'        => array(
 						'type'        => 'string',
 						'required'    => true,
 						'description' => __( 'The security key', 'textdomain' ),
 					),
-					'data'      => array(
+					'data'         => array(
 						'type'        => 'json',
 						'required'    => true,
 						'description' => __( 'The form must have data', 'textdomain' ),
 					),
-					'form_id'   => array(
+					'form_id'      => array(
 						'type'        => 'string',
 						'required'    => true,
 						'description' => __( 'The form identifier.', 'textdomain' ),
 					),
-					'post_id'   => array(
+					'post_id'      => array(
 						'type'        => 'string',
 						'required'    => true,
 						'description' => __( 'The form identifier.', 'textdomain' ),
 					),
 					'form_builder' => array(
-						'type'  => 'string',
-						'required' => true,
-						'description' => __( 'Form builder.', 'textdomain'),
-					)
+						'type'        => 'string',
+						'required'    => true,
+						'description' => __( 'Form builder.', 'textdomain' ),
+					),
 				),
 			)
 		);
@@ -96,11 +96,11 @@ class Server extends \WP_Rest_Controller {
 			);
 		}
 
-		$data      = $data[ $form_id ];
-		$post_id   = $request->get_param( 'post_id' );
-		$form_type = $request->get_param( 'form_type' );
+		$data         = $data[ $form_id ];
+		$post_id      = $request->get_param( 'post_id' );
+		$form_type    = $request->get_param( 'form_type' );
 		$form_builder = $request->get_param( 'form_builder' );
-		$return    = array(
+		$return       = array(
 			'success' => false,
 			'message' => esc_html__( 'Something went wrong', 'textdomain' ),
 		);

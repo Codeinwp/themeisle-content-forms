@@ -134,18 +134,18 @@ class Registration_Admin extends Elementor_Widget_Base {
 
 		global $wp_roles;
 		$all_roles = $wp_roles->roles;
-		$roles = [];
-		foreach ( $all_roles as $role_key => $role_data ){
-			$roles[$role_key] = $role_data['name'];
+		$roles     = [];
+		foreach ( $all_roles as $role_key => $role_data ) {
+			$roles[ $role_key ] = $role_data['name'];
 		}
-		if( current_user_can( 'manage_options' ) ){
+		if ( current_user_can( 'manage_options' ) ) {
 			$this->add_control(
 				'user_role',
 				[
-					'label'     => __( 'Register user as:', 'textdomain' ),
-					'type'      => Controls_Manager::SELECT,
-					'options'   => $roles,
-					'default'   => 'subscriber',
+					'label'   => __( 'Register user as:', 'textdomain' ),
+					'type'    => Controls_Manager::SELECT,
+					'options' => $roles,
+					'default' => 'subscriber',
 				]
 			);
 		}

@@ -841,7 +841,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			$mapping     = array();
 			foreach ( $form_fields as $field ) {
 				$field_map = $field['field_map'];
-				if ( in_array( $field_map, $mapping ) ) {
+				if ( in_array( $field_map, $mapping, true ) ) {
 					echo '<p>';
 					printf(
 						esc_html__( 'The %s field is mapped to multiple form fields. Please check your field settings.', 'textdomain' ),

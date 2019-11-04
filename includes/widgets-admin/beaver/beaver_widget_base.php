@@ -53,7 +53,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 */
 	public function __construct( $data ) {
 
-		$this->form_type = $this->get_type();
+		$this->form_type       = $this->get_type();
 		$this->module_settings = $this->set_module_settings();
 
 		parent::__construct( $data );
@@ -65,12 +65,12 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	/**
 	 * Set module settings.
 	 */
-	private function set_module_settings(){
+	private function set_module_settings() {
 
 		$args = array(
 			'general' => array(
-				'title'       => $this->get_widget_name(),
-				'sections'    => array(),
+				'title'    => $this->get_widget_name(),
+				'sections' => array(),
 			),
 		);
 
@@ -83,7 +83,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'label'        => esc_html__( 'Field', 'textdomain' ),
 					'form'         => 'field',
 					'preview_text' => 'label',
-					'default'      => $this->get_default('fields'),
+					'default'      => $this->get_default( 'fields' ),
 				),
 			),
 		);
@@ -91,15 +91,15 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$repeater_fields = apply_filters(
 			$this->form_type . '_repeater_fields',
 			array(
-				'label'    => array(
+				'label'       => array(
 					'type'  => 'text',
 					'label' => esc_html__( 'Label', 'textdomain' ),
 				),
-				'placeholder'    => array(
+				'placeholder' => array(
 					'type'  => 'text',
 					'label' => esc_html__( 'Placeholder', 'textdomain' ),
 				),
-				'type'     => array(
+				'type'        => array(
 					'type'    => 'select',
 					'label'   => esc_html__( 'Type', 'textdomain' ),
 					'options' => array(
@@ -110,9 +110,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 				),
 				'field_width' => array(
-					'type'    => 'select',
-					'label'   => esc_html__( 'Field Width', 'textdomain' ),
-					'options' => array(
+					'type'       => 'select',
+					'label'      => esc_html__( 'Field Width', 'textdomain' ),
+					'options'    => array(
 						'100' => '100%',
 						'75'  => '75%',
 						'66'  => '66%',
@@ -122,7 +122,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 					'responsive' => true,
 				),
-				'required' => array(
+				'required'    => array(
 					'type'    => 'select',
 					'label'   => esc_html__( 'Is required?', 'textdomain' ),
 					'options' => array(
@@ -142,9 +142,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'title'    => esc_html__( 'Field', 'textdomain' ),
 						'sections' => array(
 							'fields' => array(
-								'title' => esc_html__( 'Field', 'textdomain' ),
-								'fields' => $repeater_fields
-							)
+								'title'  => esc_html__( 'Field', 'textdomain' ),
+								'fields' => $repeater_fields,
+							),
 						),
 					),
 				),
@@ -155,41 +155,41 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			$this->form_type . '_controls_fields',
 			array(
 				'success_message' => array(
-					'type' => 'text',
+					'type'    => 'text',
 					'label'   => esc_html__( 'Success message', 'textdomain' ),
-					'default' => $this->get_default('success_message'),
+					'default' => $this->get_default( 'success_message' ),
 				),
-				'error_message' => array(
-					'type' => 'text',
+				'error_message'   => array(
+					'type'    => 'text',
 					'label'   => esc_html__( 'Error message', 'textdomain' ),
-					'default' => $this->get_default('error_message'),
+					'default' => $this->get_default( 'error_message' ),
 				),
 				'hide_label'      => array(
-					'type'        =>  'select',
-					'label'       => __( 'Hide Label', 'textdomain' ),
-					'default'     => 'show',
-					'options'     => array(
-						'hide'    => esc_html__( 'Hide', 'textarea' ),
-						'show'    => esc_html__( 'Show', 'textarea' ),
-					)
+					'type'    => 'select',
+					'label'   => __( 'Hide Label', 'textdomain' ),
+					'default' => 'show',
+					'options' => array(
+						'hide' => esc_html__( 'Hide', 'textarea' ),
+						'show' => esc_html__( 'Show', 'textarea' ),
+					),
 				),
 				'submit_label'    => array(
 					'type'        => 'text',
 					'label'       => esc_html__( 'Submit', 'textdomain' ),
 					'default'     => $this->get_default( 'submit_label' ),
-					'description' => esc_html__( 'The Call To Action label', 'textdomain' )
+					'description' => esc_html__( 'The Call To Action label', 'textdomain' ),
 				),
 				'submit_position' => array(
 					'type'    => 'align',
 					'label'   => esc_html__( 'Alignment', 'textdomain' ),
 					'default' => 'left',
 					'preview' => array( //TODO
-						'type'       => 'css',
-						'selector'   => '.submit-form.'.$this->form_type,
-						'property'   => 'text-align',
+						'type'     => 'css',
+						'selector' => '.submit-form.' . $this->form_type,
+						'property' => 'text-align',
 					),
 
-				)
+				),
 			)
 		);
 
@@ -230,21 +230,21 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * Render form fields
 	 */
 	public function render_form_field( $field, $label_visibility ) {
-		$key = Form_Manager::get_field_key_name( $field );
-		$form_id  = $this->node;
-		$field_name = 'data[' . $form_id . '][' . $key . ']';
-		$required = $field['required'] === 'required' ? 'required="required"' : '';
-		$placeholder = array_key_exists( 'placeholder', $field ) ? 'placeholder="'. esc_attr( $field['placeholder'] ) .'"' : '';
-		$width = array_key_exists('field_width', $field ) ? 'style="width:'.$field['field_width'].'%"' : '';
+		$key         = Form_Manager::get_field_key_name( $field );
+		$form_id     = $this->node;
+		$field_name  = 'data[' . $form_id . '][' . $key . ']';
+		$required    = $field['required'] === 'required' ? 'required="required"' : '';
+		$placeholder = array_key_exists( 'placeholder', $field ) ? 'placeholder="' . esc_attr( $field['placeholder'] ) . '"' : '';
+		$width       = array_key_exists( 'field_width', $field ) ? 'style="width:' . $field['field_width'] . '%"' : '';
 
-		echo '<fieldset class="content-form-field-'. esc_attr( $field['type'] ) .'" '. $width .'>';
-		if( $label_visibility === 'show' ){
+		echo '<fieldset class="content-form-field-' . esc_attr( $field['type'] ) . '" ' . $width . '>';
+		if ( $label_visibility === 'show' ) {
 			$this->maybe_render_field_label( $field_name, $field );
 		}
 
 		switch ( $field['type'] ) {
 			case 'textarea':
-				echo '<textarea name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' '. $placeholder. ' cols="30" rows="5"></textarea>';
+				echo '<textarea name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $placeholder . ' cols="30" rows="5"></textarea>';
 				break;
 			case 'password':
 				echo '<input type="password" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . '>';
@@ -263,9 +263,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @param $field
 	 * @return bool
 	 */
-	private function maybe_render_field_label($field_name, $field){
+	private function maybe_render_field_label( $field_name, $field ) {
 		$label = $field['label'];
-		if ( empty( $label ) ){
+		if ( empty( $label ) ) {
 			return false;
 		}
 

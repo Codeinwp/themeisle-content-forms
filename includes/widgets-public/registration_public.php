@@ -49,7 +49,7 @@ class Registration_Public extends Widget_Actions_Base {
 		$settings['display_name'] = ! empty( $data['DISPLAY_NAME'] ) ? $data['DISPLAY_NAME'] : '';
 		$settings['first_name']   = ! empty( $data['FIRST_NAME'] ) ? $data['FIRST_NAME'] : '';
 		$settings['last_name']    = ! empty( $data['LAST_NAME'] ) ? $data['LAST_NAME'] : '';
-		$settings['role']         = array_key_exists( 'user_role', $widget_settings ) ?  $widget_settings['user_role'] : 'subscriber';
+		$settings['role']         = array_key_exists( 'user_role', $widget_settings ) ? $widget_settings['user_role'] : 'subscriber';
 
 		$return = $this->_register_user( $return, $settings );
 

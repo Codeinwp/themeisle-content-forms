@@ -58,11 +58,11 @@ abstract class Widget_Actions_Base {
 	 */
 	static function get_widget_settings( $widget_id, $post_id, $builder ) {
 
-		if ( $builder === 'elementor' ){
+		if ( $builder === 'elementor' ) {
 			return self::get_elementor_module_settings_by_id( $widget_id, $post_id );
 		}
 
-		if ( $builder === 'beaver' ){
+		if ( $builder === 'beaver' ) {
 			return self::get_beaver_module_settings_by_id( $widget_id, $post_id );
 		}
 
@@ -77,7 +77,7 @@ abstract class Widget_Actions_Base {
 	 *
 	 * @return array|bool
 	 */
-	private static function get_elementor_module_settings_by_id( $widget_id, $post_id ){
+	private static function get_elementor_module_settings_by_id( $widget_id, $post_id ) {
 		$document      = Plugin::$instance->documents->get( $post_id );
 		$elements_data = $document->get_elements_data();
 

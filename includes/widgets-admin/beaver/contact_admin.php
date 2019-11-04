@@ -21,7 +21,7 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 *
 	 * @return string
 	 */
-	public function get_widget_name(){
+	public function get_widget_name() {
 		return esc_html__( 'Contact Form', 'textdomain' );
 	}
 
@@ -39,16 +39,16 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 * @param string $field Field name.
 	 * @return array | string | bool
 	 */
-	public function get_default( $field ){
+	public function get_default( $field ) {
 		$default = array(
-			'fields' => array(
+			'fields'          => array(
 				array(
 					'key'         => 'name',
 					'label'       => esc_html__( 'Name', 'textdomain' ),
 					'placeholder' => esc_html__( 'Name', 'textdomain' ),
 					'type'        => 'text',
 					'field_width' => '100',
-					'required' => 'required',
+					'required'    => 'required',
 				),
 				array(
 					'key'         => 'email',
@@ -56,7 +56,7 @@ class Contact_Admin extends Beaver_Widget_Base {
 					'placeholder' => esc_html__( 'Email', 'textdomain' ),
 					'type'        => 'email',
 					'field_width' => '100',
-					'required' => 'required',
+					'required'    => 'required',
 				),
 				array(
 					'key'         => 'phone',
@@ -64,7 +64,7 @@ class Contact_Admin extends Beaver_Widget_Base {
 					'placeholder' => esc_html__( 'Phone', 'textdomain' ),
 					'type'        => 'number',
 					'field_width' => '100',
-					'required' => 'optional',
+					'required'    => 'optional',
 				),
 				array(
 					'key'         => 'message',
@@ -72,16 +72,16 @@ class Contact_Admin extends Beaver_Widget_Base {
 					'placeholder' => esc_html__( 'Message', 'textdomain' ),
 					'type'        => 'textarea',
 					'field_width' => '100',
-					'required' => 'required',
-				)
+					'required'    => 'required',
+				),
 			),
-			'submit_label' => esc_html__( 'Submit', 'textdomain' ),
+			'submit_label'    => esc_html__( 'Submit', 'textdomain' ),
 			'success_message' => esc_html__( 'Your message has been sent!', 'textdomain' ),
-			'error_message' => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
+			'error_message'   => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
 		);
 
-		if( array_key_exists( $field, $default ) ){
-			return $default[$field];
+		if ( array_key_exists( $field, $default ) ) {
+			return $default[ $field ];
 		}
 		return false;
 	}
@@ -105,8 +105,8 @@ class Contact_Admin extends Beaver_Widget_Base {
 	/**
 	 * Run hooks and filters.
 	 */
-	private function run_hooks(){
-		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls'));
+	private function run_hooks() {
+		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls' ) );
 	}
 
 	/**
@@ -118,12 +118,12 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 */
 	public function add_widget_specific_controls( $fields ) {
 		$fields = array(
-			'to_send_email' =>  array(
+			'to_send_email' => array(
 				'type'        => 'text',
 				'label'       => esc_html__( 'Send to', 'textdomain' ),
 				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
-				'default'     => get_bloginfo( 'admin_email' )
-			)
+				'default'     => get_bloginfo( 'admin_email' ),
+			),
 		) + $fields;
 		return $fields;
 	}

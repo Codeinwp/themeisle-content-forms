@@ -8,7 +8,7 @@ namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 /**
  * Class Beaver_Widget_Manager\
  */
-class Beaver_Widget_Manager{
+class Beaver_Widget_Manager {
 
 	/**
 	 * Type of Widget Forms.
@@ -20,7 +20,7 @@ class Beaver_Widget_Manager{
 	/*
 	 * Register beaver modules
 	 */
-	public function register_beaver_module(){
+	public function register_beaver_module() {
 		if ( ! class_exists( '\FLBuilderModel' ) ) {
 			return false;
 		}
@@ -28,10 +28,10 @@ class Beaver_Widget_Manager{
 		foreach ( self::$forms as $form ) {
 			require_once $form . '_admin.php';
 			$classname = '\ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver\\' . ucwords( $form ) . '_Admin';
-			$module = new $classname(
+			$module    = new $classname(
 				array(
-					'id'                   => 'content_form_' . $form,
-					'type'                 => $form,
+					'id'   => 'content_form_' . $form,
+					'type' => $form,
 				)
 			);
 			$module->register_widget();

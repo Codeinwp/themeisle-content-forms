@@ -38,26 +38,26 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * @param string $field Field name.
 	 * @return array | string | bool
 	 */
-	public function get_default( $field ){
+	public function get_default( $field ) {
 		$default = array(
-			'fields' => array(
+			'fields'          => array(
 				array(
 					'key'         => 'email',
 					'label'       => esc_html__( 'Email', 'textdomain' ),
 					'placeholder' => esc_html__( 'Email', 'textdomain' ),
 					'type'        => 'email',
 					'field_width' => '100',
-					'required' => 'required',
-					'field_map' => 'email',
+					'required'    => 'required',
+					'field_map'   => 'email',
 				),
 			),
-			'submit_label' => esc_html__( 'Join Newsletter', 'textdomain' ),
+			'submit_label'    => esc_html__( 'Join Newsletter', 'textdomain' ),
 			'success_message' => esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
-			'error_message' => esc_html__( 'Action failed!', 'textdomain' ),
+			'error_message'   => esc_html__( 'Action failed!', 'textdomain' ),
 		);
 
-		if( array_key_exists( $field, $default ) ){
-			return $default[$field];
+		if ( array_key_exists( $field, $default ) ) {
+			return $default[ $field ];
 		}
 		return false;
 	}
@@ -81,9 +81,9 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	/**
 	 * Run hooks and filters.
 	 */
-	private function run_hooks(){
-		add_filter( $this->get_type() . '_repeater_fields', array( $this, 'add_widget_repeater_fields'));
-		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls'));
+	private function run_hooks() {
+		add_filter( $this->get_type() . '_repeater_fields', array( $this, 'add_widget_repeater_fields' ) );
+		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls' ) );
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * @param array $fields Repeater fields.
 	 * @return array
 	 */
-	public function add_widget_repeater_fields( $fields ){
+	public function add_widget_repeater_fields( $fields ) {
 
 		$fields['field_map'] = array(
 			'label'       => __( 'Map field to', 'textdomain' ),
@@ -108,7 +108,7 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * TODO
 	 * @return array
 	 */
-	public function add_widget_specific_controls( $fields ){
+	public function add_widget_specific_controls( $fields ) {
 		return $fields;
 	}
 }
