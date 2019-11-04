@@ -96,14 +96,14 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	public function add_widget_specific_controls( $fields ) {
 		$fields = array(
 			'success_message' => array(
-			  'type'    => 'text',
-			  'label'   => esc_html__( 'Success message', 'textdomain' ),
-			  'default' => $this->get_default( 'success_message' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Success message', 'textdomain' ),
+				'default' => $this->get_default( 'success_message' ),
 			),
 			'error_message'   => array(
-			  'type'    => 'text',
-			  'label'   => esc_html__( 'Error message', 'textdomain' ),
-			  'default' => $this->get_default( 'error_message' ),
+				'type'    => 'text',
+				'label'   => esc_html__( 'Error message', 'textdomain' ),
+				'default' => $this->get_default( 'error_message' ),
 			),
 		) + $fields;
 

@@ -115,7 +115,7 @@ class Contact_Admin extends Beaver_Widget_Base {
 				'label'   => esc_html__( 'Error message', 'textdomain' ),
 				'default' => $this->get_default( 'error_message' ),
 			),
-			'to_send_email' => array(
+			'to_send_email'   => array(
 				'type'        => 'text',
 				'label'       => esc_html__( 'Send to', 'textdomain' ),
 				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),

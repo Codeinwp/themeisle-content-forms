@@ -31,9 +31,9 @@ class Registration_Admin extends Beaver_Widget_Base {
 	 *
 	 * @return array
 	 */
-	public function widget_default_values(){
+	public function widget_default_values() {
 		return array(
-			'fields'          => array(
+			'fields'       => array(
 				array(
 					'key'         => 'username',
 					'label'       => esc_html__( 'User Name', 'textdomain' ),
@@ -62,7 +62,7 @@ class Registration_Admin extends Beaver_Widget_Base {
 					'field_map'   => 'user_pass',
 				),
 			),
-			'submit_label'    => esc_html__( 'Register', 'textdomain' ),
+			'submit_label' => esc_html__( 'Register', 'textdomain' ),
 		);
 	}
 
@@ -110,8 +110,8 @@ class Registration_Admin extends Beaver_Widget_Base {
 				'type'    => 'select',
 				'label'   => __( 'Register user as:', 'textdomain' ),
 				'default' => 'subscriber',
-				'options' => $roles
-			)
+				'options' => $roles,
+			),
 		) + $fields;
 
 		return $fields;

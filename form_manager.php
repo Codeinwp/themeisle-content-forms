@@ -152,7 +152,7 @@ class Form_Manager {
 	 *
 	 * @return array
 	 */
-	public static function get_user_roles(){
+	public static function get_user_roles() {
 		global $wp_roles;
 		$all_roles = $wp_roles->roles;
 		$roles     = [];
