@@ -115,6 +115,255 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				'title'    => $this->get_widget_name(),
 				'sections' => array(),
 			),
+			'style' => array(
+				'title' => esc_html__('Style', 'textdomain' ),
+				'sections' => array(
+					'spacing' => array(
+						'title' => esc_html__( 'Spacing', 'textdomain' ),
+						'fields' => array(
+							'column_gap' => array(
+								'type'   => 'unit',
+								'units'  => array( 'px' ),
+								'label'  => __( 'Columns Gap', 'textdomain' ),
+								'default' => 0,
+								'slider' => array(
+									'min'  	=> 0,
+									'max'  	=> 60,
+									'step' 	=> 1,
+								),
+								'preview' => array(
+									'type'     => 'css',
+									'rules'           => array(
+										array(
+											'selector' => '.content-form-' . $this->form_type . ' fieldset',
+											'property' => 'padding-right',
+										),
+										array(
+											'selector' => '.content-form-' . $this->form_type . ' fieldset',
+											'property' => 'padding-left',
+										),
+									)
+								),
+							),
+							'row_gap' => array(
+								'type'   => 'unit',
+								'units'  => array( 'px' ),
+								'label'  => __( 'Rows Gap', 'textdomain' ),
+								'default' => 0,
+								'slider' => array(
+									'min'  	=> 0,
+									'max'  	=> 60,
+									'step' 	=> 1,
+								),
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset',
+									'property' => 'margin-bottom',
+								),
+							),
+						)
+					),
+					'label' => array(
+						'title' => esc_html__( 'Label', 'textdomain' ),
+						'fields' => array(
+							'label_spacing'=> array(
+								'type'   => 'unit',
+								'units'  => array( 'px' ),
+								'label'  => __( 'Label Spacing', 'textdomain' ),
+								'default' => 0,
+								'slider' => array(
+									'min'  	=> 0,
+									'max'  	=> 60,
+									'step' 	=> 1,
+								),
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset label',
+									'property' => 'padding-bottom',
+								),
+							),
+							'label_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Text Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset label',
+									'property' => 'color',
+								),
+
+							),
+							'mark_required_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Mark Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset label .required-mark',
+									'property' => 'color',
+								),
+							),
+							'label_typography' => array(
+								'type'       => 'typography',
+								'label'      => __( 'Label Typography', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'	    => 'css',
+									'selector'  => '.content-form-' . $this->form_type . ' fieldset label',
+								),
+							)
+						)
+					),
+					'field' => array(
+						'title' => esc_html__( 'Field', 'textdomain' ),
+						'fields' => array(
+							'field_typography' => array(
+								'type'       => 'typography',
+								'label'      => __( 'Field Typography', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset select, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset button',
+								),
+							),
+							'field_text_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Text Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select, .content-form-' . $this->form_type . ' fieldset input::placeholder, .content-form-' . $this->form_type . ' fieldset textarea::placeholder, .content-form-' . $this->form_type . ' fieldset select::placeholder',
+									'property' => 'color',
+								),
+							),
+							'field_background_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Background Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select',
+									'property' => 'background-color',
+								),
+							),
+							'field_border_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Border Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select',
+									'property' => 'border-color',
+								),
+							),
+							'field_border' => array(
+								'type'       => 'border',
+								'label'      => __( 'Border', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select',
+								),
+							),
+						)
+					),
+					'button' => array(
+						'title' => esc_html__( 'Submit Button', 'textdomain' ),
+						'fields' => array(
+							'button_background_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Button Background Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button',
+									'property' => 'background-color',
+								),
+							),
+							'button_text_color' => array(
+								'type'          => 'color',
+								'label'         => __( 'Button Text Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button',
+									'property' => 'color',
+								),
+							),
+							'button_typography' => array(
+								'type'       => 'typography',
+								'label'      => __( 'Typography', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button'
+								),
+							),
+							'button_border' => array(
+								'type'       => 'border',
+								'label'      => __( 'Border', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button'
+								),
+							),
+						)
+					),
+					'button_hover' => array(
+						'title' => esc_html__( 'Submit Button Hover', 'textdomain' ),
+						'fields' => array(
+							'button_background_color_hover' => array(
+								'type'          => 'color',
+								'label'         => __( 'Button Background Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover',
+									'property' => 'background-color',
+								),
+							),
+							'button_text_color_hover' => array(
+								'type'          => 'color',
+								'label'         => __( 'Button Text Color', 'textdomain' ),
+								'show_reset'    => true,
+								'show_alpha'    => false,
+								'preview' => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover',
+									'property' => 'color',
+								),
+							),
+							'button_typography_hover' => array(
+								'type'       => 'typography',
+								'label'      => __( 'Typography', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover'
+								),
+							),
+							'button_border_hover' => array(
+								'type'       => 'border',
+								'label'      => __( 'Border Hover', 'textdomain' ),
+								'responsive' => true,
+								'preview'    => array(
+									'type'     => 'css',
+									'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover'
+								),
+							),
+						)
+					)
+				)
+			)
 		);
 
 		$args['general']['sections']['settings'] = array(
@@ -251,8 +500,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . $id . '" id="content-form-' . $id . '" class="content-form content-form-' . $this->get_type() . '">';
 		wp_nonce_field( 'content-form-' . $id, '_wpnonce_' . $this->get_type() );
 		echo '<input type="hidden" name="action" value="content_form_submit" />';
-		// there could be also the possibility to submit by type
-		// echo '<input type="hidden" name="action" value="content_form_{type}_submit" />';
 		echo '<input type="hidden" name="form-type" value="' . $this->get_type() . '" />';
 		echo '<input type="hidden" name="form-builder" value="beaver" />';
 		echo '<input type="hidden" name="post-id" value="' . get_the_ID() . '" />';
