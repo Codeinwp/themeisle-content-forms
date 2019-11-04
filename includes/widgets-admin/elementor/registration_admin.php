@@ -8,6 +8,7 @@
 namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor;
 
 use Elementor\Controls_Manager;
+use ThemeIsle\ContentForms\Form_Manager;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-admin/elementor/elementor_widget_base.php';
 
@@ -132,12 +133,7 @@ class Registration_Admin extends Elementor_Widget_Base {
 			]
 		);
 
-		global $wp_roles;
-		$all_roles = $wp_roles->roles;
-		$roles     = [];
-		foreach ( $all_roles as $role_key => $role_data ) {
-			$roles[ $role_key ] = $role_data['name'];
-		}
+		$roles = Form_Manager::get_user_roles();
 		if ( current_user_can( 'manage_options' ) ) {
 			$this->add_control(
 				'user_role',

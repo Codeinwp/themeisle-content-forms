@@ -147,6 +147,18 @@ class Form_Manager {
 		return 'field_' . $field['_id'];
 	}
 
-
-
+	/**
+	 * Get user roles.
+	 *
+	 * @return array
+	 */
+	public static function get_user_roles(){
+		global $wp_roles;
+		$all_roles = $wp_roles->roles;
+		$roles     = [];
+		foreach ( $all_roles as $role_key => $role_data ) {
+			$roles[ $role_key ] = $role_data['name'];
+		}
+		return $roles;
+	}
 }

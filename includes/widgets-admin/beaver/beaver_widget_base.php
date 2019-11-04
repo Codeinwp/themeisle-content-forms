@@ -26,6 +26,13 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	public $module_settings;
 
 	/**
+	 * Widget default data.
+	 *
+	 * @var array
+	 */
+	public $default_data = array();
+
+	/**
 	 * Get form type.
 	 * @return string
 	 */
@@ -34,10 +41,15 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	/**
 	 * Get default config data.
 	 *
-	 * @param $field
+	 * @param string $field Field to retrieve.
 	 * @return mixed
 	 */
-	abstract function get_default( $field );
+	public function get_default( $field ){
+		if ( ! array_key_exists( $field, $this->default_data ) ) {
+			return false;
+		}
+		return $this->default_data[ $field ];
+	}
 
 	/**
 	 * Get widget name.
@@ -52,7 +64,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @param $data
 	 */
 	public function __construct( $data ) {
-
+		$this->default_data    = $this->widget_default_values();
 		$this->form_type       = $this->get_type();
 		$this->module_settings = $this->set_module_settings();
 
@@ -61,6 +73,37 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		wp_enqueue_script( 'content-forms' );
 		wp_enqueue_style( 'content-forms' );
 	}
+
+	/**
+	 * Run hooks and filters.
+	 */
+	public function run_hooks() {
+		add_filter( $this->get_type() . '_repeater_fields', array( $this, 'add_widget_repeater_fields' ) );
+		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls' ) );
+	}
+
+	/**
+	 * Add widget specific repeater fields.
+	 *
+	 * @param array $fields Repeater fields.
+	 * @return mixed
+	 */
+	abstract function add_widget_repeater_fields( $fields );
+
+	/**
+	 * Add widget specific controls.
+	 *
+	 * @param array $fields Widget fields.
+	 * @return mixed
+	 */
+	abstract function add_widget_specific_controls( $fields );
+
+	/**
+	 * Set default values for registration widget.
+	 *
+	 * @return array
+	 */
+	abstract function widget_default_values();
 
 	/**
 	 * Set module settings.
@@ -154,16 +197,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$controls = apply_filters(
 			$this->form_type . '_controls_fields',
 			array(
-				'success_message' => array(
-					'type'    => 'text',
-					'label'   => esc_html__( 'Success message', 'textdomain' ),
-					'default' => $this->get_default( 'success_message' ),
-				),
-				'error_message'   => array(
-					'type'    => 'text',
-					'label'   => esc_html__( 'Error message', 'textdomain' ),
-					'default' => $this->get_default( 'error_message' ),
-				),
 				'hide_label'      => array(
 					'type'    => 'select',
 					'label'   => __( 'Hide Label', 'textdomain' ),

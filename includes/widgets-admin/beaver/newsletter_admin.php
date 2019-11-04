@@ -33,13 +33,12 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	}
 
 	/**
-	 * Get default form data.
+	 * Set default values for registration widget.
 	 *
-	 * @param string $field Field name.
-	 * @return array | string | bool
+	 * @return array
 	 */
-	public function get_default( $field ) {
-		$default = array(
+	public function widget_default_values() {
+		return array(
 			'fields'          => array(
 				array(
 					'key'         => 'email',
@@ -55,11 +54,6 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 			'success_message' => esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
 			'error_message'   => esc_html__( 'Action failed!', 'textdomain' ),
 		);
-
-		if ( array_key_exists( $field, $default ) ) {
-			return $default[ $field ];
-		}
-		return false;
 	}
 
 	/**
@@ -76,14 +70,6 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 				'url'         => plugin_dir_url( __FILE__ ),
 			)
 		);
-	}
-
-	/**
-	 * Run hooks and filters.
-	 */
-	private function run_hooks() {
-		add_filter( $this->get_type() . '_repeater_fields', array( $this, 'add_widget_repeater_fields' ) );
-		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls' ) );
 	}
 
 	/**
@@ -105,10 +91,22 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * Add specific controls for this type of widget.
 	 *
 	 * @param array $fields Fields config.
-	 * TODO
 	 * @return array
 	 */
 	public function add_widget_specific_controls( $fields ) {
+		$fields = array(
+			'success_message' => array(
+			  'type'    => 'text',
+			  'label'   => esc_html__( 'Success message', 'textdomain' ),
+			  'default' => $this->get_default( 'success_message' ),
+			),
+			'error_message'   => array(
+			  'type'    => 'text',
+			  'label'   => esc_html__( 'Error message', 'textdomain' ),
+			  'default' => $this->get_default( 'error_message' ),
+			),
+		) + $fields;
+
 		return $fields;
 	}
 }

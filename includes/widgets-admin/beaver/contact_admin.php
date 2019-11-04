@@ -34,13 +34,12 @@ class Contact_Admin extends Beaver_Widget_Base {
 	}
 
 	/**
-	 * Get default form data.
+	 * Set default values for registration widget.
 	 *
-	 * @param string $field Field name.
-	 * @return array | string | bool
+	 * @return array
 	 */
-	public function get_default( $field ) {
-		$default = array(
+	public function widget_default_values() {
+		return array(
 			'fields'          => array(
 				array(
 					'key'         => 'name',
@@ -79,11 +78,6 @@ class Contact_Admin extends Beaver_Widget_Base {
 			'success_message' => esc_html__( 'Your message has been sent!', 'textdomain' ),
 			'error_message'   => esc_html__( 'Oops! I cannot send this email!', 'textdomain' ),
 		);
-
-		if ( array_key_exists( $field, $default ) ) {
-			return $default[ $field ];
-		}
-		return false;
 	}
 
 	/**
@@ -103,13 +97,6 @@ class Contact_Admin extends Beaver_Widget_Base {
 	}
 
 	/**
-	 * Run hooks and filters.
-	 */
-	private function run_hooks() {
-		add_filter( $this->get_type() . '_controls_fields', array( $this, 'add_widget_specific_controls' ) );
-	}
-
-	/**
 	 * Add specific controls for this type of widget.
 	 *
 	 * @param array $fields Fields config.
@@ -118,6 +105,16 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 */
 	public function add_widget_specific_controls( $fields ) {
 		$fields = array(
+			'success_message' => array(
+				'type'    => 'text',
+				'label'   => esc_html__( 'Success message', 'textdomain' ),
+				'default' => $this->get_default( 'success_message' ),
+			),
+			'error_message'   => array(
+				'type'    => 'text',
+				'label'   => esc_html__( 'Error message', 'textdomain' ),
+				'default' => $this->get_default( 'error_message' ),
+			),
 			'to_send_email' => array(
 				'type'        => 'text',
 				'label'       => esc_html__( 'Send to', 'textdomain' ),
@@ -125,6 +122,17 @@ class Contact_Admin extends Beaver_Widget_Base {
 				'default'     => get_bloginfo( 'admin_email' ),
 			),
 		) + $fields;
+		return $fields;
+	}
+
+	/**
+	 * Add widget repeater fields specific for contact widget.
+	 *
+	 * @param array $fields Widget fields.
+	 *
+	 * @return array
+	 */
+	function add_widget_repeater_fields( $fields ) {
 		return $fields;
 	}
 }
