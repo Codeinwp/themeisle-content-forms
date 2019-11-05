@@ -10,13 +10,6 @@ require_once 'beaver_widget_base.php';
 class Registration_Admin extends Beaver_Widget_Base {
 
 	/**
-	 * Current module settings.
-	 *
-	 * @var array
-	 */
-	public static $module_settings;
-
-	/**
 	 * Widget name.
 	 *
 	 * @return string
@@ -77,7 +70,6 @@ class Registration_Admin extends Beaver_Widget_Base {
 	 * Registration_Admin constructor.
 	 */
 	public function __construct() {
-		$this->run_hooks();
 		parent::__construct(
 			array(
 				'name'        => esc_html__( 'Registration', 'textdomain' ),
@@ -97,6 +89,21 @@ class Registration_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	function add_widget_repeater_fields( $fields ) {
+		$field_types = array(
+			'first_name'   => __( 'First Name', 'textdomain' ),
+			'last_name'    => __( 'Last Name', 'textdomain' ),
+			'user_pass'    => __( 'Password', 'textdomain' ),
+			'user_login'   => __( 'Username', 'textdomain' ),
+			'user_email'   => __( 'Email', 'textdomain' ),
+			'display_name' => __( 'Display Name', 'textdomain' ),
+		);
+
+		$fields['field_map'] = array(
+			'label'       => __( 'Map field to', 'textdomain' ),
+			'type'        => 'select',
+			'options'     => $field_types,
+			'default'     => $this->get_default('field_map'),
+		);
 		return $fields;
 	}
 
@@ -112,14 +119,14 @@ class Registration_Admin extends Beaver_Widget_Base {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return $fields;
 		}
-		$fields = array(
+		$fields['fields'] = array(
 			'user_role' => array(
 				'type'    => 'select',
 				'label'   => __( 'Register user as:', 'textdomain' ),
 				'default' => 'subscriber',
 				'options' => $roles,
 			),
-		) + $fields;
+		) + $fields['fields'];
 
 		return $fields;
 	}

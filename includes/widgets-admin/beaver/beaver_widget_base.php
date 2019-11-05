@@ -77,7 +77,8 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return array
 	 */
 	public function filter_widget_settings( $form, $slug ){
-		if( $slug === 'newsletter_admin' ){
+		$form_widgets = array( 'newsletter_admin', 'contact_admin', 'registration_admin');
+		if( in_array( $slug, $form_widgets, true) ){
 			return $this->module_settings;
 		}
 
@@ -356,7 +357,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'multiple'     => true,
 					'type'         => 'form',
 					'label'        => esc_html__( 'Field', 'textdomain' ),
-					'form'         => 'field',
+					'form'         => $this->get_type() .'_field',
 					'preview_text' => 'label',
 					'default'      => $this->get_default( 'fields' ),
 				),
@@ -406,7 +407,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		);
 
 		\FLBuilder::register_settings_form(
-			'field',
+			$this->get_type() .'_field',
 			array(
 				'title' => esc_html__( 'Field', 'textdomain' ),
 				'tabs'  => array(
@@ -415,7 +416,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'sections' => array(
 							'fields' => array(
 								'title'  => esc_html__( 'Field', 'textdomain' ),
-								'fields' => apply_filters( $this->form_type . '_repeater_fields', $repeater_fields ),
+								'fields' => apply_filters( $this->get_type(). '_repeater_fields', $repeater_fields ),
 							),
 						),
 					),

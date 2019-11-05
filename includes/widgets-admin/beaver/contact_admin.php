@@ -15,20 +15,12 @@ require_once 'beaver_widget_base.php';
  */
 class Contact_Admin extends Beaver_Widget_Base {
 
-
-	/**
-	 * Current module settings.
-	 *
-	 * @var array
-	 */
-	public static $module_settings;
-
 	/**
 	 * Widget name.
 	 *
 	 * @return string
 	 */
-	public function get_widget_name() {
+	function get_widget_name() {
 		return esc_html__( 'Contact Form', 'textdomain' );
 	}
 
@@ -91,7 +83,6 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 * Contact_Admin constructor.
 	 */
 	public function __construct() {
-		$this->run_hooks();
 		parent::__construct(
 			array(
 				'name'        => esc_html__( 'Contact', 'textdomain' ),
@@ -104,6 +95,15 @@ class Contact_Admin extends Beaver_Widget_Base {
 	}
 
 	/**
+	 * Add map field for Contact field
+	 * @param array $fields Repeater fields.
+	 * @return array
+	 */
+	public function add_widget_repeater_fields( $fields ) {
+		return $fields;
+	}
+
+	/**
 	 * Add specific controls for this type of widget.
 	 *
 	 * @param array $fields Fields config.
@@ -111,7 +111,7 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	public function add_widget_specific_controls( $fields ) {
-		$fields = array(
+		$fields['fields'] = array(
 			'success_message' => array(
 				'type'    => 'text',
 				'label'   => esc_html__( 'Success message', 'textdomain' ),
@@ -128,18 +128,7 @@ class Contact_Admin extends Beaver_Widget_Base {
 				'description' => esc_html__( 'Where should we send the email?', 'textdomain' ),
 				'default'     => get_bloginfo( 'admin_email' ),
 			),
-		) + $fields;
-		return $fields;
-	}
-
-	/**
-	 * Add widget repeater fields specific for contact widget.
-	 *
-	 * @param array $fields Widget fields.
-	 *
-	 * @return array
-	 */
-	function add_widget_repeater_fields( $fields ) {
+		) + $fields['fields'];
 		return $fields;
 	}
 }
