@@ -82,7 +82,6 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 		$fields['field_map'] = array(
 			'label'   => __( 'Map field to', 'textdomain' ),
 			'type'    => 'text',
-			'default' => $this->get_default( 'field_map' ),
 		);
 		return $fields;
 	}

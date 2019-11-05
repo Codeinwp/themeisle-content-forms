@@ -394,6 +394,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'25'  => '25%',
 				),
 				'responsive' => true,
+				'default'    => '100',
 			),
 			'required'    => array(
 				'type'    => 'select',
