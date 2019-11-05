@@ -99,9 +99,9 @@ class Registration_Admin extends Beaver_Widget_Base {
 		);
 
 		$fields['field_map'] = array(
-			'label'       => __( 'Map field to', 'textdomain' ),
-			'type'        => 'select',
-			'options'     => $field_types,
+			'label'   => __( 'Map field to', 'textdomain' ),
+			'type'    => 'select',
+			'options' => $field_types,
 		);
 		return $fields;
 	}
