@@ -19,12 +19,15 @@ require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-admin/elementor/elemento
  */
 class Registration_Admin extends Elementor_Widget_Base {
 
+
 	/**
 	 * The type of current widget form.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	public $form_type = 'registration';
+	public function get_widget_type(){
+		return 'registration';
+	}
 
 	/**
 	 * @var array

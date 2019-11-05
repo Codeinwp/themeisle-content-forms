@@ -18,9 +18,11 @@ class Contact_Admin extends Elementor_Widget_Base {
 	/**
 	 * The type of current widget form.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	public $form_type = 'contact';
+	public function get_widget_type(){
+		return 'contact';
+	}
 
 	/**
 	 * Elementor Widget Name.

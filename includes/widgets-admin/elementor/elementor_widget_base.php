@@ -23,13 +23,6 @@ use ThemeIsle\ContentForms\Form_Manager;
 abstract class Elementor_Widget_Base extends Widget_Base {
 
 	/**
-	 * Form strings.
-	 *
-	 * @var array
-	 */
-	public $strings = array();
-
-	/**
 	 * All the widgets that extends this class have the same category.
 	 *
 	 * @return array
@@ -63,7 +56,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	private function register_form_fields() {
 
 		$this->start_controls_section(
-			$this->form_type . '_form_fields',
+			$this->get_widget_type() . '_form_fields',
 			array(
 				'label' => __( 'Fields', 'textdomain' ),
 			)
@@ -159,32 +152,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
-	 * Add specific fields for repeater form fields.
-	 *
-	 * @param Object $repeater Repeater object
-	 */
-	abstract function add_repeater_specific_fields( $repeater );
-
-	/**
-	 * Add widget specific settings.
-	 *
-	 * @return mixed
-	 */
-	abstract function add_widget_specific_settings();
-
-	/**
-	 * Get form fields default values.
-	 *
-	 * @return array
-	 */
-	abstract function get_default_config();
-
-	/**
-	 * Add Widget specific form fields.
-	 */
-	abstract function add_specific_form_fields();
-
-	/**
 	 * Register form setting controls.
 	 */
 	private function register_settings_controls() {
@@ -211,11 +178,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 
 		$this->end_controls_section();
 	}
-
-	/**
-	 * Add widget specific settings controls.
-	 */
-	abstract function add_specific_settings_controls();
 
 	/**
 	 * Add style controls.
@@ -787,8 +749,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		}
 
 		$btn_label = ! empty( $settings['submit_label'] ) ? $settings['submit_label'] : esc_html__( 'Submit', 'textdomain' );
-		echo '<fieldset class="submit-form ' . esc_attr( $this->form_type ) . '">';
-		echo '<button type="submit" name="submit" ' . $disabled . ' value="submit-' . esc_attr( $this->form_type ) . '-' . esc_attr( $form_id ) . '" class="' . $this->get_render_attribute_string( 'button' ) . '">';
+		echo '<fieldset class="submit-form ' . esc_attr( $this->get_widget_type() ) . '">';
+		echo '<button type="submit" name="submit" ' . $disabled . ' value="submit-' . esc_attr( $this->get_widget_type() ) . '-' . esc_attr( $form_id ) . '" class="' . $this->get_render_attribute_string( 'button' ) . '">';
 		echo esc_html( $btn_label );
 		if ( ! empty( $settings['button_icon'] ) ) {
 			echo '<span ' . $this->get_render_attribute_string( 'content-wrapper' ) . '>';
@@ -813,7 +775,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			return $has_error;
 		}
 
-		if ( $this->form_type === 'newsletter' ) {
+		if ( $this->get_widget_type() === 'newsletter' ) {
 			$settings = $this->get_settings();
 			echo '<div class="content-forms-required">';
 
@@ -858,7 +820,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			return $has_error;
 		}
 
-		if ( $this->form_type === 'contact' ) {
+		if ( $this->get_widget_type() === 'contact' ) {
 			$settings = $this->get_settings();
 
 			if ( array_key_exists( 'to_send_email', $settings ) && empty( $settings['to_send_email'] ) ) {
@@ -905,12 +867,12 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		// create an url for the form's action
 		$url = admin_url( 'admin-post.php' );
 
-		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . esc_attr( $id ) . '" id="content-form-' . esc_attr( $id ) . '" class="content-form content-form-' . esc_attr( $this->form_type ) . ' ' . esc_attr( $this->get_name() ) . '">';
+		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . esc_attr( $id ) . '" id="content-form-' . esc_attr( $id ) . '" class="content-form content-form-' . esc_attr( $this->get_widget_type() ) . ' ' . esc_attr( $this->get_name() ) . '">';
 
-		wp_nonce_field( 'content-form-' . esc_attr( $id ), '_wpnonce_' . esc_attr( $this->form_type ) );
+		wp_nonce_field( 'content-form-' . esc_attr( $id ), '_wpnonce_' . esc_attr( $this->get_widget_type() ) );
 
 		echo '<input type="hidden" name="action" value="content_form_submit" />';
-		echo '<input type="hidden" name="form-type" value="' . esc_attr( $this->form_type ) . '" />';
+		echo '<input type="hidden" name="form-type" value="' . esc_attr( $this->get_widget_type() ) . '" />';
 		echo '<input type="hidden" name="form-builder" value="elementor" />';
 		echo '<input type="hidden" name="post-id" value="' . get_the_ID() . '" />';
 		echo '<input type="hidden" name="form-id" value="' . esc_attr( $id ) . '" />';
@@ -1057,4 +1019,41 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	private function render_form_footer() {
 		echo '</form>';
 	}
+
+	/**
+	 * Get widget type.
+	 * @return string
+	 */
+	abstract function get_widget_type();
+
+	/**
+	 * Add specific fields for repeater form fields.
+	 *
+	 * @param Object $repeater Repeater object
+	 */
+	abstract function add_repeater_specific_fields( $repeater );
+
+	/**
+	 * Add widget specific settings.
+	 *
+	 * @return mixed
+	 */
+	abstract function add_widget_specific_settings();
+
+	/**
+	 * Get form fields default values.
+	 *
+	 * @return array
+	 */
+	abstract function get_default_config();
+
+	/**
+	 * Add Widget specific form fields.
+	 */
+	abstract function add_specific_form_fields();
+
+	/**
+	 * Add widget specific settings controls.
+	 */
+	abstract function add_specific_settings_controls();
 }

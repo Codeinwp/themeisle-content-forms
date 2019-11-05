@@ -16,12 +16,15 @@ require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-admin/elementor/elemento
  */
 class Newsletter_Admin extends Elementor_Widget_Base {
 
+
 	/**
 	 * The type of current widget form.
 	 *
-	 * @var string
+	 * @return string
 	 */
-	public $form_type = 'newsletter';
+	public function get_widget_type(){
+		return 'newsletter';
+	}
 
 	/**
 	 * @var array
