@@ -525,6 +525,81 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	}
 
 	/**
+	 * Render form errors.
+	 *
+	 * @return bool
+	 */
+	public function maybe_render_form_errors( $widget_id ){
+		$has_error = false;
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return $has_error;
+		}
+		$widget = $this->get_type();
+
+		require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
+		$widget_settings = Widget_Actions_Base::get_beaver_module_settings_by_id( $widget_id, get_the_ID() );
+
+		if( $widget === 'newsletter' ){
+
+			echo '<div class="content-forms-required">';
+
+			if ( array_key_exists( 'access_key', $widget_settings ) && empty( $widget_settings['access_key'] ) ) {
+				echo '<p>';
+				printf(
+					esc_html__( 'The %s setting is required!', 'textdomain' ),
+					'<strong>'. esc_html__('Access Key', 'textdomain' ) . '</strong>'
+				);
+				echo '</p>';
+				$has_error = true;
+			}
+
+			if ( array_key_exists( 'list_id', $widget_settings ) && empty( $widget_settings['list_id'] ) ) {
+				echo '<p>';
+				printf(
+					esc_html__( 'The %s setting is required!', 'textdomain' ),
+					'<strong>'. esc_html__('List id', 'textdomain' ) . '</strong>'
+				);
+				echo '</p>';
+				$has_error = true;
+			}
+
+			$form_fields = $widget_settings['fields'];
+			$mapping     = array();
+			foreach ( $form_fields as $field ) {
+				$field_map = $field['field_map'];
+				if ( in_array( $field_map, $mapping, true ) ) {
+					echo '<p>';
+					printf(
+						esc_html__( 'The %s field is mapped to multiple form fields. Please check your field settings.', 'textdomain' ),
+						'<strong>' . $field_map . '</strong>'
+					);
+					echo '</p>';
+					$has_error = true;
+				}
+				array_push( $mapping, $field_map );
+			}
+
+			echo '</div>';
+
+			return $has_error;
+		}
+
+		if ( $widget === 'contact' ) {
+			if ( array_key_exists( 'to_send_email', $widget_settings ) && empty( $widget_settings['to_send_email'] ) ) {
+				echo '<p>';
+				printf(
+					esc_html__( 'The %s setting is required!', 'textdomain' ),
+					'<strong>' . esc_html__( 'Send to Email Address', 'textdomain' ) . '</strong>'
+				);
+				echo '</p>';
+				$has_error = true;
+			}
+		}
+
+		return $has_error;
+	}
+
+	/**
 	 * Render form fields
 	 */
 	public function render_form_field( $field, $label_visibility ) {
