@@ -7,6 +7,7 @@ foreach ( $fields as $key => $field ) {
 	$field        = (array) $field;
 	$field['_id'] = $key;
 	$module->render_form_field( $field, $label_visibility );
+	$module->maybe_render_newsletter_address( $field, $module->node );
 }
 
 $btn_label = ! empty( $settings->submit_label ) ? $settings->submit_label : esc_html__( 'Submit', 'textdomain' );

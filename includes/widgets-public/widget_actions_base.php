@@ -132,7 +132,7 @@ abstract class Widget_Actions_Base {
 	 *
 	 * @return array|bool
 	 */
-	private static function get_beaver_module_settings_by_id( $node_id, $post_id ) {
+	public static function get_beaver_module_settings_by_id( $node_id, $post_id ) {
 		$post_data = \FLBuilderModel::get_layout_data( null, $post_id );
 		if ( isset( $post_data[ $node_id ] ) ) {
 			$module = $post_data[ $node_id ];

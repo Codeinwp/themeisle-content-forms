@@ -83,7 +83,6 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 			'label'       => __( 'Map field to', 'textdomain' ),
 			'type'        => 'text',
 			'default'     => $this->get_default('field_map'),
-			'description' => esc_html__( 'If you\'re using SendInBlue and you map the field to address, please ignore the additional settings.', 'textdomain' ),
 		);
 		return $fields;
 	}

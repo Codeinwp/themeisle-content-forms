@@ -983,7 +983,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		}
 
 		$form_id       = $this->get_data( 'id' );
-		$settings      = $this->get_settings();
 		$display_label = $settings['hide_label'];
 		$disabled      = $is_preview ? 'disabled="disabled"' : '';
 		$required      = $field['requirement'] === 'required' ? 'required="required"' : '';
