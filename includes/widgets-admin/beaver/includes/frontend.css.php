@@ -118,7 +118,7 @@ if ( property_exists( $settings, 'field_border' ) ) {
 		array(
 			'settings'     => $settings,
 			'setting_name' => 'field_border',
-			'selector'     => '.content-form-' . $module_type . ' fieldset input, .content-form-' . $module_type . ' fieldset textarea, .content-form-' . $module_type . ' fieldset select',
+			'selector'     => '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset input, .content-form-' . $module_type . ' fieldset textarea, .content-form-' . $module_type . ' fieldset select',
 		)
 	);
 }
@@ -164,7 +164,7 @@ if ( property_exists( $settings, 'button_typography' ) ) {
 		array(
 			'settings'     => $settings,
 			'setting_name' => 'button_typography',
-			'selector'     => '.content-form-' . $module_type . ' fieldset.submit-form button',
+			'selector'     => '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset.submit-form button',
 		)
 	);
 }
@@ -174,7 +174,7 @@ if ( property_exists( $settings, 'button_typography_hover' ) ) {
 		array(
 			'settings'     => $settings,
 			'setting_name' => 'button_typography_hover',
-			'selector'     => '.content-form-' . $module_type . ' fieldset.submit-form button:hover',
+			'selector'     => '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset.submit-form button:hover',
 		)
 	);
 }
@@ -184,7 +184,7 @@ if ( property_exists( $settings, 'button_border' ) ) {
 		array(
 			'settings'     => $settings,
 			'setting_name' => 'button_border',
-			'selector'     => '.content-form-' . $module_type . ' fieldset.submit-form button',
+			'selector'     => '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset.submit-form button',
 		)
 	);
 }
@@ -194,8 +194,7 @@ if ( property_exists( $settings, 'button_border_hover' ) ) {
 		array(
 			'settings'     => $settings,
 			'setting_name' => 'button_border_hover',
-			'selector'     => '.content-form-' . $module_type . ' fieldset.submit-form button:hover',
+			'selector'     => '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset.submit-form button:hover',
 		)
 	);
 }
-
