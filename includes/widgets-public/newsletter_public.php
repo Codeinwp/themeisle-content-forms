@@ -10,7 +10,7 @@ namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
-require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
 
 /**
  * Class Newsletter_Public
@@ -38,7 +38,6 @@ class Newsletter_Public extends Widget_Actions_Base {
 	 * @return array
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
-
 		/**
 		 * Email address is required for this type of form
 		 */

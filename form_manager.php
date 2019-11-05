@@ -29,7 +29,7 @@ class Form_Manager {
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact'/*, 'newsletter', 'registration'*/ ];
+	public static $forms = [ 'contact', 'newsletter', 'registration' ];
 
 	/**
 	 * Initialization function.

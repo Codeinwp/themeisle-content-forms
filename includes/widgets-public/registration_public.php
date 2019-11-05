@@ -7,7 +7,7 @@ namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
-require_once TI_CONTENT_FORMS_PATH . '/includes/widgets/elementor/elementor_widget_actions_base.php';
+require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
 
 class Registration_Public extends Widget_Actions_Base {
 

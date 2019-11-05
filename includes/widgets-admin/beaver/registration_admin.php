@@ -54,8 +54,8 @@ class Registration_Admin extends Beaver_Widget_Base {
 				),
 				array(
 					'key'         => 'password',
-					'label'       => esc_html__( 'Email', 'textdomain' ),
-					'placeholder' => esc_html__( 'Email', 'textdomain' ),
+					'label'       => esc_html__( 'Password', 'textdomain' ),
+					'placeholder' => esc_html__( 'Password', 'textdomain' ),
 					'type'        => 'password',
 					'field_width' => '100',
 					'required'    => 'required',
@@ -102,7 +102,6 @@ class Registration_Admin extends Beaver_Widget_Base {
 			'label'       => __( 'Map field to', 'textdomain' ),
 			'type'        => 'select',
 			'options'     => $field_types,
-			'default'     => $this->get_default('field_map'),
 		);
 		return $fields;
 	}

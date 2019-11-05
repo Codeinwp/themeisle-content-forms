@@ -42,7 +42,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 
 		$this->run_hooks();
 
-		$this->form_type       = $this->get_type();
 		$this->default_data    = $this->widget_default_values();
 		$this->module_settings = $this->get_module_settings();
 
@@ -111,11 +110,11 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'type'  => 'css',
 							'rules' => array(
 								array(
-									'selector' => '.content-form-' . $this->form_type . ' fieldset',
+									'selector' => '.content-form-' . $this->get_type() . ' fieldset',
 									'property' => 'padding-right',
 								),
 								array(
-									'selector' => '.content-form-' . $this->form_type . ' fieldset',
+									'selector' => '.content-form-' . $this->get_type() . ' fieldset',
 									'property' => 'padding-left',
 								),
 							),
@@ -133,7 +132,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						),
 						'preview' => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset',
 							'property' => 'margin-bottom',
 						),
 					),
@@ -154,7 +153,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						),
 						'preview' => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset label',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset label',
 							'property' => 'padding-bottom',
 						),
 					),
@@ -165,7 +164,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset label',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset label',
 							'property' => 'color',
 						),
 
@@ -177,7 +176,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset label .required-mark',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset label .required-mark',
 							'property' => 'color',
 						),
 					),
@@ -187,7 +186,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset label',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset label',
 						),
 					),
 				),
@@ -201,7 +200,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset select, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset select, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset button',
 						),
 					),
 					'field_text_color'       => array(
@@ -211,7 +210,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select, .content-form-' . $this->form_type . ' fieldset input::placeholder, .content-form-' . $this->form_type . ' fieldset textarea::placeholder, .content-form-' . $this->form_type . ' fieldset select::placeholder',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select, .content-form-' . $this->get_type() . ' fieldset input::placeholder, .content-form-' . $this->get_type() . ' fieldset textarea::placeholder, .content-form-' . $this->get_type() . ' fieldset select::placeholder',
 							'property' => 'color',
 						),
 					),
@@ -222,7 +221,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select',
 							'property' => 'background-color',
 						),
 					),
@@ -233,7 +232,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select',
 							'property' => 'border-color',
 						),
 					),
@@ -243,7 +242,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset input, .content-form-' . $this->form_type . ' fieldset textarea, .content-form-' . $this->form_type . ' fieldset select',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select',
 						),
 					),
 				),
@@ -258,7 +257,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
 							'property' => 'background-color',
 						),
 					),
@@ -269,7 +268,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
 							'property' => 'color',
 						),
 					),
@@ -279,7 +278,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
 						),
 					),
 					'button_border'           => array(
@@ -288,7 +287,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
 						),
 					),
 				),
@@ -303,7 +302,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
 							'property' => 'background-color',
 						),
 					),
@@ -314,7 +313,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
 							'property' => 'color',
 						),
 					),
@@ -324,7 +323,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
 						),
 					),
 					'button_border_hover'     => array(
@@ -333,7 +332,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->form_type . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
 						),
 					),
 				),
@@ -436,7 +435,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 */
 	private function get_control_settings( $args ){
 		$args['general']['sections']['controls'] = apply_filters(
-			$this->form_type . '_controls_fields', array(
+			$this->get_type() . '_controls_fields', array(
 				'title'  => esc_html__( 'Form Settings', 'textdomain' ),
 				'fields' => array(
 					'hide_label'      => array(
@@ -460,7 +459,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'default' => 'left',
 						'preview' => array( //TODO
 							'type'     => 'css',
-							'selector' => '.submit-form.' . $this->form_type,
+							'selector' => '.submit-form.' . $this->get_type(),
 							'property' => 'text-align',
 						),
 
@@ -528,6 +527,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 */
 	public function render_form_field( $field, $label_visibility ) {
 		$key         = Form_Manager::get_field_key_name( $field );
+		$key         = $key === 'ADDRESS' ? $key = 'ADDRESS[addr1]' : $key;
 		$form_id     = $this->node;
 		$field_name  = 'data[' . $form_id . '][' . $key . ']';
 		$required    = $field['required'] === 'required' ? 'required="required"' : '';
@@ -565,7 +565,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	public function maybe_render_newsletter_address( $field, $widget_id ){
 		require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
 		$widget_settings = Widget_Actions_Base::get_beaver_module_settings_by_id( $widget_id, get_the_ID() );
-
+		if ( ! is_array( $widget_settings ) ) {
+			return false;
+		}
 		if ( ! array_key_exists( 'provider', $widget_settings ) || $widget_settings['provider'] !== 'mailchimp' ){
 			return false;
 		}
