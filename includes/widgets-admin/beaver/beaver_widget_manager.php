@@ -15,10 +15,12 @@ class Beaver_Widget_Manager {
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact', 'newsletter', 'registration' ];
+	public static $forms = [ 'newsletter' ];
 
 	/*
 	 * Register beaver modules
+	 *
+	 * @return bool
 	 */
 	public function register_beaver_module() {
 		if ( ! class_exists( '\FLBuilderModel' ) ) {
@@ -28,14 +30,10 @@ class Beaver_Widget_Manager {
 		foreach ( self::$forms as $form ) {
 			require_once $form . '_admin.php';
 			$classname = '\ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver\\' . ucwords( $form ) . '_Admin';
-			$module    = new $classname(
-				array(
-					'id'   => 'content_form_' . $form,
-					'type' => $form,
-				)
-			);
-			$module->register_widget();
+			\FLBuilder::register_module( $classname, array() );
 		}
+
+		return true;
 	}
 
 }

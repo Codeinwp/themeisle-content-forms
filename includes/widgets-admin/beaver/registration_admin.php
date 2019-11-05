@@ -10,6 +10,13 @@ require_once 'beaver_widget_base.php';
 class Registration_Admin extends Beaver_Widget_Base {
 
 	/**
+	 * Current module settings.
+	 *
+	 * @var array
+	 */
+	public static $module_settings;
+
+	/**
 	 * Widget name.
 	 *
 	 * @return string

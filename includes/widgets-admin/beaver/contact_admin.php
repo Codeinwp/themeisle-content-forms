@@ -17,6 +17,13 @@ class Contact_Admin extends Beaver_Widget_Base {
 
 
 	/**
+	 * Current module settings.
+	 *
+	 * @var array
+	 */
+	public static $module_settings;
+
+	/**
 	 * Widget name.
 	 *
 	 * @return string

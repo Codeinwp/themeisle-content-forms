@@ -15,6 +15,7 @@ require_once 'beaver_widget_base.php';
  */
 class Newsletter_Admin extends Beaver_Widget_Base {
 
+
 	/**
 	 * Widget name.
 	 *
@@ -60,7 +61,6 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * Newsletter_Admin constructor.
 	 */
 	public function __construct() {
-		$this->run_hooks();
 		parent::__construct(
 			array(
 				'name'        => esc_html__( 'Newsletter', 'textdomain' ),
@@ -82,6 +82,7 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 		$fields['field_map'] = array(
 			'label'       => __( 'Map field to', 'textdomain' ),
 			'type'        => 'text',
+			'default'     => $this->get_default('field_map'),
 			'description' => esc_html__( 'If you\'re using SendInBlue and you map the field to address, please ignore the additional settings.', 'textdomain' ),
 		);
 		return $fields;
@@ -94,7 +95,23 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	public function add_widget_specific_controls( $fields ) {
-		$fields = array(
+		$fields['fields'] = array(
+			'provider'        => array(
+				'type'    => 'select',
+				'label'   => esc_html__( 'Subscribe to', 'textdomain' ),
+				'options' => array(
+					'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
+					'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' ),
+				),
+			),
+			'access_key'      => array(
+				'type'  => 'text',
+				'label' => esc_html__( 'Access Key', 'textdomain' ),
+			),
+			'list_id'         => array(
+				'type'  => 'text',
+				'label' => esc_html__( 'List ID', 'textdomain' ),
+			),
 			'success_message' => array(
 				'type'    => 'text',
 				'label'   => esc_html__( 'Success message', 'textdomain' ),
@@ -105,7 +122,7 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 				'label'   => esc_html__( 'Error message', 'textdomain' ),
 				'default' => $this->get_default( 'error_message' ),
 			),
-		) + $fields;
+		) + $fields['fields'];
 
 		return $fields;
 	}
