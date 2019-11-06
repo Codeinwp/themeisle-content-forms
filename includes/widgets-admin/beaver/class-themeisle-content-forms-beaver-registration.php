@@ -41,6 +41,7 @@ class Registration_Admin extends Beaver_Widget_Base {
 					'type'        => 'text',
 					'required'    => 'required',
 					'field_map'   => 'user_login',
+					'field_width' => '100',
 				),
 				array(
 					'key'         => 'email',
@@ -49,6 +50,7 @@ class Registration_Admin extends Beaver_Widget_Base {
 					'type'        => 'email',
 					'required'    => 'required',
 					'field_map'   => 'user_email',
+					'field_width' => '100',
 				),
 				array(
 					'key'         => 'password',
@@ -57,6 +59,7 @@ class Registration_Admin extends Beaver_Widget_Base {
 					'type'        => 'password',
 					'required'    => 'required',
 					'field_map'   => 'user_pass',
+					'field_width' => '100',
 				),
 			),
 			'submit_label' => esc_html__( 'Register', 'textdomain' ),

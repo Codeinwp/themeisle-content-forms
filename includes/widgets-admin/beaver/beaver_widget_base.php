@@ -437,7 +437,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			array(
 				'title'  => esc_html__( 'Form Settings', 'textdomain' ),
 				'fields' => array(
-					'hide_label'      => array(
+					'hide_label'   => array(
 						'type'    => 'select',
 						'label'   => __( 'Hide Label', 'textdomain' ),
 						'default' => 'show',
@@ -446,22 +446,11 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'show' => esc_html__( 'Show', 'textarea' ),
 						),
 					),
-					'submit_label'    => array(
+					'submit_label' => array(
 						'type'        => 'text',
 						'label'       => esc_html__( 'Submit', 'textdomain' ),
 						'default'     => $this->get_default( 'submit_label' ),
 						'description' => esc_html__( 'The Call To Action label', 'textdomain' ),
-					),
-					'submit_position' => array(
-						'type'    => 'align',
-						'label'   => esc_html__( 'Alignment', 'textdomain' ),
-						'default' => 'left',
-						'preview' => array( //TODO
-							'type'     => 'css',
-							'selector' => '.submit-form.' . $this->get_type(),
-							'property' => 'text-align',
-						),
-
 					),
 				),
 			)
@@ -540,7 +529,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 
 			echo '<div class="content-forms-required">';
 
-			if ( array_key_exists( 'access_key', $widget_settings ) && empty( $widget_settings['access_key'] ) ) {
+			if ( array_key_exists( 'access_key', (array) $widget_settings ) && empty( $widget_settings['access_key'] ) ) {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
@@ -550,7 +539,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				$has_error = true;
 			}
 
-			if ( array_key_exists( 'list_id', $widget_settings ) && empty( $widget_settings['list_id'] ) ) {
+			if ( array_key_exists( 'list_id', (array) $widget_settings ) && empty( $widget_settings['list_id'] ) ) {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
@@ -562,7 +551,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 
 			$form_fields = $widget_settings['fields'];
 			$mapping     = array();
-			foreach ( $form_fields as $field ) {
+			foreach ( (array) $form_fields as $field ) {
 				$field_map = $field->field_map;
 				if ( in_array( $field_map, $mapping, true ) ) {
 					echo '<p>';
@@ -582,7 +571,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		}
 
 		if ( $widget === 'contact' ) {
-			if ( array_key_exists( 'to_send_email', $widget_settings ) && empty( $widget_settings['to_send_email'] ) ) {
+			if ( array_key_exists( 'to_send_email', (array) $widget_settings ) && empty( $widget_settings['to_send_email'] ) ) {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
@@ -605,8 +594,8 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$form_id     = $this->node;
 		$field_name  = 'data[' . $form_id . '][' . $key . ']';
 		$required    = $field['required'] === 'required' ? 'required="required"' : '';
-		$placeholder = array_key_exists( 'placeholder', $field ) ? 'placeholder="' . esc_attr( $field['placeholder'] ) . '"' : '';
-		$width       = array_key_exists( 'field_width', $field ) && ! empty( $field['field_width'] ) ? 'style="width:' . $field['field_width'] . '%"' : '';
+		$placeholder = array_key_exists( 'placeholder', (array) $field ) && ! empty( $field['placeholder'] ) ? 'placeholder="' . esc_attr( $field['placeholder'] ) . '"' : '';
+		$width       = array_key_exists( 'field_width', (array) $field ) && ! empty( $field['field_width'] ) ? 'style="width:' . $field['field_width'] . '%"' : '';
 
 		echo '<fieldset class="content-form-field-' . esc_attr( $field['type'] ) . '" ' . $width . '>';
 		if ( $label_visibility === 'show' ) {
@@ -642,17 +631,17 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		if ( ! is_array( $widget_settings ) ) {
 			return false;
 		}
-		if ( ! array_key_exists( 'provider', $widget_settings ) || $widget_settings['provider'] !== 'mailchimp' ) {
+		if ( ! array_key_exists( 'provider', (array) $widget_settings ) || $widget_settings['provider'] !== 'mailchimp' ) {
 			return false;
 		}
 
-		if ( ! array_key_exists( 'field_map', $field ) || strtolower( $field['field_map'] ) !== 'address' ) {
+		if ( ! array_key_exists( 'field_map', (array) $field ) || strtolower( $field['field_map'] ) !== 'address' ) {
 			return false;
 		}
 
 		$display_label  = $widget_settings['hide_label'];
 		$required       = $field['required'] === 'required' ? 'required="required"' : '';
-		$width          = array_key_exists( 'field_width', $field ) ? 'style="width:' . $field['field_width'] . '%"' : '';
+		$width          = array_key_exists( 'field_width', (array) $field ) ? 'style="width:' . $field['field_width'] . '%"' : '';
 		$address_fields = array(
 			'addr2'   => __( 'Address Line 2', 'textdomain' ),
 			'city'    => __( 'City', 'textdomain' ),
@@ -661,7 +650,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			'country' => __( 'Country', 'textdomain' ),
 		);
 		foreach ( $address_fields as $address_item => $item_label ) {
-			$placeholder = array_key_exists( 'placeholder', $field ) && ! empty( $field['placeholder'] ) ? 'placeholder="' . esc_attr( $item_label ) . '"' : '';
+			$placeholder = array_key_exists( 'placeholder', (array) $field ) && ! empty( $field['placeholder'] ) ? 'placeholder="' . esc_attr( $item_label ) . '"' : '';
 			$field_name  = 'data[' . $widget_id . '][ADDRESS[' . $address_item . ']]';
 			echo '<fieldset class="content-form-field-' . esc_attr( $field['type'] ) . '" ' . $width . '>';
 

@@ -48,6 +48,7 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 					'type'        => 'email',
 					'required'    => 'required',
 					'field_map'   => 'email',
+					'field_width' => '75',
 				),
 			),
 			'submit_label'    => esc_html__( 'Join Newsletter', 'textdomain' ),

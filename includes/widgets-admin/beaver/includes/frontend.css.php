@@ -18,15 +18,6 @@ if ( property_exists( $settings, 'row_gap' ) ) {
 	<?php
 }
 
-if ( property_exists( $settings, 'submit_position' ) ) {
-	?>
-.fl-node-<?php echo $id; ?> .content-form-<?php echo $module_type; ?> fieldset.submit-form.<?php echo $module_type; ?> {
-	text-align: <?php echo  $settings->submit_position; ?>;
-}
-
-	<?php
-}
-
 
 if ( property_exists( $settings, 'label_spacing' ) ) {
 	?>
