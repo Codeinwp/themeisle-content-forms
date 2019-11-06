@@ -410,7 +410,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			array(
 				'title'  => esc_html__( 'Form Settings', 'textdomain' ),
 				'fields' => array(
-					'hide_label'   => array(
+					'hide_label'      => array(
 						'type'    => 'select',
 						'label'   => __( 'Hide Label', 'textdomain' ),
 						'default' => 'show',
@@ -419,20 +419,20 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'show' => esc_html__( 'Show', 'textarea' ),
 						),
 					),
-					'submit_label' => array(
+					'submit_label'    => array(
 						'type'        => 'text',
 						'label'       => esc_html__( 'Submit', 'textdomain' ),
 						'default'     => $this->get_default( 'submit_label' ),
 						'description' => esc_html__( 'The Call To Action label', 'textdomain' ),
 					),
-					'submit_display' => array(
-						'type'      => 'select',
-						'label'     => __( 'Submit Display', 'textdomain' ),
-						'options'   => array(
+					'submit_display'  => array(
+						'type'    => 'select',
+						'label'   => __( 'Submit Display', 'textdomain' ),
+						'options' => array(
 							'inline' => esc_html__( 'Inline', 'textarea' ),
-							'block' => esc_html__( 'Block', 'textarea' ),
+							'block'  => esc_html__( 'Block', 'textarea' ),
 						),
-						'toggle' => array(
+						'toggle'  => array(
 							'block' => array(
 								'fields' => array( 'submit_position' ),
 							),
