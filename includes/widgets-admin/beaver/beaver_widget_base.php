@@ -139,22 +139,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			'label'        => array(
 				'title'  => esc_html__( 'Label', 'textdomain' ),
 				'fields' => array(
-					'label_spacing'       => array(
-						'type'    => 'unit',
-						'units'   => array( 'px' ),
-						'label'   => __( 'Label Spacing', 'textdomain' ),
-						'label'   => __( 'Label Spacing', 'textdomain' ),
-						'slider'  => array(
-							'min'  => 0,
-							'max'  => 60,
-							'step' => 1,
-						),
-						'preview' => array(
-							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset label',
-							'property' => 'padding-bottom',
-						),
-					),
 					'label_color'         => array(
 						'type'       => 'color',
 						'label'      => __( 'Text Color', 'textdomain' ),
@@ -198,7 +182,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset select, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset select, .content-form-' . $this->get_type() . ' fieldset textarea',
 						),
 					),
 					'field_text_color'       => array(
@@ -223,17 +207,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'property' => 'background-color',
 						),
 					),
-					'field_border_color'     => array(
-						'type'       => 'color',
-						'label'      => __( 'Border Color', 'textdomain' ),
-						'show_reset' => true,
-						'show_alpha' => false,
-						'preview'    => array(
-							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select',
-							'property' => 'border-color',
-						),
-					),
 					'field_border'           => array(
 						'type'       => 'border',
 						'label'      => __( 'Border', 'textdomain' ),
@@ -255,7 +228,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
 							'property' => 'background-color',
 						),
 					),
@@ -266,7 +239,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
 							'property' => 'color',
 						),
 					),
@@ -276,7 +249,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
 						),
 					),
 					'button_border'           => array(
@@ -285,7 +258,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
 						),
 					),
 				),
@@ -300,7 +273,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]:hover',
 							'property' => 'background-color',
 						),
 					),
@@ -311,7 +284,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'show_alpha' => false,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]:hover',
 							'property' => 'color',
 						),
 					),
@@ -321,7 +294,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]:hover',
 						),
 					),
 					'button_border_hover'           => array(
@@ -330,7 +303,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'responsive' => true,
 						'preview'    => array(
 							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset.submit-form button:hover',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]:hover',
 						),
 					),
 				),
