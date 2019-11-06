@@ -5,9 +5,7 @@
 
 namespace ThemeIsle\ContentForms;
 
-
 use ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver\Beaver_Widget_Manager;
-use ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor\Elementor_Widget_Actions_Base;
 use ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor\Elementor_Widget_Manager;
 use ThemeIsle\ContentForms\Includes\Rest\Server;
 

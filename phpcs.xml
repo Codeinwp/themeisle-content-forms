@@ -14,18 +14,10 @@
 
     <rule ref="WordPress-Core">
         <exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
-        <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
         <exclude name="WordPress.DB.PreparedSQL.NotPrepared"/>
         <exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar"/>
         <exclude name="WordPress.NamingConventions.ValidHookName.UseUnderscores"/>
-        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
-        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
-        <exclude name="Squiz.Commenting.FileComment.SpacingAfterComment"/>
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
-        <exclude name="Squiz.Commenting.FunctionComment.MissingParamName"/>
-        <exclude name="Squiz.Commenting.VariableComment.EmptyVar"/>
-        <exclude name="Generic.Commenting.DocComment.MissingShort"/>
-        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
         <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
         <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
         <exclude name="Squiz.PHP.DisallowMultipleAssignments.Found"/>

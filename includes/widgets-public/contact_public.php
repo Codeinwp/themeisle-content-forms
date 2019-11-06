@@ -41,8 +41,9 @@ class Contact_Public extends Widget_Actions_Base {
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
 
-		$settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
-
+		$settings        = $this->get_widget_settings( $widget_id, $post_id, $builder );
+		$success_message = array_key_exists( 'success_message', $settings ) ? $settings['success_message'] : esc_html__( 'Your message has been sent!', 'textdomain' );
+		$error_message   = array_key_exists( 'error_message', $settings ) ? $settings['error_message'] : esc_html__( 'We failed to send your message!', 'textdomain' );
 		if ( empty( $settings ) ) {
 			return $return;
 		}
@@ -74,10 +75,10 @@ class Contact_Public extends Widget_Actions_Base {
 		// prepare settings for submit
 		$result = $this->_send_mail( $settings['to_send_email'], $from, $name, $data );
 
-		$return['message'] = $settings['error_message'];
+		$return['message'] = $error_message;
 		if ( $result ) {
 			$return['success'] = true;
-			$return['message'] = $settings['success_message'];
+			$return['message'] = $success_message;
 		}
 
 		return $return;

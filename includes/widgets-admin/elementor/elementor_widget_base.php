@@ -910,7 +910,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		);
 
 		echo '<fieldset ' . $this->get_render_attribute_string( 'fieldset' . $field_id ) . '>';
-		$this->maybe_render_field_label( $field );
+		$this->render_field_label( $field );
 
 		switch ( $field['type'] ) {
 			case 'textarea':
@@ -985,27 +985,21 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 *
 	 * @return true
 	 */
-	private function maybe_render_field_label( $field ) {
-
-		if ( empty( $field['label'] ) ) {
-			return false;
-		}
+	private function render_field_label( $field ) {
 
 		$settings      = $this->get_settings();
 		$display_label = $settings['hide_label'];
-		if ( $display_label === 'hide' ) {
-			return false;
-		}
-
-		$field_id   = $field['_id'];
-		$key        = Form_Manager::get_field_key_name( $field );
-		$form_id    = $this->get_data( 'id' );
-		$field_name = 'data[' . $form_id . '][' . $key . ']';
+		$field_id      = $field['_id'];
+		$key           = Form_Manager::get_field_key_name( $field );
+		$form_id       = $this->get_data( 'id' );
+		$field_name    = 'data[' . $form_id . '][' . $key . ']';
 
 		echo '<label for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $field_id ) . '>';
+		if ( $display_label !== 'hide' && ! empty( $field['label'] ) ) {
 			echo wp_kses_post( $field['label'] );
-		if ( $field['requirement'] === 'required' ) {
-			echo '<span class="required-mark"> *</span>';
+			if ( $field['requirement'] === 'required' ) {
+				echo '<span class="required-mark"> *</span>';
+			}
 		}
 		echo '</label>';
 

@@ -80,8 +80,8 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 	public function add_widget_repeater_fields( $fields ) {
 
 		$fields['field_map'] = array(
-			'label'   => __( 'Map field to', 'textdomain' ),
-			'type'    => 'text',
+			'label' => __( 'Map field to', 'textdomain' ),
+			'type'  => 'text',
 		);
 		return $fields;
 	}

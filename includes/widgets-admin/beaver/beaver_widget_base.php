@@ -529,7 +529,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 *
 	 * @return bool
 	 */
-	public function maybe_render_form_errors( $widget_id ){
+	public function maybe_render_form_errors( $widget_id ) {
 		$has_error = false;
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return $has_error;
@@ -539,7 +539,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
 		$widget_settings = Widget_Actions_Base::get_beaver_module_settings_by_id( $widget_id, get_the_ID() );
 
-		if( $widget === 'newsletter' ){
+		if ( $widget === 'newsletter' ) {
 
 			echo '<div class="content-forms-required">';
 
@@ -547,7 +547,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
-					'<strong>'. esc_html__('Access Key', 'textdomain' ) . '</strong>'
+					'<strong>' . esc_html__( 'Access Key', 'textdomain' ) . '</strong>'
 				);
 				echo '</p>';
 				$has_error = true;
@@ -557,7 +557,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
-					'<strong>'. esc_html__('List id', 'textdomain' ) . '</strong>'
+					'<strong>' . esc_html__( 'List id', 'textdomain' ) . '</strong>'
 				);
 				echo '</p>';
 				$has_error = true;
@@ -566,7 +566,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			$form_fields = $widget_settings['fields'];
 			$mapping     = array();
 			foreach ( $form_fields as $field ) {
-				$field_map = $field['field_map'];
+				$field_map = $field->field_map;
 				if ( in_array( $field_map, $mapping, true ) ) {
 					echo '<p>';
 					printf(

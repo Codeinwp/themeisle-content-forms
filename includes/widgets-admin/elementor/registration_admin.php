@@ -25,7 +25,7 @@ class Registration_Admin extends Elementor_Widget_Base {
 	 *
 	 * @return string
 	 */
-	public function get_widget_type(){
+	public function get_widget_type() {
 		return 'registration';
 	}
 

@@ -1,6 +1,6 @@
 <?php
 $module->render_form_header( $module->node );
-$has_error = $module->maybe_render_form_errors( $module->node );
+$has_error        = $module->maybe_render_form_errors( $module->node );
 $fields           = $settings->fields;
 $label_visibility = property_exists( $settings, 'hide_label' ) ? $settings->hide_label : 'show';
 foreach ( $fields as $key => $field ) {
