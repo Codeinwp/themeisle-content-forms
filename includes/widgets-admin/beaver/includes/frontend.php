@@ -11,7 +11,7 @@ foreach ( $fields as $key => $field ) {
 }
 
 $btn_label = ! empty( $settings->submit_label ) ? $settings->submit_label : esc_html__( 'Submit', 'textdomain' );
-echo '<fieldset class="submit-form ' . esc_attr( $module->get_type() ) . '" >';
+echo '<fieldset>';
 echo '<button type="submit" name="submit" value="submit-' . esc_attr( $module->get_type() ) . '-' . esc_attr( $module->node ) . '">';
 echo $btn_label;
 echo '</button>';

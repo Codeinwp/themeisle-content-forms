@@ -76,7 +76,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return array
 	 */
 	public function filter_widget_settings( $form, $slug ) {
-		$form_widgets = array( 'newsletter_admin', 'contact_admin', 'registration_admin' );
+		$form_widgets = array( 'class-themeisle-content-forms-beaver-newsletter', 'class-themeisle-content-forms-beaver-contact', 'class-themeisle-content-forms-beaver-registration' );
 		if ( in_array( $slug, $form_widgets, true ) ) {
 			return $this->module_settings;
 		}
@@ -100,7 +100,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'type'    => 'unit',
 						'units'   => array( 'px' ),
 						'label'   => __( 'Columns Gap', 'textdomain' ),
-						'default' => 0,
 						'slider'  => array(
 							'min'  => 0,
 							'max'  => 60,
@@ -124,7 +123,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'type'    => 'unit',
 						'units'   => array( 'px' ),
 						'label'   => __( 'Rows Gap', 'textdomain' ),
-						'default' => 0,
 						'slider'  => array(
 							'min'  => 0,
 							'max'  => 60,
@@ -145,7 +143,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'type'    => 'unit',
 						'units'   => array( 'px' ),
 						'label'   => __( 'Label Spacing', 'textdomain' ),
-						'default' => 0,
+						'label'   => __( 'Label Spacing', 'textdomain' ),
 						'slider'  => array(
 							'min'  => 0,
 							'max'  => 60,
@@ -394,7 +392,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'25'  => '25%',
 				),
 				'responsive' => true,
-				'default'    => '100',
 			),
 			'required'    => array(
 				'type'    => 'select',
@@ -609,7 +606,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$field_name  = 'data[' . $form_id . '][' . $key . ']';
 		$required    = $field['required'] === 'required' ? 'required="required"' : '';
 		$placeholder = array_key_exists( 'placeholder', $field ) ? 'placeholder="' . esc_attr( $field['placeholder'] ) . '"' : '';
-		$width       = array_key_exists( 'field_width', $field ) ? 'style="width:' . $field['field_width'] . '%"' : '';
+		$width       = array_key_exists( 'field_width', $field ) && ! empty( $field['field_width'] ) ? 'style="width:' . $field['field_width'] . '%"' : '';
 
 		echo '<fieldset class="content-form-field-' . esc_attr( $field['type'] ) . '" ' . $width . '>';
 		if ( $label_visibility === 'show' ) {

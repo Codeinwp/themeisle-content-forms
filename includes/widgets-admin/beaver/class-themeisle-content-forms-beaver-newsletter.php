@@ -46,7 +46,6 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 					'label'       => esc_html__( 'Email', 'textdomain' ),
 					'placeholder' => esc_html__( 'Email', 'textdomain' ),
 					'type'        => 'email',
-					'field_width' => '100',
 					'required'    => 'required',
 					'field_map'   => 'email',
 				),
