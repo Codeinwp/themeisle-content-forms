@@ -71,9 +71,13 @@ if ( property_exists( $settings, 'field_border' ) ) {
 /**
  * Submit Button style.
  */
-
+$fieldset_button_selector = '.fl-node-'. $id . ' .content-form-'. $module_type .' fieldset.submit-field';
 $button_selector       = '.fl-node-'. $id . ' .content-form-'. $module_type .' fieldset button[name="submit"]';
 $button_hover_selector = '.fl-node-'. $id . ' .content-form-'. $module_type .' fieldset button[name="submit"]:hover';
+
+echo $fieldset_button_selector . '{';
+    echo property_exists( $settings, 'submit_position' ) ? 'text-align: '. $settings->submit_position .';' : '';
+echo '}';
 
 echo $button_selector.'{';
     echo property_exists( $settings, 'button_background_color' ) ? 'background-color: #'. $settings->button_background_color .';' : '';

@@ -425,6 +425,29 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'default'     => $this->get_default( 'submit_label' ),
 						'description' => esc_html__( 'The Call To Action label', 'textdomain' ),
 					),
+					'submit_display' => array(
+						'type'      => 'select',
+						'label'     => __( 'Submit Display', 'textdomain' ),
+						'options'   => array(
+							'inline' => esc_html__( 'Inline', 'textarea' ),
+							'block' => esc_html__( 'Block', 'textarea' ),
+						),
+						'toggle' => array(
+							'block' => array(
+								'fields' => array( 'submit_position' ),
+							),
+						),
+					),
+					'submit_position' => array(
+						'type'    => 'align',
+						'label'   => esc_html__( 'Alignment', 'textdomain' ),
+						'default' => 'left',
+						'preview' => array(
+							'type'     => 'css',
+							'selector' => '.submit-field',
+							'property' => 'text-align',
+						),
+					),
 				),
 			)
 		);
