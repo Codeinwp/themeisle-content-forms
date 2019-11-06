@@ -8,7 +8,6 @@
     <arg name="extensions" value="php"/>
 
     <exclude-pattern type="relative">vendor</exclude-pattern>
-    <exclude-pattern type="relative">sample-theme</exclude-pattern>
     <exclude-pattern type="relative">node_modules</exclude-pattern>
     <exclude-pattern type="relative">tests</exclude-pattern>
 
