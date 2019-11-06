@@ -783,7 +783,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
-					'<strong>Access Key</strong>'
+					'<strong>' . esc_html__( 'Access Key', 'textdomain' ) . '</strong>'
 				);
 				echo '</p>';
 				$has_error = true;
@@ -793,7 +793,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				echo '<p>';
 				printf(
 					esc_html__( 'The %s setting is required!', 'textdomain' ),
-					'<strong>List id</strong>'
+					'<strong>' . esc_html__( 'List id', 'textdomain' ) . '</strong>'
 				);
 				echo '</p>';
 				$has_error = true;
