@@ -89,6 +89,7 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 				'options'   => [
 					'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
 					'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' ),
+					'mailerlite' => esc_html__( 'MailerLite', 'textdomain' ),
 				],
 				'default'   => 'mailchimp',
 				'separator' => 'after',
@@ -226,7 +227,7 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 				'label'       => __( 'Map field to', 'textdomain' ),
 				'type'        => Controls_Manager::TEXT,
 				'separator'   => 'after',
-				'description' => esc_html__( 'If you\'re using SendInBlue and you map the field to address, please ignore the additional settings.', 'textdomain' ),
+				'description' => esc_html__( 'If you\'re using SendInBlue or MailerLite and you map the field to address, please ignore the additional settings.', 'textdomain' ),
 			)
 		);
 

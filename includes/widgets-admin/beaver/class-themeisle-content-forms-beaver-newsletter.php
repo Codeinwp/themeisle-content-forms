@@ -100,6 +100,7 @@ class Newsletter_Admin extends Beaver_Widget_Base {
 				'options' => array(
 					'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
 					'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' ),
+					'mailerlite' => esc_html__( 'MailerLite', 'textdomain' ),
 				),
 			),
 			'access_key'      => array(

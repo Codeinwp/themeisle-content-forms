@@ -8,9 +8,12 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
+use MailerLiteApi\Exceptions\MailerLiteSdkException;
+use MailerLiteApi\MailerLite;
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
+require_once TI_CONTENT_FORMS_PATH . '/vendor/autoload.php';
 
 /**
  * Class Newsletter_Public
@@ -104,6 +107,10 @@ class Newsletter_Public extends Widget_Actions_Base {
 
 		if ( $provider_name === 'sendinblue' ) {
 			$result = $this->sib_subscribe( $form_settings, $result );
+		}
+
+		if ( $provider_name === 'mailerlite' ) {
+			$result = $this->mailerlite_subscribe( $form_settings, $result );
 		}
 
 		return $result;
@@ -208,5 +215,46 @@ class Newsletter_Public extends Widget_Actions_Base {
 		$body              = json_decode( wp_remote_retrieve_body( $response ), true );
 		$result['message'] = $body['message'];
 		return $result;
+	}
+
+	/**
+	 * Handle the request for MailerLite.
+	 *
+	 * @param array $form_settings Form data.
+	 * @param array $result Server response array.
+	 *
+	 * @return array
+	 */
+	private function mailerlite_subscribe( $form_settings, $result ) {
+		$api_key = $form_settings['provider_settings']['access_key'];
+		$list_id = $form_settings['provider_settings']['list_id'];
+		$data    = $form_settings['data'];
+		if ( ! is_array( $data ) ) {
+			return $result;
+		}
+		$form_data = array(
+			'email' => $data['EMAIL'],
+		);
+		unset( $data['EMAIL'] );
+
+		if ( ! empty( $data ) ) {
+			foreach ( $data as $key => $value ) {
+				$form_data['fields'][ strtolower( $key ) ] = $value;
+			}
+		}
+
+		try {
+			$ml_subscribers = new MailerLite( $api_key );
+			$groups_api     = $ml_subscribers->groups();
+			$ml_response    = $groups_api->addSubscriber( $list_id, $form_data );
+			if ( ! property_exists( $ml_response, 'error' ) ) {
+				$result['message'] = $form_settings['strings']['success_message'];
+				$result['success'] = true;
+				return $result;
+			}
+			return $result;
+		} catch ( MailerLiteSdkException $e ) {
+			return $result;
+		}
 	}
 }
