@@ -148,7 +148,7 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 					'button_icon!' => '',
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-button-icon' => 'margin-right: {{SIZE}}{{UNIT}}; margin-left: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-button-icon' => 'margin-left: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);

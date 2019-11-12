@@ -178,15 +178,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			'field'        => array(
 				'title'  => esc_html__( 'Field', 'textdomain' ),
 				'fields' => array(
-					'field_typography'       => array(
-						'type'       => 'typography',
-						'label'      => __( 'Field Typography', 'textdomain' ),
-						'responsive' => true,
-						'preview'    => array(
-							'type'     => 'css',
-							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset select, .content-form-' . $this->get_type() . ' fieldset textarea',
-						),
-					),
 					'field_text_color'       => array(
 						'type'       => 'color',
 						'label'      => __( 'Text Color', 'textdomain' ),
@@ -207,6 +198,15 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'type'     => 'css',
 							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select',
 							'property' => 'background-color',
+						),
+					),
+					'field_typography'       => array(
+						'type'       => 'typography',
+						'label'      => __( 'Field Typography', 'textdomain' ),
+						'responsive' => true,
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset select, .content-form-' . $this->get_type() . ' fieldset textarea',
 						),
 					),
 					'field_border'           => array(
@@ -438,7 +438,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				'fields' => array(
 					'hide_label'      => array(
 						'type'    => 'select',
-						'label'   => __( 'Hide Label', 'textdomain' ),
+						'label'   => __( 'Hide Field Label', 'textdomain' ),
 						'default' => 'show',
 						'options' => array(
 							'hide' => esc_html__( 'Hide', 'textarea' ),

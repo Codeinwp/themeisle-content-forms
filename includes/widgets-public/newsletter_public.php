@@ -77,8 +77,8 @@ class Newsletter_Public extends Widget_Actions_Base {
 			),
 			'data'              => $form_fields,
 			'strings'           => array(
-				'error_message'   => $settings['error_message'],
-				'success_message' => $settings['success_message'],
+				'error_message'   => array_key_exists( 'error_message', $settings ) && ! empty( $settings['error_message'] ) ? $settings['error_message'] : esc_html__( 'Action failed!', 'textdomain' ),
+				'success_message' => array_key_exists( 'success_message', $settings ) && ! empty( $settings['success_message'] ) ? $settings['success_message'] : esc_html__( 'Welcome to our newsletter!', 'textdomain' ),
 			),
 		);
 

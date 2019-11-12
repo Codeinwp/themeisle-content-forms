@@ -163,8 +163,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			)
 		);
 
-		$this->add_specific_settings_controls();
-
 		$this->add_control(
 			'hide_label',
 			array(
@@ -175,6 +173,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'separator'    => 'before',
 			)
 		);
+
+		$this->add_specific_settings_controls();
 
 		$this->end_controls_section();
 	}
