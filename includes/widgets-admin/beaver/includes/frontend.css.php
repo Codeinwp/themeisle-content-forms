@@ -1,26 +1,20 @@
 <?php
 $module_type = $module->get_type();
 
-/**
- * Field spacing.
- */
 $fieldset_selector = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset';
 echo $fieldset_selector . '{';
-	echo property_exists( $settings, 'column_gap' ) ? 'padding: 0 ' . $settings->column_gap . 'px 0 ' . $settings->column_gap . 'px;' : '';
-	echo property_exists( $settings, 'row_gap' ) ? 'margin-bottom:' . $settings->row_gap . 'px;' : '';
+	echo check_numeric_property( $settings, 'column_gap' ) ? 'padding: 0 ' . $settings->column_gap . 'px 0 ' . $settings->column_gap . 'px;' : '';
+	echo check_numeric_property( $settings, 'row_gap' ) ? 'margin-bottom:' . $settings->row_gap . 'px;' : '';
 echo '}';
 
-/**
- * Field label style.
- */
 $fieldset_label_selector = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset label';
 echo $fieldset_label_selector . '{';
-	echo property_exists( $settings, 'label_color' ) ? 'color: #' . $settings->label_color : '';
+	echo check_color_property( $settings, 'label_color' ) ? 'color: #' . $settings->label_color : '';
 echo '}';
 
 $required_mark_selector = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset label .required-mark';
 echo $required_mark_selector . '{';
-	echo property_exists( $settings, 'mark_required_color' ) ? 'color: #' . $settings->mark_required_color . ';' : '';
+	echo check_color_property( $settings, 'mark_required_color' ) ? 'color: #' . $settings->mark_required_color . ';' : '';
 echo '}';
 
 if ( property_exists( $settings, 'label_typography' ) ) {
@@ -33,9 +27,6 @@ if ( property_exists( $settings, 'label_typography' ) ) {
 	);
 }
 
-/**
- * Field style
- */
 $input_field_selector    = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset input';
 $textarea_field_selector = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset textarea';
 $select_field_selector   = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset select';
@@ -51,11 +42,11 @@ if ( property_exists( $settings, 'field_typography' ) ) {
 }
 
 echo $input_field_selector . ',' . $input_field_selector . '::placeholder,' . $textarea_field_selector . ',' . $textarea_field_selector . '::placeholder,' . $select_field_selector . ',' . $select_field_selector . '::placeholder{';
-	echo property_exists( $settings, 'field_text_color' ) ? 'color: #' . $settings->field_text_color . ';' : '';
+	echo check_color_property( $settings, 'field_text_color' ) ? 'color: #' . $settings->field_text_color . ';' : '';
 echo '}';
 
 echo $input_field_selector . ',' . $textarea_field_selector . ',' . $select_field_selector . '{';
-	echo property_exists( $settings, 'field_background_color' ) ? 'background-color: #' . $settings->field_background_color . ';' : '';
+	echo check_color_property( $settings, 'field_background_color' ) ? 'background-color: #' . $settings->field_background_color . ';' : '';
 echo '}';
 
 if ( property_exists( $settings, 'field_border' ) ) {
@@ -68,25 +59,27 @@ if ( property_exists( $settings, 'field_border' ) ) {
 	);
 }
 
-/**
- * Submit Button style.
- */
 $fieldset_button_selector = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset.submit-field';
 $button_selector          = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset button[name="submit"]';
 $button_hover_selector    = '.fl-node-' . $id . ' .content-form-' . $module_type . ' fieldset button[name="submit"]:hover';
 
+echo $button_selector . '{';
+	echo check_numeric_property( $settings, 'button_width' ) ? 'width: ' . $settings->button_width . $settings->button_width_unit . ';' : '';
+	echo check_numeric_property( $settings, 'button_height' ) ? 'height: ' . $settings->button_height . $settings->button_height_unit . ';' : '';
+echo '}';
+
 echo $fieldset_button_selector . '{';
-	echo property_exists( $settings, 'submit_position' ) ? 'text-align: ' . $settings->submit_position . ';' : '';
+	echo check_not_empty_property( $settings, 'submit_position' ) ? 'text-align: ' . $settings->submit_position . ';' : '';
 echo '}';
 
 echo $button_selector . '{';
-	echo property_exists( $settings, 'button_background_color' ) ? 'background-color: #' . $settings->button_background_color . ';' : '';
-	echo property_exists( $settings, 'button_text_color' ) ? 'color: #' . $settings->button_text_color . ';' : '';
+	echo check_color_property( $settings, 'button_background_color' ) ? 'background-color: #' . $settings->button_background_color . ';' : '';
+	echo check_color_property( $settings, 'button_text_color' ) ? 'color: #' . $settings->button_text_color . ';' : '';
 echo '}';
 
 echo $button_hover_selector . '{';
-	echo property_exists( $settings, 'button_background_color_hover' ) ? 'background-color: #' . $settings->button_background_color_hover . ';' : '';
-	echo property_exists( $settings, 'button_text_color_hover' ) ? 'color: #' . $settings->button_text_color_hover . ';' : '';
+	echo check_color_property( $settings, 'button_background_color_hover' ) ? 'background-color: #' . $settings->button_background_color_hover . ';' : '';
+	echo check_color_property( $settings, 'button_text_color_hover' ) ? 'color: #' . $settings->button_text_color_hover . ';' : '';
 echo '}';
 
 if ( property_exists( $settings, 'button_typography' ) ) {
@@ -127,4 +120,41 @@ if ( property_exists( $settings, 'button_border_hover' ) ) {
 			'selector'     => $button_hover_selector,
 		)
 	);
+}
+
+echo '@media (max-width: 1024px) {';
+echo $fieldset_selector . '{';
+	echo check_numeric_property( $settings, 'column_gap_medium' ) ? 'padding: 0 ' . $settings->column_gap_medium . 'px 0 ' . $settings->column_gap_medium . 'px;' : '';
+	echo check_numeric_property( $settings, 'row_gap_medium' ) ? 'margin-bottom:' . $settings->row_gap_medium . 'px;' : '';
+echo '}';
+
+echo $button_selector . '{';
+	echo check_numeric_property( $settings, 'button_width_medium' ) ? 'width: ' . $settings->button_width_medium . $settings->button_width_medium_unit . ';' : '';
+	echo check_numeric_property( $settings, 'button_height_medium' ) ? 'height: ' . $settings->button_height_medium . $settings->button_height_medium_unit . ';' : '';
+echo '}';
+echo '}';
+
+echo '@media (max-width: 768px) {';
+echo $fieldset_selector . '{';
+	echo check_numeric_property( $settings, 'column_gap_responsive' ) ? 'padding: 0 ' . $settings->column_gap_responsive . 'px 0 ' . $settings->column_gap_responsive . 'px;' : '';
+	echo check_numeric_property( $settings, 'row_gap_responsive' ) ? 'margin-bottom:' . $settings->row_gap_responsive . 'px;' : '';
+echo '}';
+echo $button_selector . '{';
+	echo check_numeric_property( $settings, 'button_width_responsive' ) ? 'width: ' . $settings->button_width_responsive . $settings->button_width_responsive_unit . ';' : '';
+	echo check_numeric_property( $settings, 'button_height_responsive' ) ? 'height: ' . $settings->button_height_responsive . $settings->button_height_responsive_unit . ';' : '';
+echo '}';
+echo '}';
+
+
+
+function check_numeric_property( $settings, $property_name ){
+	return property_exists( $settings, $property_name ) && is_numeric( $settings->$property_name );
+}
+
+function check_color_property( $settings, $property_name ){
+	return property_exists( $settings, $property_name ) && ctype_xdigit( $settings->$property_name ) && strlen($settings->$property_name) === 6;
+}
+
+function check_not_empty_property( $settings, $property_name ){
+	return property_exists( $settings, $property_name ) && !empty($settings->$property_name);
 }

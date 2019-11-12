@@ -200,7 +200,6 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 			array(
 				'type'     => 'text',
 				'label'    => esc_html__( 'Access Key', 'textdomain' ),
-				'required' => true,
 			)
 		);
 
@@ -209,7 +208,6 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 			array(
 				'type'     => 'text',
 				'label'    => esc_html__( 'List ID', 'textdomain' ),
-				'required' => true,
 			)
 		);
 

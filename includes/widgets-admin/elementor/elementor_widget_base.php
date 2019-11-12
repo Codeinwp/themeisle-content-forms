@@ -867,7 +867,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		// create an url for the form's action
 		$url = admin_url( 'admin-post.php' );
 
-		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . esc_attr( $id ) . '" id="content-form-' . esc_attr( $id ) . '" class="content-form content-form-' . esc_attr( $this->get_widget_type() ) . ' ' . esc_attr( $this->get_name() ) . '">';
+		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . esc_attr( $id ) . '" id="content-form-' . esc_attr( $id ) . '" class="ti-cf-module content-form content-form-' . esc_attr( $this->get_widget_type() ) . ' ' . esc_attr( $this->get_name() ) . '">';
 
 		wp_nonce_field( 'content-form-' . esc_attr( $id ), '_wpnonce_' . esc_attr( $this->get_widget_type() ) );
 

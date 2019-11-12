@@ -126,11 +126,19 @@ class Newsletter_Public extends Widget_Actions_Base {
 	 */
 	private function mailchimp_subscribe( $form_settings, $result ) {
 
-		$api_key   = $form_settings['provider_settings']['access_key'];
-		$list_id   = $form_settings['provider_settings']['list_id'];
-		$form_data = $form_settings['data'];
-		$email     = $form_data['EMAIL'];
-		unset( $form_data['EMAIL'] );
+		$api_key = $form_settings['provider_settings']['access_key'];
+		$list_id = $form_settings['provider_settings']['list_id'];
+		$data    = $form_settings['data'];
+		$email   = $data['EMAIL'];
+		unset( $data['EMAIL'] );
+
+		$form_data = array(
+			'email_address' => $email,
+			'status'        => 'pending',
+		);
+		if ( ! empty( $data ) ) {
+			$form_data['merge_fields'] = $data;
+		}
 
 		$url = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . md5( strtolower( $email ) );
 
@@ -139,13 +147,7 @@ class Newsletter_Public extends Widget_Actions_Base {
 			'headers' => array(
 				'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
 			),
-			'body'    => json_encode(
-				array(
-					'email_address' => $email,
-					'status'        => 'pending',
-					'merge_fields'  => $form_data,
-				)
-			),
+			'body'    => json_encode( $form_data ),
 		);
 
 		$response = wp_remote_post( $url, $args );
@@ -176,29 +178,31 @@ class Newsletter_Public extends Widget_Actions_Base {
 	 */
 	private function sib_subscribe( $form_settings, $result ) {
 
-		$api_key   = $form_settings['provider_settings']['access_key'];
-		$list_id   = $form_settings['provider_settings']['list_id'];
-		$form_data = $form_settings['data'];
-		$email     = $form_data['EMAIL'];
-		unset( $form_data['EMAIL'] );
+		$api_key = $form_settings['provider_settings']['access_key'];
+		$list_id = $form_settings['provider_settings']['list_id'];
+		$data    = $form_settings['data'];
+		$email   = $data['EMAIL'];
+		unset( $data['EMAIL'] );
 
 		$url = 'https://api.sendinblue.com/v3/contacts';
 
+		$form_data = array(
+			'email'            => $email,
+			'listIds'          => array( (int) $list_id ),
+			'emailBlacklisted' => false,
+			'smsBlacklisted'   => false,
+		);
+
+		if ( ! empty( $data ) ) {
+			$form_data['attributes'] = $data;
+		}
 		$args = array(
 			'method'  => 'POST',
 			'headers' => array(
 				'content-type' => 'application/json',
 				'api-key'      => $api_key,
 			),
-			'body'    => json_encode(
-				array(
-					'email'            => $email,
-					'listIds'          => array( (int) $list_id ),
-					'attributes'       => $form_data,
-					'emailBlacklisted' => false,
-					'smsBlacklisted'   => false,
-				)
-			),
+			'body'    => json_encode( $form_data ),
 		);
 
 		$response = wp_remote_post( $url, $args );

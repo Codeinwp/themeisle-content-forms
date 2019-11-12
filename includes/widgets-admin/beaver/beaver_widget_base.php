@@ -97,6 +97,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				'title'  => esc_html__( 'Spacing', 'textdomain' ),
 				'fields' => array(
 					'column_gap' => array(
+						'responsive' => true,
 						'type'    => 'unit',
 						'units'   => array( 'px' ),
 						'label'   => __( 'Columns Gap', 'textdomain' ),
@@ -120,6 +121,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						),
 					),
 					'row_gap'    => array(
+						'responsive' => true,
 						'type'    => 'unit',
 						'units'   => array( 'px' ),
 						'label'   => __( 'Rows Gap', 'textdomain' ),
@@ -200,7 +202,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'type'       => 'color',
 						'label'      => __( 'Background Color', 'textdomain' ),
 						'show_reset' => true,
-						'show_alpha' => false,
+						'show_alpha' => true,
 						'preview'    => array(
 							'type'     => 'css',
 							'selector' => '.content-form-' . $this->get_type() . ' fieldset input, .content-form-' . $this->get_type() . ' fieldset textarea, .content-form-' . $this->get_type() . ' fieldset select',
@@ -221,6 +223,30 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			'button'       => array(
 				'title'  => esc_html__( 'Submit Button', 'textdomain' ),
 				'fields' => array(
+					'button_width' => array(
+						'responsive'   => 'true',
+						'type'         => 'unit',
+						'label'        => __('Width','textdomain'),
+						'units'	       => array( 'px', 'vw', '%' ),
+						'default_unit' => 'px', // Optional
+						'preview'	   => array(
+							'type'          => 'css',
+							'selector'      => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
+							'property'      => 'width',
+						),
+					),
+					'button_height' => array(
+						'responsive'   => 'true',
+						'type'         => 'unit',
+						'label'        => __('Height','textdomain'),
+						'units'	       => array( 'px', 'vw', '%' ),
+						'default_unit' => 'px', // Optional
+						'preview'	   => array(
+							'type'          => 'css',
+							'selector'      => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
+							'property'      => 'height',
+						),
+					),
 					'button_background_color' => array(
 						'type'       => 'color',
 						'label'      => __( 'Button Background Color', 'textdomain' ),
@@ -497,7 +523,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 */
 	public function render_form_header( $id ) {
 		$url = admin_url( 'admin-post.php' );
-		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . $id . '" id="content-form-' . $id . '" class="content-form content-form-' . $this->get_type() . '">';
+		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . $id . '" id="content-form-' . $id . '" class="ti-cf-module content-form content-form-' . $this->get_type() . '">';
 		wp_nonce_field( 'content-form-' . $id, '_wpnonce_' . $this->get_type() );
 		echo '<input type="hidden" name="action" value="content_form_submit" />';
 		echo '<input type="hidden" name="form-type" value="' . $this->get_type() . '" />';
