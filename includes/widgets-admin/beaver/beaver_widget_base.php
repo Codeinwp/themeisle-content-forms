@@ -357,6 +357,15 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'preview_text' => 'label',
 					'default'      => $this->get_default( 'fields' ),
 				),
+				'hide_label'      => array(
+					'type'    => 'select',
+					'label'   => __( 'Hide Label', 'textdomain' ),
+					'default' => 'show',
+					'options' => array(
+						'hide' => esc_html__( 'Hide', 'textarea' ),
+						'show' => esc_html__( 'Show', 'textarea' ),
+					),
+				),
 			),
 		);
 
@@ -436,15 +445,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			array(
 				'title'  => esc_html__( 'Form Settings', 'textdomain' ),
 				'fields' => array(
-					'hide_label'      => array(
-						'type'    => 'select',
-						'label'   => __( 'Hide Field Label', 'textdomain' ),
-						'default' => 'show',
-						'options' => array(
-							'hide' => esc_html__( 'Hide', 'textarea' ),
-							'show' => esc_html__( 'Show', 'textarea' ),
-						),
-					),
 					'submit_label'    => array(
 						'type'        => 'text',
 						'label'       => esc_html__( 'Submit', 'textdomain' ),

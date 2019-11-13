@@ -147,6 +147,17 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'title_field' => '{{{ label }}}',
 			)
 		);
+
+		$this->add_control(
+			'hide_label',
+			array(
+				'type'         => Controls_Manager::SWITCHER,
+				'label'        => __( 'Hide Label', 'textdomain' ),
+				'return_value' => 'hide',
+				'default'      => '',
+				'separator'    => 'before',
+			)
+		);
 		$this->end_controls_section();
 		$this->add_specific_form_fields();
 	}
@@ -160,17 +171,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			'contact_form_settings',
 			array(
 				'label' => __( 'Form Settings', 'textdomain' ),
-			)
-		);
-
-		$this->add_control(
-			'hide_label',
-			array(
-				'type'         => Controls_Manager::SWITCHER,
-				'label'        => __( 'Hide Label', 'textdomain' ),
-				'return_value' => 'hide',
-				'default'      => '',
-				'separator'    => 'before',
 			)
 		);
 
