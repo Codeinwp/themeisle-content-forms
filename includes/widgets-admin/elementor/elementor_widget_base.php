@@ -739,7 +739,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		);
 
 		$this->add_responsive_control(
-			'notification_margins',
+			'notification_margin',
 			[
 				'label'      => __( 'Margin', 'textdomain' ),
 				'type'       => Controls_Manager::DIMENSIONS,
@@ -1043,6 +1043,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
+	 * Get style for form notification.
+	 *
 	 * @return string
 	 */
 	public function get_notice_style() {
@@ -1060,7 +1062,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
+	 * Render the preview of form notifications.
 	 *
+	 * @return bool
 	 */
 	private function maybe_render_form_notification(){
 		if ( Plugin::$instance->editor->is_edit_mode() !== true ){
@@ -1077,10 +1081,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		echo '<h3 '. $style .' class="content-form-notice content-form-error">'. __( 'This is a preview of how the error notification will look', 'textdomain' ) .'</h3>';
 		echo '</div>';
 
-
 		return true;
 	}
-
 
 	/**
 	 * Display method for the form's header

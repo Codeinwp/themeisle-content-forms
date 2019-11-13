@@ -2,6 +2,7 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 
+use Elementor\Plugin;
 use ThemeIsle\ContentForms\Form_Manager;
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
@@ -93,20 +94,20 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 */
 	private function get_style_settings( $args ) {
 		$args['style']['sections'] = array(
-			'spacing'      => array(
+			'spacing'              => array(
 				'title'  => esc_html__( 'Spacing', 'textdomain' ),
 				'fields' => array(
 					'column_gap' => array(
 						'responsive' => true,
-						'type'    => 'unit',
-						'units'   => array( 'px' ),
-						'label'   => __( 'Columns Gap', 'textdomain' ),
-						'slider'  => array(
+						'type'       => 'unit',
+						'units'      => array( 'px' ),
+						'label'      => __( 'Columns Gap', 'textdomain' ),
+						'slider'     => array(
 							'min'  => 0,
 							'max'  => 60,
 							'step' => 1,
 						),
-						'preview' => array(
+						'preview'    => array(
 							'type'  => 'css',
 							'rules' => array(
 								array(
@@ -122,15 +123,15 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 					'row_gap'    => array(
 						'responsive' => true,
-						'type'    => 'unit',
-						'units'   => array( 'px' ),
-						'label'   => __( 'Rows Gap', 'textdomain' ),
-						'slider'  => array(
+						'type'       => 'unit',
+						'units'      => array( 'px' ),
+						'label'      => __( 'Rows Gap', 'textdomain' ),
+						'slider'     => array(
 							'min'  => 0,
 							'max'  => 60,
 							'step' => 1,
 						),
-						'preview' => array(
+						'preview'    => array(
 							'type'     => 'css',
 							'selector' => '.content-form-' . $this->get_type() . ' fieldset',
 							'property' => 'margin-bottom',
@@ -138,7 +139,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 				),
 			),
-			'label'        => array(
+			'label'                => array(
 				'title'  => esc_html__( 'Label', 'textdomain' ),
 				'fields' => array(
 					'label_color'         => array(
@@ -175,7 +176,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 				),
 			),
-			'field'        => array(
+			'field'                => array(
 				'title'  => esc_html__( 'Field', 'textdomain' ),
 				'fields' => array(
 					'field_text_color'       => array(
@@ -220,31 +221,31 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 				),
 			),
-			'button'       => array(
+			'button'               => array(
 				'title'  => esc_html__( 'Submit Button', 'textdomain' ),
 				'fields' => array(
-					'button_width' => array(
+					'button_width'            => array(
 						'responsive'   => 'true',
 						'type'         => 'unit',
-						'label'        => __('Width','textdomain'),
-						'units'	       => array( 'px', 'vw', '%' ),
+						'label'        => __( 'Width', 'textdomain' ),
+						'units'        => array( 'px', 'vw', '%' ),
 						'default_unit' => 'px', // Optional
-						'preview'	   => array(
-							'type'          => 'css',
-							'selector'      => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
-							'property'      => 'width',
+						'preview'      => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
+							'property' => 'width',
 						),
 					),
-					'button_height' => array(
+					'button_height'           => array(
 						'responsive'   => 'true',
 						'type'         => 'unit',
-						'label'        => __('Height','textdomain'),
-						'units'	       => array( 'px', 'vw', '%' ),
+						'label'        => __( 'Height', 'textdomain' ),
+						'units'        => array( 'px', 'vw', '%' ),
 						'default_unit' => 'px', // Optional
-						'preview'	   => array(
-							'type'          => 'css',
-							'selector'      => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
-							'property'      => 'height',
+						'preview'      => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' fieldset button[name="submit"]',
+							'property' => 'height',
 						),
 					),
 					'button_background_color' => array(
@@ -289,7 +290,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 				),
 			),
-			'button_hover' => array(
+			'button_hover'         => array(
 				'title'  => esc_html__( 'Submit Button Hover', 'textdomain' ),
 				'fields' => array(
 					'button_background_color_hover' => array(
@@ -334,6 +335,56 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					),
 				),
 			),
+			'notification'         => array(
+				'title'  => esc_html__( 'Notification', 'textdomain' ),
+				'fields' => array(
+					'notification_margin' => array(
+						'type'        => 'dimension',
+						'label'       => __('Margin','textdomain'),
+						'description' => 'px',
+					),
+					'notification_text_padding' => array(
+						'type'        => 'dimension',
+						'label'       => __('Padding','textdomain'),
+						'description' => 'px',
+					),
+					'notification_width' => array(
+						'type'   => 'unit',
+						'label'  => __('Width','textdomain'),
+						'slider' => array(
+							'min'  	=> 0,
+							'max'  	=> 100,
+							'step' 	=> 1,
+						),
+					),
+					'notification_typography' => array(
+						'type'       => 'typography',
+						'label'      => __('Typography','textdomain'),
+						'responsive' => true,
+						'preview'    => array(
+							'type'	    => 'css',
+							'selector'  => '.content-form-' . $this->get_type() . ' .content-form-notice',
+						),
+					),
+					'notification_box_shadow' => array(
+						'type'        => 'shadow',
+						'label'       => __( 'Box Shadow', 'textdomain' ),
+						'show_spread' => true,
+						'preview'     => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-notice',
+							'property' => 'box-shadow',
+						),
+					),
+					'notification_alignment' => array(
+						'type'    => 'align',
+						'label'   => __( 'alignment', 'textdomain' ),
+						'default' => 'left',
+					)
+				)
+			),
+			'notification_success' => array(),
+			'notification_error'   => array(),
 		);
 		return $args;
 	}
@@ -517,6 +568,28 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	}
 
 	/**
+	 * Render the preview of form notifications.
+	 *
+	 * @return bool
+	 */
+	private function maybe_render_form_notification(){
+		if ( ! \FLBuilderModel::is_builder_active() ){
+			return false;
+		}
+
+		$style = '';//$this->get_notice_style();
+
+		echo '<div class="content-form-notice-wrapper">';
+		echo '<h3 '. $style .' class="content-form-notice content-form-success">'. __( 'This is a preview of how the success notification will look', 'textdomain' ) .'</h3>';
+		echo '</div>';
+
+		echo '<div class="content-form-notice-wrapper">';
+		echo '<h3 '. $style .' class="content-form-notice content-form-error">'. __( 'This is a preview of how the error notification will look', 'textdomain' ) .'</h3>';
+		echo '</div>';
+
+		return true;
+	}
+	/**
 	 * Render the header of the form based on the block id(for JS identification)
 	 *
 	 * @param $id
@@ -524,6 +597,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	public function render_form_header( $id ) {
 		$url = admin_url( 'admin-post.php' );
 		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . $id . '" id="content-form-' . $id . '" class="ti-cf-module content-form content-form-' . $this->get_type() . '">';
+		$this->maybe_render_form_notification();
 		wp_nonce_field( 'content-form-' . $id, '_wpnonce_' . $this->get_type() );
 		echo '<input type="hidden" name="action" value="content_form_submit" />';
 		echo '<input type="hidden" name="form-type" value="' . $this->get_type() . '" />';

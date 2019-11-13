@@ -122,6 +122,32 @@ if ( property_exists( $settings, 'button_border_hover' ) ) {
 	);
 }
 
+$notification_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-notice';
+echo $notification_selector . '{';
+	echo check_numeric_property( $settings, 'notification_margin_top' ) ? 'margin-top: ' . $settings->notification_margin_top . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_margin_bottom' ) ? 'margin-bottom: ' . $settings->notification_margin_bottom . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_margin_left' ) ? 'margin-left: ' . $settings->notification_margin_left . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_margin_right' ) ? 'margin-right: ' . $settings->notification_margin_right . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_text_padding_top' ) ? 'padding-top: ' . $settings->notification_text_padding_top . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_text_padding_bottom' ) ? 'padding-bottom: ' . $settings->notification_text_padding_bottom . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_text_padding_left' ) ? 'padding-left: ' . $settings->notification_text_padding_left . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_text_padding_right' ) ? 'padding-right: ' . $settings->notification_text_padding_right . 'px;' : '';
+	echo check_numeric_property( $settings, 'notification_width' ) ? 'width: ' . $settings->notification_width . '%;' : '';
+	if ( property_exists( $settings, 'notification_box_shadow' ) ) {
+		echo 'box-shadow:' . FLBuilderColor::shadow( $settings->notification_box_shadow ) . ';';
+	}
+echo '}';
+
+if ( property_exists( $settings, 'notification_typography' ) ) {
+	FLBuilderCSS::typography_field_rule(
+		array(
+			'settings'     => $settings,
+			'setting_name' => 'notification_typography',
+			'selector'     => $notification_selector,
+		)
+	);
+}
+
 echo '@media (max-width: 1024px) {';
 echo $fieldset_selector . '{';
 	echo check_numeric_property( $settings, 'column_gap_medium' ) ? 'padding: 0 ' . $settings->column_gap_medium . 'px 0 ' . $settings->column_gap_medium . 'px;' : '';
