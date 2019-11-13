@@ -9,7 +9,7 @@
     border: 1px solid #cccccc;
     border-radius: 3px;
 }
-.ti-cf-module .content-form-newsletter select.country{
+.ti-cf-module.content-form-newsletter select.country{
     width: 100%;
     line-height: normal;
 }
