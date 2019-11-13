@@ -9,6 +9,7 @@ namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor;
 
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;
+use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
 use Elementor\Plugin;
 use Elementor\Repeater;
@@ -728,6 +729,187 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'notification_style',
+			[
+				'label' => __( 'Notification', 'textdomain' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_responsive_control(
+			'notification_margins',
+			[
+				'label'      => __( 'Margin', 'textdomain' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .content-form-notice'    => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'notification_text_padding',
+			[
+				'label'      => __( 'Padding', 'textdomain' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', 'em', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .content-form-notice'    => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'notification_width',
+			[
+				'label' => __( 'Width', 'textdomain' ),
+				'type' => Controls_Manager::SLIDER,
+				'unit' => '%',
+				'range' => [
+					'%' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'default' => [
+					'unit' => '%',
+				],
+				'selectors' => [
+					'{{WRAPPER}} .content-form-notice' => 'width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'notification_typography',
+				'selector' => '{{WRAPPER}} .content-form-notice',
+				'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Box_Shadow::get_type(),
+			[
+				'name' => 'notification_box_shadow',
+				'label' => __( 'Box Shadow', 'textdomain' ),
+				'selector' => '{{WRAPPER}} .content-form-notice',
+			]
+		);
+
+		$this->add_responsive_control(
+			'notification_alignment',
+			[
+				'label'     => __( 'Alignment', 'textdomain' ),
+				'type'      => Controls_Manager::CHOOSE,
+				'toggle'    => false,
+				'default'   => 'left',
+				'options'   => [
+					'left'   => [
+						'title' => __( 'Left', 'textdomain' ),
+						'icon'  => 'fa fa-align-left',
+					],
+					'center' => [
+						'title' => __( 'Center', 'textdomain' ),
+						'icon'  => 'fa fa-align-center',
+					],
+					'right'  => [
+						'title' => __( 'Right', 'textdomain' ),
+						'icon'  => 'fa fa-align-right',
+					],
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'tabs_notification_style' );
+
+		$this->start_controls_tab(
+			'tab_notification_success',
+			[
+				'label' => __( 'Success', 'textdomain' ),
+			]
+		);
+
+		$this->add_control(
+			'notification_background_color_success',
+			[
+				'label'     => __( 'Background Color', 'textdomain' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .content-form-notice.content-form-success'    => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'notification_text_color_success',
+			[
+				'label'     => __( 'Text Color', 'textdomain' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .content-form-notice.content-form-success'    => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'notification_border_success',
+				'label' => __( 'Border', 'textdomain' ),
+				'selector' => '{{WRAPPER}} .content-form-notice.content-form-success',
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_notification_error',
+			[
+				'label' => __( 'Error', 'textdomain' ),
+			]
+		);
+
+		$this->add_control(
+			'notification_background_color_error',
+			[
+				'label'     => __( 'Background Color', 'textdomain' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .content-form-notice.content-form-error'    => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'notification_text_color_error',
+			[
+				'label'     => __( 'Text Color', 'textdomain' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					'{{WRAPPER}} .content-form-notice.content-form-error'    => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Border::get_type(),
+			[
+				'name' => 'notification_border_error',
+				'label' => __( 'Border', 'textdomain' ),
+				'selector' => '{{WRAPPER}} .content-form-notice.content-form-error',
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
 	}
 
 	/**
@@ -849,13 +1031,56 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		if ( Plugin::$instance->editor->is_edit_mode() === true && apply_filters( 'themeisle_content_forms_register_default_style', true ) ) {
 			echo '<style>';
 			echo file_get_contents( plugin_dir_path( TI_CONTENT_FORMS_FILE ) . '/assets/content-forms.css' );
+			echo $this->get_notice_style();
 			echo '</style>';
 		} else {
 			// if `themeisle_content_forms_register_default_style` is false, the style won't be registered anyway
+			$style = $this->get_notice_style();;
+			wp_localize_script( 'content-forms', 'formStyle', array( 'formStyle' => $style ) );
 			wp_enqueue_script( 'content-forms' );
 			wp_enqueue_style( 'content-forms' );
 		}
 	}
+
+	/**
+	 * @return string
+	 */
+	public function get_notice_style() {
+		$settings = $this->get_settings_for_display();
+
+		$style = 'style="margin-left:0; text-align:'. $settings['notification_alignment'] .'"';
+		if( $settings['notification_alignment'] === 'right' ){
+			$style = 'style="margin-right:0; margin-left:auto; text-align:'.$settings['notification_alignment'].'"';
+		}
+		if( $settings['notification_alignment'] === 'center' ){
+			$style = 'style="margin-left: auto; margin-right: auto; text-align:'.$settings['notification_alignment'].'"';
+		}
+
+		return $style;
+	}
+
+	/**
+	 *
+	 */
+	private function maybe_render_form_notification(){
+		if ( Plugin::$instance->editor->is_edit_mode() !== true ){
+			return false;
+		}
+
+		$style = $this->get_notice_style();
+
+		echo '<div class="content-form-notice-wrapper">';
+		echo '<h3 '. $style .' class="content-form-notice content-form-success">'. __( 'This is a preview of how the success notification will look', 'textdomain' ) .'</h3>';
+		echo '</div>';
+
+		echo '<div class="content-form-notice-wrapper">';
+		echo '<h3 '. $style .' class="content-form-notice content-form-error">'. __( 'This is a preview of how the error notification will look', 'textdomain' ) .'</h3>';
+		echo '</div>';
+
+
+		return true;
+	}
+
 
 	/**
 	 * Display method for the form's header
@@ -866,9 +1091,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	private function render_form_header( $id ) {
 		// create an url for the form's action
 		$url = admin_url( 'admin-post.php' );
-
 		echo '<form action="' . esc_url( $url ) . '" method="post" name="content-form-' . esc_attr( $id ) . '" id="content-form-' . esc_attr( $id ) . '" class="ti-cf-module content-form content-form-' . esc_attr( $this->get_widget_type() ) . ' ' . esc_attr( $this->get_name() ) . '">';
-
+		$this->maybe_render_form_notification();
 		wp_nonce_field( 'content-form-' . esc_attr( $id ), '_wpnonce_' . esc_attr( $this->get_widget_type() ) );
 
 		echo '<input type="hidden" name="action" value="content_form_submit" />';
