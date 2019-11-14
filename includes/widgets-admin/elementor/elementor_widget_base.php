@@ -745,7 +745,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .content-form-notice'    => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .content-form-notice' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -757,7 +757,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors'  => [
-					'{{WRAPPER}} .content-form-notice'    => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .content-form-notice' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -765,16 +765,16 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->add_responsive_control(
 			'notification_width',
 			[
-				'label' => __( 'Width', 'textdomain' ),
-				'type' => Controls_Manager::SLIDER,
-				'unit' => '%',
-				'range' => [
+				'label'     => __( 'Width', 'textdomain' ),
+				'type'      => Controls_Manager::SLIDER,
+				'unit'      => '%',
+				'range'     => [
 					'%' => [
 						'min' => 0,
 						'max' => 100,
 					],
 				],
-				'default' => [
+				'default'   => [
 					'unit' => '%',
 				],
 				'selectors' => [
@@ -795,8 +795,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Box_Shadow::get_type(),
 			[
-				'name' => 'notification_box_shadow',
-				'label' => __( 'Box Shadow', 'textdomain' ),
+				'name'     => 'notification_box_shadow',
+				'label'    => __( 'Box Shadow', 'textdomain' ),
 				'selector' => '{{WRAPPER}} .content-form-notice',
 			]
 		);
@@ -804,11 +804,11 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->add_responsive_control(
 			'notification_alignment',
 			[
-				'label'     => __( 'Alignment', 'textdomain' ),
-				'type'      => Controls_Manager::CHOOSE,
-				'toggle'    => false,
-				'default'   => 'left',
-				'options'   => [
+				'label'   => __( 'Alignment', 'textdomain' ),
+				'type'    => Controls_Manager::CHOOSE,
+				'toggle'  => false,
+				'default' => 'left',
+				'options' => [
 					'left'   => [
 						'title' => __( 'Left', 'textdomain' ),
 						'icon'  => 'fa fa-align-left',
@@ -859,8 +859,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'notification_border_success',
-				'label' => __( 'Border', 'textdomain' ),
+				'name'     => 'notification_border_success',
+				'label'    => __( 'Border', 'textdomain' ),
 				'selector' => '{{WRAPPER}} .content-form-notice.content-form-success',
 			]
 		);
@@ -899,8 +899,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
-				'name' => 'notification_border_error',
-				'label' => __( 'Border', 'textdomain' ),
+				'name'     => 'notification_border_error',
+				'label'    => __( 'Border', 'textdomain' ),
 				'selector' => '{{WRAPPER}} .content-form-notice.content-form-error',
 			]
 		);
@@ -1035,7 +1035,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			echo '</style>';
 		} else {
 			// if `themeisle_content_forms_register_default_style` is false, the style won't be registered anyway
-			$style = $this->get_notice_style();;
+			$style = $this->get_notice_style();
+
 			wp_localize_script( 'content-forms', 'formStyle', array( 'formStyle' => $style ) );
 			wp_enqueue_script( 'content-forms' );
 			wp_enqueue_style( 'content-forms' );
@@ -1050,12 +1051,12 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	public function get_notice_style() {
 		$settings = $this->get_settings_for_display();
 
-		$style = 'style="margin-left:0; text-align:'. $settings['notification_alignment'] .'"';
-		if( $settings['notification_alignment'] === 'right' ){
-			$style = 'style="margin-right:0; margin-left:auto; text-align:'.$settings['notification_alignment'].'"';
+		$style = 'style="margin-left:0; text-align:' . $settings['notification_alignment'] . '"';
+		if ( $settings['notification_alignment'] === 'right' ) {
+			$style = 'style="margin-right:0; margin-left:auto; text-align:' . $settings['notification_alignment'] . '"';
 		}
-		if( $settings['notification_alignment'] === 'center' ){
-			$style = 'style="margin-left: auto; margin-right: auto; text-align:'.$settings['notification_alignment'].'"';
+		if ( $settings['notification_alignment'] === 'center' ) {
+			$style = 'style="margin-left: auto; margin-right: auto; text-align:' . $settings['notification_alignment'] . '"';
 		}
 
 		return $style;
@@ -1066,19 +1067,19 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 *
 	 * @return bool
 	 */
-	private function maybe_render_form_notification(){
-		if ( Plugin::$instance->editor->is_edit_mode() !== true ){
+	private function maybe_render_form_notification() {
+		if ( Plugin::$instance->editor->is_edit_mode() !== true ) {
 			return false;
 		}
 
 		$style = $this->get_notice_style();
 
 		echo '<div class="content-form-notice-wrapper">';
-		echo '<h3 '. $style .' class="content-form-notice content-form-success">'. __( 'This is a preview of how the success notification will look', 'textdomain' ) .'</h3>';
+		echo '<h3 ' . $style . ' class="content-form-notice content-form-success">' . __( 'This is a preview of how the success notification will look', 'textdomain' ) . '</h3>';
 		echo '</div>';
 
 		echo '<div class="content-form-notice-wrapper">';
-		echo '<h3 '. $style .' class="content-form-notice content-form-error">'. __( 'This is a preview of how the error notification will look', 'textdomain' ) .'</h3>';
+		echo '<h3 ' . $style . ' class="content-form-notice content-form-error">' . __( 'This is a preview of how the error notification will look', 'textdomain' ) . '</h3>';
 		echo '</div>';
 
 		return true;

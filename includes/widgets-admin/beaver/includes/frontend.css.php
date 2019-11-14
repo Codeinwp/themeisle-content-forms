@@ -122,9 +122,9 @@ if ( property_exists( $settings, 'button_border_hover' ) ) {
 	);
 }
 
-$notification_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-notice';
+$notification_selector         = '.fl-node-' . $id . ' .ti-cf-module .content-form-notice';
 $notification_success_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-success';
-$notification_error_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-error';
+$notification_error_selector   = '.fl-node-' . $id . ' .ti-cf-module .content-form-error';
 echo $notification_selector . '{';
 	echo check_numeric_property( $settings, 'notification_margin_top' ) ? 'margin-top: ' . $settings->notification_margin_top . 'px;' : '';
 	echo check_numeric_property( $settings, 'notification_margin_bottom' ) ? 'margin-bottom: ' . $settings->notification_margin_bottom . 'px;' : '';
@@ -135,19 +135,19 @@ echo $notification_selector . '{';
 	echo check_numeric_property( $settings, 'notification_text_padding_left' ) ? 'padding-left: ' . $settings->notification_text_padding_left . 'px;' : '';
 	echo check_numeric_property( $settings, 'notification_text_padding_right' ) ? 'padding-right: ' . $settings->notification_text_padding_right . 'px;' : '';
 	echo check_numeric_property( $settings, 'notification_width' ) ? 'width: ' . $settings->notification_width . '%;' : '';
-	if ( property_exists( $settings, 'notification_box_shadow' ) ) {
-		echo 'box-shadow:' . FLBuilderColor::shadow( $settings->notification_box_shadow ) . ';';
-	}
+if ( property_exists( $settings, 'notification_box_shadow' ) ) {
+	echo 'box-shadow:' . FLBuilderColor::shadow( $settings->notification_box_shadow ) . ';';
+}
 echo '}';
 
 echo $notification_success_selector . '{';
-	echo check_color_property( $settings, 'notification_success_background_color' ) ? 'background-color: #'. $settings->notification_success_background_color . ';' : '';
-	echo check_color_property( $settings, 'notification_success_text_color' ) ? 'color: #'. $settings->notification_success_text_color . ';' : '';
+	echo check_color_property( $settings, 'notification_success_background_color' ) ? 'background-color: #' . $settings->notification_success_background_color . ';' : '';
+	echo check_color_property( $settings, 'notification_success_text_color' ) ? 'color: #' . $settings->notification_success_text_color . ';' : '';
 echo '}';
 
 echo $notification_error_selector . '{';
-	echo check_color_property( $settings, 'notification_error_background_color' ) ? 'background-color: #'. $settings->notification_error_background_color . ';' : '';
-	echo check_color_property( $settings, 'notification_error_text_color' ) ? 'color: #'. $settings->notification_error_text_color . ';' : '';
+	echo check_color_property( $settings, 'notification_error_background_color' ) ? 'background-color: #' . $settings->notification_error_background_color . ';' : '';
+	echo check_color_property( $settings, 'notification_error_text_color' ) ? 'color: #' . $settings->notification_error_text_color . ';' : '';
 echo '}';
 
 if ( property_exists( $settings, 'notification_error_border' ) ) {
@@ -172,10 +172,10 @@ if ( property_exists( $settings, 'notification_success_border' ) ) {
 
 if ( property_exists( $settings, 'notification_alignment' ) ) {
 	$style = 'margin-left:0; margin-right:auto;';
-	if( $settings->notification_alignment === 'center' ){
+	if ( $settings->notification_alignment === 'center' ) {
 		$style = 'margin-left:auto; margin-right:auto;';
 	}
-	if( $settings->notification_alignment === 'right' ){
+	if ( $settings->notification_alignment === 'right' ) {
 		$style = 'margin-left:auto; margin-right:0;';
 	}
 	echo $notification_selector . '{';
@@ -219,14 +219,14 @@ echo '}';
 
 
 
-function check_numeric_property( $settings, $property_name ){
+function check_numeric_property( $settings, $property_name ) {
 	return property_exists( $settings, $property_name ) && is_numeric( $settings->$property_name );
 }
 
-function check_color_property( $settings, $property_name ){
-	return property_exists( $settings, $property_name ) && ctype_xdigit( $settings->$property_name ) && strlen($settings->$property_name) === 6;
+function check_color_property( $settings, $property_name ) {
+	return property_exists( $settings, $property_name ) && ctype_xdigit( $settings->$property_name ) && strlen( $settings->$property_name ) === 6;
 }
 
-function check_not_empty_property( $settings, $property_name ){
-	return property_exists( $settings, $property_name ) && !empty($settings->$property_name);
+function check_not_empty_property( $settings, $property_name ) {
+	return property_exists( $settings, $property_name ) && ! empty( $settings->$property_name );
 }

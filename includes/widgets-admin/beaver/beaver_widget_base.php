@@ -338,35 +338,35 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			'notification'         => array(
 				'title'  => esc_html__( 'Notification', 'textdomain' ),
 				'fields' => array(
-					'notification_margin' => array(
+					'notification_margin'       => array(
 						'type'        => 'dimension',
-						'label'       => __('Margin','textdomain'),
+						'label'       => __( 'Margin', 'textdomain' ),
 						'description' => 'px',
 					),
 					'notification_text_padding' => array(
 						'type'        => 'dimension',
-						'label'       => __('Padding','textdomain'),
+						'label'       => __( 'Padding', 'textdomain' ),
 						'description' => 'px',
 					),
-					'notification_width' => array(
+					'notification_width'        => array(
 						'type'   => 'unit',
-						'label'  => __('Width','textdomain'),
+						'label'  => __( 'Width', 'textdomain' ),
 						'slider' => array(
-							'min'  	=> 0,
-							'max'  	=> 100,
-							'step' 	=> 1,
+							'min'  => 0,
+							'max'  => 100,
+							'step' => 1,
 						),
 					),
-					'notification_typography' => array(
+					'notification_typography'   => array(
 						'type'       => 'typography',
-						'label'      => __('Typography','textdomain'),
+						'label'      => __( 'Typography', 'textdomain' ),
 						'responsive' => true,
 						'preview'    => array(
-							'type'	    => 'css',
-							'selector'  => '.content-form-' . $this->get_type() . ' .content-form-notice',
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-notice',
 						),
 					),
-					'notification_box_shadow' => array(
+					'notification_box_shadow'   => array(
 						'type'        => 'shadow',
 						'label'       => __( 'Box Shadow', 'textdomain' ),
 						'show_spread' => true,
@@ -376,17 +376,17 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'property' => 'box-shadow',
 						),
 					),
-					'notification_alignment' => array(
+					'notification_alignment'    => array(
 						'type'    => 'align',
 						'label'   => __( 'alignment', 'textdomain' ),
 						'default' => 'left',
-					)
-				)
+					),
+				),
 			),
 			'notification_success' => array(
 				'title'  => esc_html__( 'Notification Success', 'textdomain' ),
 				'fields' => array(
-					'notification_success_background_color'         => array(
+					'notification_success_background_color' => array(
 						'type'       => 'color',
 						'label'      => __( 'Background', 'textdomain' ),
 						'show_reset' => true,
@@ -397,7 +397,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'property' => 'background-color',
 						),
 					),
-					'notification_success_text_color'         => array(
+					'notification_success_text_color' => array(
 						'type'       => 'color',
 						'label'      => __( 'Text', 'textdomain' ),
 						'show_reset' => true,
@@ -408,20 +408,20 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'property' => 'color',
 						),
 					),
-					'notification_success_border'           => array(
-						'type'       => 'border',
-						'label'      => __( 'Border', 'textdomain' ),
-						'preview'    => array(
+					'notification_success_border'     => array(
+						'type'    => 'border',
+						'label'   => __( 'Border', 'textdomain' ),
+						'preview' => array(
 							'type'     => 'css',
 							'selector' => '.content-form-' . $this->get_type() . ' .content-form-success',
 						),
 					),
 				),
 			),
-			'notification_error' => array(
+			'notification_error'   => array(
 				'title'  => esc_html__( 'Notification Error', 'textdomain' ),
 				'fields' => array(
-					'notification_error_background_color'         => array(
+					'notification_error_background_color' => array(
 						'type'       => 'color',
 						'label'      => __( 'Background', 'textdomain' ),
 						'show_reset' => true,
@@ -432,7 +432,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 							'property' => 'background-color',
 						),
 					),
-					'notification_error_text_color'         => array(
+					'notification_error_text_color'       => array(
 						'type'       => 'color',
 						'label'      => __( 'Text', 'textdomain' ),
 						'show_reset' => true,
@@ -444,9 +444,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						),
 					),
 					'notification_error_border'           => array(
-						'type'       => 'border',
-						'label'      => __( 'Border', 'textdomain' ),
-						'preview'    => array(
+						'type'    => 'border',
+						'label'   => __( 'Border', 'textdomain' ),
+						'preview' => array(
 							'type'     => 'css',
 							'selector' => '.content-form-' . $this->get_type() . ' .content-form-error',
 						),
@@ -468,7 +468,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 		$args['general']['sections']['settings'] = array(
 			'title'  => esc_html__( 'Fields', 'textdomain' ),
 			'fields' => array(
-				'fields' => array(
+				'fields'     => array(
 					'multiple'     => true,
 					'type'         => 'form',
 					'label'        => esc_html__( 'Field', 'textdomain' ),
@@ -476,7 +476,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'preview_text' => 'label',
 					'default'      => $this->get_default( 'fields' ),
 				),
-				'hide_label'      => array(
+				'hide_label' => array(
 					'type'    => 'select',
 					'label'   => __( 'Hide Label', 'textdomain' ),
 					'default' => 'show',
@@ -640,19 +640,19 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 *
 	 * @return bool
 	 */
-	private function maybe_render_form_notification(){
-		if ( ! \FLBuilderModel::is_builder_active() ){
+	private function maybe_render_form_notification() {
+		if ( ! \FLBuilderModel::is_builder_active() ) {
 			return false;
 		}
 
 		$style = '';//$this->get_notice_style();
 
 		echo '<div class="content-form-notice-wrapper">';
-		echo '<h3 '. $style .' class="content-form-notice content-form-success">'. __( 'This is a preview of how the success notification will look', 'textdomain' ) .'</h3>';
+		echo '<h3 ' . $style . ' class="content-form-notice content-form-success">' . __( 'This is a preview of how the success notification will look', 'textdomain' ) . '</h3>';
 		echo '</div>';
 
 		echo '<div class="content-form-notice-wrapper">';
-		echo '<h3 '. $style .' class="content-form-notice content-form-error">'. __( 'This is a preview of how the error notification will look', 'textdomain' ) .'</h3>';
+		echo '<h3 ' . $style . ' class="content-form-notice content-form-error">' . __( 'This is a preview of how the error notification will look', 'textdomain' ) . '</h3>';
 		echo '</div>';
 
 		return true;

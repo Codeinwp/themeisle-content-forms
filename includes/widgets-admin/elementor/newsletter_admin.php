@@ -198,16 +198,16 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 		$this->add_control(
 			'access_key',
 			array(
-				'type'     => 'text',
-				'label'    => esc_html__( 'Access Key', 'textdomain' ),
+				'type'  => 'text',
+				'label' => esc_html__( 'Access Key', 'textdomain' ),
 			)
 		);
 
 		$this->add_control(
 			'list_id',
 			array(
-				'type'     => 'text',
-				'label'    => esc_html__( 'List ID', 'textdomain' ),
+				'type'  => 'text',
+				'label' => esc_html__( 'List ID', 'textdomain' ),
 			)
 		);
 
