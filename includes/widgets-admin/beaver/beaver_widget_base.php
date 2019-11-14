@@ -383,8 +383,76 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					)
 				)
 			),
-			'notification_success' => array(),
-			'notification_error'   => array(),
+			'notification_success' => array(
+				'title'  => esc_html__( 'Notification Success', 'textdomain' ),
+				'fields' => array(
+					'notification_success_background_color'         => array(
+						'type'       => 'color',
+						'label'      => __( 'Background', 'textdomain' ),
+						'show_reset' => true,
+						'show_alpha' => true,
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-success',
+							'property' => 'background-color',
+						),
+					),
+					'notification_success_text_color'         => array(
+						'type'       => 'color',
+						'label'      => __( 'Text', 'textdomain' ),
+						'show_reset' => true,
+						'show_alpha' => false,
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-success',
+							'property' => 'color',
+						),
+					),
+					'notification_success_border'           => array(
+						'type'       => 'border',
+						'label'      => __( 'Border', 'textdomain' ),
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-success',
+						),
+					),
+				),
+			),
+			'notification_error' => array(
+				'title'  => esc_html__( 'Notification Error', 'textdomain' ),
+				'fields' => array(
+					'notification_error_background_color'         => array(
+						'type'       => 'color',
+						'label'      => __( 'Background', 'textdomain' ),
+						'show_reset' => true,
+						'show_alpha' => true,
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-error',
+							'property' => 'background-color',
+						),
+					),
+					'notification_error_text_color'         => array(
+						'type'       => 'color',
+						'label'      => __( 'Text', 'textdomain' ),
+						'show_reset' => true,
+						'show_alpha' => false,
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-error',
+							'property' => 'color',
+						),
+					),
+					'notification_error_border'           => array(
+						'type'       => 'border',
+						'label'      => __( 'Border', 'textdomain' ),
+						'preview'    => array(
+							'type'     => 'css',
+							'selector' => '.content-form-' . $this->get_type() . ' .content-form-error',
+						),
+					),
+				),
+			),
 		);
 		return $args;
 	}

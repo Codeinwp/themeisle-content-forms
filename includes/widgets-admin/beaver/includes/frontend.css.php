@@ -123,6 +123,8 @@ if ( property_exists( $settings, 'button_border_hover' ) ) {
 }
 
 $notification_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-notice';
+$notification_success_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-success';
+$notification_error_selector = '.fl-node-' . $id . ' .ti-cf-module .content-form-error';
 echo $notification_selector . '{';
 	echo check_numeric_property( $settings, 'notification_margin_top' ) ? 'margin-top: ' . $settings->notification_margin_top . 'px;' : '';
 	echo check_numeric_property( $settings, 'notification_margin_bottom' ) ? 'margin-bottom: ' . $settings->notification_margin_bottom . 'px;' : '';
@@ -137,6 +139,50 @@ echo $notification_selector . '{';
 		echo 'box-shadow:' . FLBuilderColor::shadow( $settings->notification_box_shadow ) . ';';
 	}
 echo '}';
+
+echo $notification_success_selector . '{';
+	echo check_color_property( $settings, 'notification_success_background_color' ) ? 'background-color: #'. $settings->notification_success_background_color . ';' : '';
+	echo check_color_property( $settings, 'notification_success_text_color' ) ? 'color: #'. $settings->notification_success_text_color . ';' : '';
+echo '}';
+
+echo $notification_error_selector . '{';
+	echo check_color_property( $settings, 'notification_error_background_color' ) ? 'background-color: #'. $settings->notification_error_background_color . ';' : '';
+	echo check_color_property( $settings, 'notification_error_text_color' ) ? 'color: #'. $settings->notification_error_text_color . ';' : '';
+echo '}';
+
+if ( property_exists( $settings, 'notification_error_border' ) ) {
+	FLBuilderCSS::border_field_rule(
+		array(
+			'settings'     => $settings,
+			'setting_name' => 'notification_error_border',
+			'selector'     => $notification_error_selector,
+		)
+	);
+}
+
+if ( property_exists( $settings, 'notification_success_border' ) ) {
+	FLBuilderCSS::border_field_rule(
+		array(
+			'settings'     => $settings,
+			'setting_name' => 'notification_success_border',
+			'selector'     => $notification_success_selector,
+		)
+	);
+}
+
+if ( property_exists( $settings, 'notification_alignment' ) ) {
+	$style = 'margin-left:0; margin-right:auto;';
+	if( $settings->notification_alignment === 'center' ){
+		$style = 'margin-left:auto; margin-right:auto;';
+	}
+	if( $settings->notification_alignment === 'right' ){
+		$style = 'margin-left:auto; margin-right:0;';
+	}
+	echo $notification_selector . '{';
+	echo $style;
+	echo '}';
+}
+
 
 if ( property_exists( $settings, 'notification_typography' ) ) {
 	FLBuilderCSS::typography_field_rule(
