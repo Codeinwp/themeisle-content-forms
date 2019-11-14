@@ -861,6 +861,42 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	}
 
 	/**
+	 * Check numeric css property in frontend.css.php
+	 *
+	 * @param Object $settings Settings object.
+	 * @param string $property_name Property name.
+	 *
+	 * @return bool
+	 */
+	public function check_numeric_property( $settings, $property_name ) {
+		return property_exists( $settings, $property_name ) && is_numeric( $settings->$property_name );
+	}
+
+	/**
+	 * Check color css property in frontend.css.php
+	 *
+	 * @param Object $settings Settings object.
+	 * @param string $property_name Property name.
+	 *
+	 * @return bool
+	 */
+	public function check_color_property( $settings, $property_name ) {
+		return property_exists( $settings, $property_name ) && ctype_xdigit( $settings->$property_name ) && strlen( $settings->$property_name ) === 6;
+	}
+
+	/**
+	 * Check if not empty property in frontend.css.php
+	 *
+	 * @param Object $settings Settings object.
+	 * @param string $property_name Property name.
+	 *
+	 * @return bool
+	 */
+	public function check_not_empty_property( $settings, $property_name ) {
+		return property_exists( $settings, $property_name ) && ! empty( $settings->$property_name );
+	}
+
+	/**
 	 * Render form footer.
 	 */
 	public function render_form_footer() {

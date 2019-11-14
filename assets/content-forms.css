@@ -24,6 +24,10 @@
     margin: 0;
     flex-wrap: wrap;
 }
+.ti-cf-module .content-forms-required{
+    width: 100%;
+}
+
 .ti-cf-module .content-form-loading {
     opacity: .5;
     pointer-events: none;
@@ -36,7 +40,6 @@
 .ti-cf-module .content-form-notice-wrapper {
 	display: flex;
 	width: 100%;
-	padding-left: 5px;
 }
 
 .ti-cf-module .content-form-success {
