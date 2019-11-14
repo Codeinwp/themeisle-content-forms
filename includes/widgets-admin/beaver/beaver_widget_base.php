@@ -586,11 +586,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 						'type'    => 'align',
 						'label'   => esc_html__( 'Alignment', 'textdomain' ),
 						'default' => 'left',
-						'preview' => array(
-							'type'     => 'css',
-							'selector' => '.submit-field',
-							'property' => 'text-align',
-						),
 					),
 				),
 			)

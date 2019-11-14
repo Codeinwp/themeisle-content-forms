@@ -56,13 +56,21 @@ class Contact_Public extends Widget_Actions_Base {
 			return $return;
 		}
 
-		foreach ( $settings['form_fields'] as $field ) {
-			$key = Form_Manager::get_field_key_name( $field );
+        $fields = array_key_exists('form_fields', $settings ) ? $settings['form_fields'] : ( array_key_exists('fields', $settings ) ? $settings['fields'] : array() );
+        if( empty( $fields ) ){
+            return $return;
+        }
 
-			if ( 'required' === $field['requirement'] && empty( $data[ $key ] ) ) {
+		foreach ( $fields as $field ) {
+			$field = (array)$field;
+			$key = Form_Manager::get_field_key_name( $field );
+			$required_field = array_key_exists( 'requirement', $field ) ? $field['requirement'] : ( array_key_exists('required', $field ) ? $field['required'] : '');
+
+			if ( 'required' === $required_field && empty( $data[ $key ] ) ) {
 				$return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain' ), $key );
 				return $return;
 			}
+
 			if ( 'email' === $field['type'] && ! is_email( $data[ $key ] ) ) {
 				$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 				return $return;
