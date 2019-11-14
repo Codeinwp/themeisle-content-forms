@@ -2,7 +2,6 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets_Admin\Beaver;
 
-use Elementor\Plugin;
 use ThemeIsle\ContentForms\Form_Manager;
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
