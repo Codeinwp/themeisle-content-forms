@@ -13,7 +13,6 @@ use MailerLiteApi\MailerLite;
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
-require_once TI_CONTENT_FORMS_PATH . '/vendor/autoload.php';
 
 /**
  * Class Newsletter_Public
