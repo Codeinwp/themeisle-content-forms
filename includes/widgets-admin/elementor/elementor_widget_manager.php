@@ -19,7 +19,7 @@ class Elementor_Widget_Manager {
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact', 'newsletter', 'registration' ];
+	public static $forms = array( 'contact', 'newsletter', 'registration' );
 
 	/**
 	 * Initialization Function
@@ -41,10 +41,10 @@ class Elementor_Widget_Manager {
 	public function add_elementor_widget_categories( $elements_manager ) {
 		$elements_manager->add_category(
 			'obfx-elementor-widgets',
-			[
+			array(
 				'title' => __( 'Orbit Fox Addons', 'textdomain' ),
 				'icon'  => 'fa fa-plug',
-			]
+			)
 		);
 	}
 

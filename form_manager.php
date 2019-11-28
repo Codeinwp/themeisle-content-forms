@@ -35,7 +35,7 @@ class Form_Manager {
 	 *
 	 * @var $forms
 	 */
-	public static $forms = [ 'contact', 'newsletter', 'registration' ];
+	public static $forms = array( 'contact', 'newsletter', 'registration' );
 
 	/**
 	 * Initialization function.
@@ -161,7 +161,7 @@ class Form_Manager {
 	public static function get_user_roles() {
 		global $wp_roles;
 		$all_roles = $wp_roles->roles;
-		$roles     = [];
+		$roles     = array();
 		foreach ( $all_roles as $role_key => $role_data ) {
 			$roles[ $role_key ] = $role_data['name'];
 		}

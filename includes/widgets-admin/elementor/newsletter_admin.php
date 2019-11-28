@@ -47,8 +47,8 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 	 * @return array
 	 */
 	function get_default_config() {
-		return [
-			[
+		return array(
+			array(
 				'key'         => 'email',
 				'type'        => 'email',
 				'label'       => esc_html__( 'Email', 'textdomain' ),
@@ -56,8 +56,8 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 				'placeholder' => esc_html__( 'Email', 'textdomain' ),
 				'field_width' => '100',
 				'field_map'   => 'email',
-			],
-		];
+			),
+		);
 	}
 
 	/**
@@ -83,17 +83,17 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 
 		$this->add_control(
 			'provider',
-			[
+			array(
 				'type'      => 'select',
 				'label'     => esc_html__( 'Subscribe to', 'textdomain' ),
-				'options'   => [
+				'options'   => array(
 					'mailchimp'  => esc_html__( 'MailChimp', 'textdomain' ),
 					'sendinblue' => esc_html__( 'Sendinblue ', 'textdomain' ),
 					'mailerlite' => esc_html__( 'MailerLite', 'textdomain' ),
-				],
+				),
 				'default'   => 'mailchimp',
 				'separator' => 'after',
-			]
+			)
 		);
 
 		$this->add_control(
@@ -125,59 +125,78 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 		);
 
 		$this->add_control(
-			'button_icon',
-			[
-				'label'       => __( 'Icon', 'elementor-pro' ),
-				'type'        => Controls_Manager::ICON,
-				'label_block' => true,
-				'default'     => '',
-			]
+			'button_icon_new',
+			array(
+				'label'            => __( 'Icon', 'textdomain' ),
+				'type'             => Controls_Manager::ICONS,
+				'fa4compatibility' => 'button_icon',
+			)
+		);
+
+		$this->add_control(
+			'button_icon_size',
+			array(
+				'label'     => __( 'Icon Size', 'textdomain' ),
+				'type'      => Controls_Manager::SLIDER,
+				'range'     => array(
+					'px' => array(
+						'max' => 100,
+					),
+				),
+				'condition' => array(
+					'button_icon!' => '',
+				),
+				'selectors' => array(
+					'{{WRAPPER}} .elementor-button-icon svg' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-button-icon i' => 'font-size: {{SIZE}}{{UNIT}};',
+				),
+			)
 		);
 
 		$this->add_control(
 			'button_icon_indent',
-			[
-				'label'     => __( 'Icon Spacing', 'elementor-pro' ),
+			array(
+				'label'     => __( 'Icon Spacing', 'textdomain' ),
 				'type'      => Controls_Manager::SLIDER,
-				'range'     => [
-					'px' => [
+				'range'     => array(
+					'px' => array(
 						'max' => 100,
-					],
-				],
-				'condition' => [
+					),
+				),
+				'condition' => array(
 					'button_icon!' => '',
-				],
-				'selectors' => [
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .elementor-button-icon' => 'margin-left: {{SIZE}}{{UNIT}};',
-				],
-			]
+				),
+			)
 		);
 
 		$this->add_responsive_control(
 			'align_submit',
-			[
+			array(
 				'label'     => __( 'Alignment', 'textdomain' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'toggle'    => false,
 				'default'   => 'left',
-				'options'   => [
-					'left'   => [
+				'options'   => array(
+					'left'   => array(
 						'title' => __( 'Left', 'textdomain' ),
 						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
+					),
+					'center' => array(
 						'title' => __( 'Center', 'textdomain' ),
 						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
+					),
+					'right'  => array(
 						'title' => __( 'Right', 'textdomain' ),
 						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 	}
 
@@ -311,9 +330,9 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 							'label'     => $field_data['label'],
 							'type'      => Controls_Manager::TEXT,
 							'default'   => $field_data['default'],
-							'condition' => [
+							'condition' => array(
 								'field_map' => 'address',
-							],
+							),
 						)
 					);
 				} else {
@@ -322,18 +341,18 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 						array(
 							'label'     => $field_data['label'],
 							'type'      => Controls_Manager::SELECT,
-							'options'   => [
+							'options'   => array(
 								'100' => '100%',
 								'75'  => '75%',
 								'66'  => '66%',
 								'50'  => '50%',
 								'33'  => '33%',
 								'25'  => '25%',
-							],
+							),
 							'default'   => $field_data['default'],
-							'condition' => [
+							'condition' => array(
 								'field_map' => 'address',
-							],
+							),
 						)
 					);
 				}

@@ -111,41 +111,41 @@ class Registration_Admin extends Elementor_Widget_Base {
 
 		$this->add_responsive_control(
 			'align_submit',
-			[
+			array(
 				'label'     => __( 'Alignment', 'textdomain' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'toggle'    => false,
 				'default'   => 'left',
-				'options'   => [
-					'left'   => [
+				'options'   => array(
+					'left'   => array(
 						'title' => __( 'Left', 'textdomain' ),
 						'icon'  => 'fa fa-align-left',
-					],
-					'center' => [
+					),
+					'center' => array(
 						'title' => __( 'Center', 'textdomain' ),
 						'icon'  => 'fa fa-align-center',
-					],
-					'right'  => [
+					),
+					'right'  => array(
 						'title' => __( 'Right', 'textdomain' ),
 						'icon'  => 'fa fa-align-right',
-					],
-				],
-				'selectors' => [
+					),
+				),
+				'selectors' => array(
 					'{{WRAPPER}} .content-form .submit-form' => 'text-align: {{VALUE}};',
-				],
-			]
+				),
+			)
 		);
 
 		$roles = Form_Manager::get_user_roles();
 		if ( current_user_can( 'manage_options' ) ) {
 			$this->add_control(
 				'user_role',
-				[
+				array(
 					'label'   => __( 'Register user as:', 'textdomain' ),
 					'type'    => Controls_Manager::SELECT,
 					'options' => $roles,
 					'default' => 'subscriber',
-				]
+				)
 			);
 		}
 	}
