@@ -90,3 +90,7 @@
 .ti-cf-module.content-form-newsletter .elementor-column:not(.elementor-col-100) + .submit-form {
     display: flex; width: auto;
 }
+
+.ti-cf-module .elementor-button-icon svg{
+    height: initial;
+}
