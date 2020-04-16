@@ -487,6 +487,18 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			),
 		);
 
+
+		$form_type   = $this->get_type();
+		$fields_type =  array(
+			'text'     => esc_html__( 'Text', 'textdomain' ),
+			'email'    => esc_html__( 'Email', 'textdomain' ),
+			'textarea' => esc_html__( 'Textarea', 'textdomain' ),
+			'password' => esc_html__( 'Password', 'textdomain' ),
+		);
+		if( $form_type === 'contact' ){
+			$fields_type['hidden'] = esc_html__( 'Hidden', 'textdomain' );
+		}
+
 		$repeater_fields = array(
 			'label'       => array(
 				'type'  => 'text',
@@ -499,11 +511,23 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			'type'        => array(
 				'type'    => 'select',
 				'label'   => esc_html__( 'Type', 'textdomain' ),
-				'options' => array(
-					'text'     => esc_html__( 'Text' ),
-					'email'    => esc_html__( 'Email' ),
-					'textarea' => esc_html__( 'Textarea', 'textdomain' ),
-					'password' => esc_html__( 'Password', 'textdomain' ),
+				'options' => $fields_type,
+				'toggle'  => array(
+					'password' => array(
+						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
+					),
+					'textarea' => array(
+						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
+					),
+					'email' => array(
+						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
+					),
+					'text' => array(
+						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
+					),
+					'hidden' => array(
+						'fields' => array( 'hidden_value', 'label' ),
+					)
 				),
 			),
 			'field_width' => array(
@@ -527,6 +551,11 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'optional' => esc_html__( 'Optional', 'textdomain' ),
 				),
 			),
+			'hidden_value' => array(
+				'type'        => 'textarea',
+				'label'       => esc_html__( 'Value', 'textdomain' ),
+				'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
+			)
 		);
 
 		\FLBuilder::register_settings_form(
@@ -767,6 +796,10 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			case 'password':
 				echo '<input type="password" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . '>';
 				break;
+			case 'hidden':
+				$hidden_field_value = $field['hidden_value'];
+				echo '<input type="hidden" value="' . esc_attr( $hidden_field_value ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '">';
+				break;
 			default:
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $placeholder . '">';
 				break;
@@ -840,6 +873,10 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return bool
 	 */
 	private function maybe_render_field_label( $field_name, $field ) {
+		if ( $field['type'] === 'hidden' ){
+			return false;
+		}
+
 		$label = $field['label'];
 		if ( empty( $label ) ) {
 			return false;

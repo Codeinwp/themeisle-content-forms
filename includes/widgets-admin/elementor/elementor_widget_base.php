@@ -81,15 +81,22 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'required',
 				'default'      => '',
+				'condition' => array(
+					'type!' => 'hidden',
+				),
 			)
 		);
 
+		$form_type   = $this->get_type();
 		$field_types = array(
 			'text'     => __( 'Text', 'textdomain' ),
 			'password' => __( 'Password', 'textdomain' ),
 			'email'    => __( 'Email', 'textdomain' ),
 			'textarea' => __( 'Textarea', 'textdomain' ),
 		);
+		if( $form_type === 'contact' ){
+			$fields_type['hidden'] = esc_html__( 'Hidden', 'textdomain' );
+		}
 
 		$repeater->add_control(
 			'type',
@@ -123,6 +130,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 					'25'  => '25%',
 				),
 				'default' => '100',
+				'condition' => array(
+					'type!' => 'hidden',
+				),
 			)
 		);
 
@@ -141,6 +151,22 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'label'   => __( 'Placeholder', 'textdomain' ),
 				'type'    => Controls_Manager::TEXT,
 				'default' => '',
+				'condition' => array(
+					'type!' => 'hidden',
+				),
+			)
+		);
+
+		$repeater->add_control(
+			'hidden_value',
+			array(
+				'label'       => __( 'Value', 'textdomain' ),
+				'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
+				'type'        => Controls_Manager::TEXTAREA,
+				'default'     => '',
+				'condition'   => array(
+					'type' => 'hidden',
+				),
 			)
 		);
 		$this->add_repeater_specific_fields( $repeater );
@@ -1155,6 +1181,10 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			case 'password':
 				echo '<input type="password" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . '>';
 				break;
+			case 'hidden':
+				$hidden_field_value = $field['hidden_value'];
+				echo '<input type="hidden" value="' . esc_attr( $hidden_field_value ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . '>';
+				break;
 			default:
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
 				break;
@@ -1221,6 +1251,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 */
 	private function render_field_label( $field ) {
 
+		if ( $field['type'] === 'hidden' ) {
+			return false;
+		}
 		$settings      = $this->get_settings();
 		$display_label = $settings['hide_label'];
 		$field_id      = $field['_id'];

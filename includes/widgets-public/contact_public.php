@@ -75,6 +75,10 @@ class Contact_Public extends Widget_Actions_Base {
 				$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 				return $return;
 			}
+
+			if( 'hidden' === $field['type'] ){
+				$data[ $key ] = $this->parse_hidden_text( $data[ $key ] );
+			}
 		}
 
 		$from = isset( $data['email'] ) ? $data['email'] : null;
