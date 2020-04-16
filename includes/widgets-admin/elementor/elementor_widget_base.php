@@ -87,15 +87,14 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			)
 		);
 
-		$form_type   = $this->get_type();
 		$field_types = array(
 			'text'     => __( 'Text', 'textdomain' ),
 			'password' => __( 'Password', 'textdomain' ),
 			'email'    => __( 'Email', 'textdomain' ),
 			'textarea' => __( 'Textarea', 'textdomain' ),
 		);
-		if( $form_type === 'contact' ){
-			$fields_type['hidden'] = esc_html__( 'Hidden', 'textdomain' );
+		if( $this->get_widget_type() === 'contact' ){
+			$field_types['hidden'] = esc_html__( 'Hidden', 'textdomain' );
 		}
 
 		$repeater->add_control(
@@ -157,18 +156,20 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			)
 		);
 
-		$repeater->add_control(
-			'hidden_value',
-			array(
-				'label'       => __( 'Value', 'textdomain' ),
-				'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
-				'type'        => Controls_Manager::TEXTAREA,
-				'default'     => '',
-				'condition'   => array(
-					'type' => 'hidden',
-				),
-			)
-		);
+		if( $this->get_widget_type() === 'contact' ) {
+			$repeater->add_control(
+				'hidden_value',
+				array(
+					'label'       => __( 'Value', 'textdomain' ),
+					'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
+					'type'        => Controls_Manager::TEXTAREA,
+					'default'     => '',
+					'condition'   => array(
+						'type' => 'hidden',
+					),
+				)
+			);
+		}
 		$this->add_repeater_specific_fields( $repeater );
 
 		$default_fields = $this->get_default_config();
