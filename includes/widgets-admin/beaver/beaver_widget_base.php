@@ -34,11 +34,25 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	public $default_data = array();
 
 	/**
+	 * Field types.
+	 *
+	 * @var array
+	 */
+	protected $field_types = array();
+
+	/**
 	 * Beaver_Widget_Base constructor.
 	 *
 	 * @param $data
 	 */
 	public function __construct( $data ) {
+
+		$this->field_types = array(
+			'text'     => esc_html__( 'Text', 'textdomain' ),
+			'email'    => esc_html__( 'Email', 'textdomain' ),
+			'textarea' => esc_html__( 'Textarea', 'textdomain' ),
+			'password' => esc_html__( 'Password', 'textdomain' ),
+		);
 
 		$this->run_hooks();
 
@@ -487,16 +501,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			),
 		);
 
-		$fields_type =  array(
-			'text'     => esc_html__( 'Text', 'textdomain' ),
-			'email'    => esc_html__( 'Email', 'textdomain' ),
-			'textarea' => esc_html__( 'Textarea', 'textdomain' ),
-			'password' => esc_html__( 'Password', 'textdomain' ),
-		);
-		if( $this->get_type() === 'contact' ){
-			$fields_type['hidden'] = esc_html__( 'Hidden', 'textdomain' );
-		}
-
+		$fields_type =  $this->get_specific_field_types();
 		$repeater_fields = array(
 			'label'       => array(
 				'type'  => 'text',
@@ -550,14 +555,6 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				),
 			),
 		);
-
-		if( $this->get_type() === 'contact' ){
-			$repeater_fields['hidden_value'] = array(
-				'type'        => 'textarea',
-				'label'       => esc_html__( 'Value', 'textdomain' ),
-				'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
-			);
-		}
 
 		\FLBuilder::register_settings_form(
 			$this->get_type() . '_field',
@@ -971,4 +968,11 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return array
 	 */
 	abstract function widget_default_values();
+
+	/**
+	 * Get allowed field types.
+	 *
+	 * @return array
+	 */
+	abstract function get_specific_field_types();
 }

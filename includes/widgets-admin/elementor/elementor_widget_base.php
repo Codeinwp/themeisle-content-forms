@@ -24,6 +24,8 @@ use ThemeIsle\ContentForms\Form_Manager;
  */
 abstract class Elementor_Widget_Base extends Widget_Base {
 
+	protected $field_types = array();
+
 	/**
 	 * All the widgets that extends this class have the same category.
 	 *
@@ -55,6 +57,13 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * Register the controls for each Elementor Widget.
 	 */
 	protected function _register_controls() {
+		$this->field_types = array(
+			'text'     => __( 'Text', 'textdomain' ),
+			'password' => __( 'Password', 'textdomain' ),
+			'email'    => __( 'Email', 'textdomain' ),
+			'textarea' => __( 'Textarea', 'textdomain' ),
+		);
+
 		$this->register_form_fields();
 		$this->register_settings_controls();
 		$this->register_style_controls();
@@ -87,16 +96,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			)
 		);
 
-		$field_types = array(
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
-		);
-		if( $this->get_widget_type() === 'contact' ){
-			$field_types['hidden'] = esc_html__( 'Hidden', 'textdomain' );
-		}
-
+		$field_types = $this->get_specific_field_types();
 		$repeater->add_control(
 			'type',
 			array(
@@ -156,20 +156,6 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			)
 		);
 
-		if( $this->get_widget_type() === 'contact' ) {
-			$repeater->add_control(
-				'hidden_value',
-				array(
-					'label'       => __( 'Value', 'textdomain' ),
-					'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
-					'type'        => Controls_Manager::TEXTAREA,
-					'default'     => '',
-					'condition'   => array(
-						'type' => 'hidden',
-					),
-				)
-			);
-		}
 		$this->add_repeater_specific_fields( $repeater );
 
 		$default_fields = $this->get_default_config();
@@ -1318,4 +1304,11 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * Add widget specific settings controls.
 	 */
 	abstract function add_specific_settings_controls();
+
+	/**
+	 * Get allowed field types.
+	 *
+	 * @return array
+	 */
+	abstract function get_specific_field_types();
 }

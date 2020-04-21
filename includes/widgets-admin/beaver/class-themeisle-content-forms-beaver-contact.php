@@ -100,6 +100,11 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	public function add_widget_repeater_fields( $fields ) {
+		$fields['hidden_value'] = array(
+			'type'        => 'textarea',
+			'label'       => esc_html__( 'Value', 'textdomain' ),
+			'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
+		);
 		return $fields;
 	}
 
@@ -130,5 +135,16 @@ class Contact_Admin extends Beaver_Widget_Base {
 			),
 		) + $fields['fields'];
 		return $fields;
+	}
+
+	/**
+	 * Get specific field types.
+	 *
+	 * @return array
+	 */
+	function get_specific_field_types() {
+		$field_types = $this->field_types;
+		$field_types['hidden'] = esc_html__( 'Hidden', 'textdomain' );
+		return $field_types;
 	}
 }

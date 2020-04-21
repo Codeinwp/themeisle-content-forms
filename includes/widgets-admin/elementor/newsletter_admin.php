@@ -359,4 +359,13 @@ class Newsletter_Admin extends Elementor_Widget_Base {
 			}
 		}
 	}
+
+	/**
+	 * Specific field types for Newsletter form.
+	 *
+	 * @return array
+	 */
+	function get_specific_field_types() {
+		return $this->field_types;
+	}
 }
