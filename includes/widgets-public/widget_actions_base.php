@@ -144,13 +144,15 @@ abstract class Widget_Actions_Base {
 	/**
 	 * Replace magic tags in hidden field.
 	 *
-	 * @param string $hidden_value Field hidden value
+	 * @param string $hidden_value Field hidden value.
+	 * @param int    $post_id      Post id.
 	 *
 	 * @return string
 	 */
-	protected function parse_hidden_text( $hidden_value ) {
-		global $wp;
-		$current_url = home_url( $wp->request );
+	protected function parse_hidden_text( $hidden_value, $post_id ) {
+
+
+		$current_url = get_the_permalink( $post_id );
 
 		$hidden_value = str_replace( '{current_url}', $current_url, $hidden_value );
 

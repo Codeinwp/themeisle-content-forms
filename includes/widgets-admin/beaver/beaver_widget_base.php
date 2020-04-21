@@ -795,8 +795,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 				echo '<input type="password" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . '>';
 				break;
 			case 'hidden':
-				$hidden_field_value = $field['hidden_value'];
-				echo '<input type="hidden" value="' . esc_attr( $hidden_field_value ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '">';
+				echo '<input type="hidden" value="' . esc_attr( $field['hidden_value'] ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '">';
 				break;
 			default:
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $placeholder . '">';
