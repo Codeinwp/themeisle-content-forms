@@ -140,4 +140,38 @@ abstract class Widget_Actions_Base {
 		}
 		return false;
 	}
+
+	/**
+	 * Replace magic tags in hidden field.
+	 *
+	 * @param string $hidden_value Field hidden value.
+	 * @param int    $post_id      Post id.
+	 *
+	 * @return string
+	 */
+	protected function parse_hidden_text( $hidden_value, $post_id ) {
+
+
+		$current_url = get_the_permalink( $post_id );
+
+		$hidden_value = str_replace( '{current_url}', $current_url, $hidden_value );
+
+		$user_id = get_current_user_id();
+		if ( $user_id !== 0 ){
+			$user_info    = get_userdata( $user_id );
+			$hidden_value = str_replace( '{username}', $user_info->user_login, $hidden_value );
+			$hidden_value = str_replace( '{user_nice_name}', $user_info->first_name . ' ' . $user_info->last_name, $hidden_value );
+			$hidden_value = str_replace( '{user_type}', implode(', ', $user_info->roles), $hidden_value );
+			$hidden_value = str_replace( '{user_email}',  $user_info->user_email, $hidden_value );
+		} else {
+			$replacement = __( 'Could not retrieve the info because the user is not logged in.', 'textdomain' );
+			$hidden_value = str_replace( '{username}', $replacement, $hidden_value );
+			$hidden_value = str_replace( '{user_nice_name}', $replacement, $hidden_value );
+			$hidden_value = str_replace( '{user_type}', $replacement, $hidden_value );
+			$hidden_value = str_replace( '{user_email}',  $replacement, $hidden_value );
+		}
+
+		return $hidden_value;
+	}
+
 }

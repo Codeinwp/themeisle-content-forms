@@ -129,4 +129,13 @@ class Registration_Admin extends Beaver_Widget_Base {
 
 		return $fields;
 	}
+
+	/**
+	 * Get specific field types.
+	 *
+	 * @return array
+	 */
+	function get_specific_field_types() {
+		return $this->field_types;
+	}
 }

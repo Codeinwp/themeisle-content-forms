@@ -40,7 +40,6 @@ class Contact_Public extends Widget_Actions_Base {
 	 * @return array
 	 */
 	public function rest_submit_form( $return, $data, $widget_id, $post_id, $builder ) {
-
 		$settings        = $this->get_widget_settings( $widget_id, $post_id, $builder );
 		$success_message = array_key_exists( 'success_message', $settings ) && ! empty( $settings['success_message'] ) ? $settings['success_message'] : esc_html__( 'Your message has been sent!', 'textdomain' );
 		$error_message   = array_key_exists( 'error_message', $settings ) && ! empty( $settings['error_message'] ) ? $settings['error_message'] : esc_html__( 'We failed to send your message!', 'textdomain' );
@@ -66,7 +65,7 @@ class Contact_Public extends Widget_Actions_Base {
 			$key            = Form_Manager::get_field_key_name( $field );
 			$required_field = array_key_exists( 'requirement', $field ) ? $field['requirement'] : ( array_key_exists( 'required', $field ) ? $field['required'] : '' );
 
-			if ( 'required' === $required_field && empty( $data[ $key ] ) ) {
+			if ( 'required' === $required_field && empty( $data[ $key ] ) && 'hidden' !== $field['type'] ) {
 				$return['message'] = sprintf( esc_html__( 'Missing %s', 'textdomain' ), $key );
 				return $return;
 			}
@@ -74,6 +73,10 @@ class Contact_Public extends Widget_Actions_Base {
 			if ( 'email' === $field['type'] && ! is_email( $data[ $key ] ) ) {
 				$return['message'] = esc_html__( 'Invalid email.', 'textdomain' );
 				return $return;
+			}
+
+			if( 'hidden' === $field['type'] ){
+				$data[ $key ] = $this->parse_hidden_text( $data[ $key ], $post_id );
 			}
 		}
 

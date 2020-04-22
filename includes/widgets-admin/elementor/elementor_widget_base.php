@@ -24,6 +24,8 @@ use ThemeIsle\ContentForms\Form_Manager;
  */
 abstract class Elementor_Widget_Base extends Widget_Base {
 
+	protected $field_types = array();
+
 	/**
 	 * All the widgets that extends this class have the same category.
 	 *
@@ -55,6 +57,13 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * Register the controls for each Elementor Widget.
 	 */
 	protected function _register_controls() {
+		$this->field_types = array(
+			'text'     => __( 'Text', 'textdomain' ),
+			'password' => __( 'Password', 'textdomain' ),
+			'email'    => __( 'Email', 'textdomain' ),
+			'textarea' => __( 'Textarea', 'textdomain' ),
+		);
+
 		$this->register_form_fields();
 		$this->register_settings_controls();
 		$this->register_style_controls();
@@ -81,16 +90,13 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'required',
 				'default'      => '',
+				'condition' => array(
+					'type!' => 'hidden',
+				),
 			)
 		);
 
-		$field_types = array(
-			'text'     => __( 'Text', 'textdomain' ),
-			'password' => __( 'Password', 'textdomain' ),
-			'email'    => __( 'Email', 'textdomain' ),
-			'textarea' => __( 'Textarea', 'textdomain' ),
-		);
-
+		$field_types = $this->get_specific_field_types();
 		$repeater->add_control(
 			'type',
 			array(
@@ -123,6 +129,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 					'25'  => '25%',
 				),
 				'default' => '100',
+				'condition' => array(
+					'type!' => 'hidden',
+				),
 			)
 		);
 
@@ -141,8 +150,12 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'label'   => __( 'Placeholder', 'textdomain' ),
 				'type'    => Controls_Manager::TEXT,
 				'default' => '',
+				'condition' => array(
+					'type!' => 'hidden',
+				),
 			)
 		);
+
 		$this->add_repeater_specific_fields( $repeater );
 
 		$default_fields = $this->get_default_config();
@@ -1155,6 +1168,10 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			case 'password':
 				echo '<input type="password" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . '>';
 				break;
+			case 'hidden':
+				$hidden_field_value = $field['hidden_value'];
+				echo '<input type="hidden" value="' . esc_attr( $hidden_field_value ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . '>';
+				break;
 			default:
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
 				break;
@@ -1221,6 +1238,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 */
 	private function render_field_label( $field ) {
 
+		if ( $field['type'] === 'hidden' ) {
+			return false;
+		}
 		$settings      = $this->get_settings();
 		$display_label = $settings['hide_label'];
 		$field_id      = $field['_id'];
@@ -1284,4 +1304,11 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 * Add widget specific settings controls.
 	 */
 	abstract function add_specific_settings_controls();
+
+	/**
+	 * Get allowed field types.
+	 *
+	 * @return array
+	 */
+	abstract function get_specific_field_types();
 }

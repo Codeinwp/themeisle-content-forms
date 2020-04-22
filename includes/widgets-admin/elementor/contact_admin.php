@@ -177,6 +177,28 @@ class Contact_Admin extends Elementor_Widget_Base {
 	 * @return bool
 	 */
 	function add_repeater_specific_fields( $repeater ) {
-		return false;
+		$repeater->add_control(
+			'hidden_value',
+			array(
+				'label'       => __( 'Value', 'textdomain' ),
+				'description' => __( 'You can use the following magic tags to get additional information: {current_url}, {username}, {user_nice_name}, {user_type}, {user_email}', 'textdomain' ),
+				'type'        => Controls_Manager::TEXTAREA,
+				'default'     => '',
+				'condition'   => array(
+					'type' => 'hidden',
+				),
+			)
+		);
+	}
+
+	/**
+	 * Specific field types for Contact form.
+	 *
+	 * @return array
+	 */
+	function get_specific_field_types() {
+		$field_types = $this->field_types;
+		$field_types['hidden'] = esc_html__( 'Hidden', 'textdomain' );
+		return $field_types;
 	}
 }
