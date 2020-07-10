@@ -90,7 +90,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'required',
 				'default'      => '',
-				'condition' => array(
+				'condition'    => array(
 					'type!' => 'hidden',
 				),
 			)
@@ -118,9 +118,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$repeater->add_responsive_control(
 			'field_width',
 			array(
-				'label'   => __( 'Field Width', 'textdomain' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => array(
+				'label'     => __( 'Field Width', 'textdomain' ),
+				'type'      => Controls_Manager::SELECT,
+				'options'   => array(
 					'100' => '100%',
 					'75'  => '75%',
 					'66'  => '66%',
@@ -128,7 +128,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 					'33'  => '33%',
 					'25'  => '25%',
 				),
-				'default' => '100',
+				'default'   => '100',
 				'condition' => array(
 					'type!' => 'hidden',
 				),
@@ -147,9 +147,9 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 		$repeater->add_control(
 			'placeholder',
 			array(
-				'label'   => __( 'Placeholder', 'textdomain' ),
-				'type'    => Controls_Manager::TEXT,
-				'default' => '',
+				'label'     => __( 'Placeholder', 'textdomain' ),
+				'type'      => Controls_Manager::TEXT,
+				'default'   => '',
 				'condition' => array(
 					'type!' => 'hidden',
 				),

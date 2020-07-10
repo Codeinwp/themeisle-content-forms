@@ -501,7 +501,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			),
 		);
 
-		$fields_type =  $this->get_specific_field_types();
+		$fields_type     = $this->get_specific_field_types();
 		$repeater_fields = array(
 			'label'       => array(
 				'type'  => 'text',
@@ -522,15 +522,15 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'textarea' => array(
 						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
 					),
-					'email' => array(
+					'email'    => array(
 						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
 					),
-					'text' => array(
+					'text'     => array(
 						'fields' => array( 'placeholder', 'field_width', 'required', 'label' ),
 					),
-					'hidden' => array(
+					'hidden'   => array(
 						'fields' => array( 'hidden_value', 'label' ),
-					)
+					),
 				),
 			),
 			'field_width' => array(
@@ -870,7 +870,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return bool
 	 */
 	private function maybe_render_field_label( $field_name, $field ) {
-		if ( $field['type'] === 'hidden' ){
+		if ( $field['type'] === 'hidden' ) {
 			return false;
 		}
 
