@@ -143,9 +143,9 @@ class Contact_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	function get_specific_field_types() {
-		$field_types = $this->field_types;
+		$field_types             = $this->field_types;
 		$field_types['checkbox'] = esc_html__( 'Checkbox', 'textdomain' );
-		$field_types['hidden'] = esc_html__( 'Hidden', 'textdomain' );
+		$field_types['hidden']   = esc_html__( 'Hidden', 'textdomain' );
 		return $field_types;
 	}
 }

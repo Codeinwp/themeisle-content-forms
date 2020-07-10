@@ -75,7 +75,7 @@ class Contact_Public extends Widget_Actions_Base {
 				return $return;
 			}
 
-			if( 'hidden' === $field['type'] ){
+			if ( 'hidden' === $field['type'] ) {
 				$data[ $key ] = $this->parse_hidden_text( $data[ $key ], $post_id );
 			}
 		}

@@ -501,7 +501,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			),
 		);
 
-		$fields_type =  $this->get_specific_field_types();
+		$fields_type     = $this->get_specific_field_types();
 		$repeater_fields = array(
 			'label'       => array(
 				'type'  => 'text',
@@ -885,7 +885,7 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return bool
 	 */
 	private function maybe_render_field_label( $field_name, $field ) {
-		if ( $field['type'] === 'hidden' || $field['type'] === 'checkbox' ){
+		if ( $field['type'] === 'hidden' || $field['type'] === 'checkbox' ) {
 			return false;
 		}
 		$label = $field['label'];
