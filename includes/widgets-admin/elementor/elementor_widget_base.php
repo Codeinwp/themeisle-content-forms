@@ -151,7 +151,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'    => Controls_Manager::TEXT,
 				'default' => '',
 				'condition' => array(
-					'type!' => 'hidden',
+					'type!' => array( 'hidden', 'checkbox' ),
 				),
 			)
 		);
@@ -1172,6 +1172,15 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				$hidden_field_value = $field['hidden_value'];
 				echo '<input type="hidden" value="' . esc_attr( $hidden_field_value ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $disabled . '>';
 				break;
+			case 'checkbox':
+				echo '<label class="checkbox-input" for="' . esc_attr( $field_name ) . '" ' . $this->get_render_attribute_string( 'label' . $field_id ) . '>';
+				echo wp_kses_post( $field['label'] );
+				if ( $field['requirement'] === 'required' ) {
+					echo '<span class="required-mark"> *</span>';
+				}
+				echo '<input type="checkbox" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . '>';
+				echo '</label>';
+				break;
 			default:
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $disabled . ' placeholder="' . esc_attr( $placeholder ) . '">';
 				break;
@@ -1238,7 +1247,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	 */
 	private function render_field_label( $field ) {
 
-		if ( $field['type'] === 'hidden' ) {
+		if ( $field['type'] === 'hidden' || $field['type'] === 'checkbox'  ) {
 			return false;
 		}
 		$settings      = $this->get_settings();
