@@ -531,6 +531,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 					'hidden'   => array(
 						'fields' => array( 'hidden_value', 'label' ),
 					),
+					'checkbox' => array(
+						'fields' => array( 'field_width', 'required', 'label' ),
+					),
 				),
 			),
 			'field_width' => array(
@@ -797,6 +800,18 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 			case 'hidden':
 				echo '<input type="hidden" value="' . esc_attr( $field['hidden_value'] ) . '" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '">';
 				break;
+			case 'checkbox':
+				$label = $field['label'];
+				if ( ! empty( $label ) ) {
+					echo '<label class="checkbox-input" for="' . esc_attr( $field_name ) . ' ">';
+					echo $field['label'];
+					if ( $field['required'] === 'required' ) {
+						echo '<span class="required-mark"> *</span>';
+					}
+					echo '<input type="checkbox" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . '>';
+					echo '</label>';
+				}
+				break;
 			default:
 				echo '<input type="text" name="' . esc_attr( $field_name ) . '" id="' . esc_attr( $field_name ) . '" ' . $required . ' ' . $placeholder . '">';
 				break;
@@ -870,10 +885,9 @@ abstract class Beaver_Widget_Base extends \FLBuilderModule {
 	 * @return bool
 	 */
 	private function maybe_render_field_label( $field_name, $field ) {
-		if ( $field['type'] === 'hidden' ) {
+		if ( $field['type'] === 'hidden' || $field['type'] === 'checkbox' ) {
 			return false;
 		}
-
 		$label = $field['label'];
 		if ( empty( $label ) ) {
 			return false;
