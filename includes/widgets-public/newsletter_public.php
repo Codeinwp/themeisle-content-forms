@@ -125,16 +125,18 @@ class Newsletter_Public extends Widget_Actions_Base {
 	 */
 	private function mailchimp_subscribe( $form_settings, $result ) {
 
-		$api_key = $form_settings['provider_settings']['access_key'];
-		$list_id = $form_settings['provider_settings']['list_id'];
-		$data    = $form_settings['data'];
-		$email   = $data['EMAIL'];
+		$api_key     = $form_settings['provider_settings']['access_key'];
+		$list_id     = $form_settings['provider_settings']['list_id'];
+		$data        = $form_settings['data'];
+		$user_status = $this->get_new_user_status( $api_key, $list_id );
+		$email       = $data['EMAIL'];
 		unset( $data['EMAIL'] );
 
 		$form_data = array(
 			'email_address' => $email,
-			'status'        => 'pending',
+			'status'        => $user_status,
 		);
+
 		if ( ! empty( $data ) ) {
 			$form_data['merge_fields'] = $data;
 		}
@@ -158,13 +160,41 @@ class Newsletter_Public extends Widget_Actions_Base {
 			return $result;
 		}
 
-		if ( $body['status'] === 'pending' ) {
+		if ( $body['status'] === 'pending' || $body['status'] === 'subscribed' ) {
 			$result['message'] = $form_settings['strings']['success_message'];
 			$result['success'] = true;
 			return $result;
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Check if the subscribing list has double opt-in.
+	 * If the option is activated, return pending status for new users, else return subscribed.
+	 *
+	 * @param string $api_key Api key.
+	 * @param string $list_id List id.
+	 *
+	 * @return string
+	 */
+	private function get_new_user_status( $api_key, $list_id ) {
+		$url  = 'https://' . substr( $api_key, strpos( $api_key, '-' ) + 1 ) . '.api.mailchimp.com/3.0/lists/' . $list_id;
+		$args = array(
+			'method'  => 'GET',
+			'headers' => array(
+				'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+			),
+		);
+
+		$response = wp_remote_post( $url, $args );
+
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			return 'pending';
+		}
+
+		return array_key_exists( 'double_optin', $body ) && $body['double_optin'] === true ? 'pending' : 'subscribed';
 	}
 
 	/**
