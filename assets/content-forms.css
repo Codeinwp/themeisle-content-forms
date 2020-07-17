@@ -5,13 +5,25 @@
 .ti-cf-module .content-form-field-hidden{
     display: none;
 }
-.ti-cf-module input,
+.ti-cf-module input:not([type="checkbox"]),
 .ti-cf-module textarea {
     width: 100%;
     display: block;
     border: 1px solid #cccccc;
     border-radius: 3px;
 }
+.ti-cf-module label.checkbox-input{
+    position: relative;
+    padding-left: 20px;
+}
+
+.ti-cf-module label.checkbox-input input[type="checkbox"]{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY( -50% );
+}
+
 .ti-cf-module select{
     height: auto;
     -webkit-appearance: none;
