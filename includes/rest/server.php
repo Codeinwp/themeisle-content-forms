@@ -61,6 +61,7 @@ class Server extends \WP_Rest_Controller {
 						'description' => __( 'Form builder.', 'textdomain' ),
 					),
 				),
+				'permission_callback' => '__return_true'
 			)
 		);
 	}
