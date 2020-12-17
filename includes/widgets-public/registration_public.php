@@ -38,8 +38,6 @@ class Registration_Public extends Widget_Actions_Base {
 			return $return;
 		}
 
-		$widget_settings = $this->get_widget_settings( $widget_id, $post_id, $builder );
-
 		$settings['user_email']             = sanitize_email( $data['USER_EMAIL'] );
 		$settings['user_login']             = ! empty( $data['USER_LOGIN'] ) ? $data['USER_LOGIN'] : $data['email'];
 		$settings['user_pass']              = ! empty( $data['USER_PASS'] ) ? $data['USER_PASS'] : wp_generate_password(
@@ -49,7 +47,7 @@ class Registration_Public extends Widget_Actions_Base {
 		$settings['display_name'] = ! empty( $data['DISPLAY_NAME'] ) ? $data['DISPLAY_NAME'] : '';
 		$settings['first_name']   = ! empty( $data['FIRST_NAME'] ) ? $data['FIRST_NAME'] : '';
 		$settings['last_name']    = ! empty( $data['LAST_NAME'] ) ? $data['LAST_NAME'] : '';
-		$settings['role']         = array_key_exists( 'user_role', $widget_settings ) ? $widget_settings['user_role'] : 'subscriber';
+		$settings['role']         = apply_filters( 'ti_content_forms_registration_form', 'subscriber', $widget_id, $post_id );
 
 		$return = $this->_register_user( $return, $settings );
 

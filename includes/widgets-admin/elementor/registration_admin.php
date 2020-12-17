@@ -135,19 +135,6 @@ class Registration_Admin extends Elementor_Widget_Base {
 				),
 			)
 		);
-
-		$roles = Form_Manager::get_user_roles();
-		if ( current_user_can( 'manage_options' ) ) {
-			$this->add_control(
-				'user_role',
-				array(
-					'label'   => __( 'Register user as:', 'textdomain' ),
-					'type'    => Controls_Manager::SELECT,
-					'options' => $roles,
-					'default' => 'subscriber',
-				)
-			);
-		}
 	}
 
 	/**
