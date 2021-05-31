@@ -14,8 +14,8 @@ use Elementor\Group_Control_Typography;
 use Elementor\Icons_Manager;
 use Elementor\Plugin;
 use Elementor\Repeater;
-use Elementor\Scheme_Color;
-use Elementor\Scheme_Typography;
+use Elementor\Core\Schemes\Color;
+use Elementor\Core\Schemes\Typography;
 use Elementor\Widget_Base;
 use ThemeIsle\ContentForms\Form_Manager;
 
@@ -304,8 +304,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 					'{{WRAPPER}} fieldset > label, {{WRAPPER}} .elementor-field-subgroup label' => 'color: {{VALUE}};',
 				),
 				'scheme'    => array(
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_3,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_3,
 				),
 			)
 		);
@@ -327,7 +327,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			array(
 				'name'     => 'label_typography',
 				'selector' => '{{WRAPPER}} fieldset > label',
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
+				'scheme'   => Typography::TYPOGRAPHY_3,
 			)
 		);
 		$this->end_controls_section();
@@ -345,7 +345,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			array(
 				'name'     => 'field_typography',
 				'selector' => '{{WRAPPER}} fieldset > input, {{WRAPPER}} fieldset select, {{WRAPPER}} fieldset > textarea, {{WRAPPER}} fieldset > button',
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
+				'scheme'   => Typography::TYPOGRAPHY_3,
 			)
 		);
 
@@ -415,8 +415,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 					'{{WRAPPER}} fieldset > textarea::placeholder' => 'color: {{VALUE}};',
 				),
 				'scheme'    => array(
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_3,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_3,
 				),
 			)
 		);
@@ -523,8 +523,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 					'{{WRAPPER}} fieldset > textarea::placeholder:focus' => 'color: {{VALUE}};',
 				),
 				'scheme'    => array(
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_3,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_3,
 				),
 			)
 		);
@@ -637,8 +637,8 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'label'     => __( 'Background Color', 'textdomain' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => array(
-					'type'  => Scheme_Color::get_type(),
-					'value' => Scheme_Color::COLOR_4,
+					'type'  => Color::get_type(),
+					'value' => Color::COLOR_4,
 				),
 				'selectors' => array(
 					'{{WRAPPER}} fieldset > button' => 'background-color: {{VALUE}};',
@@ -662,7 +662,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'button_typography',
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_4,
+				'scheme'   => Typography::TYPOGRAPHY_4,
 				'selector' => '{{WRAPPER}} fieldset > button',
 			)
 		);
@@ -811,7 +811,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 			array(
 				'name'     => 'notification_typography',
 				'selector' => '{{WRAPPER}} .content-form-notice',
-				'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
+				'scheme'   => Typography::TYPOGRAPHY_3,
 			)
 		);
 
