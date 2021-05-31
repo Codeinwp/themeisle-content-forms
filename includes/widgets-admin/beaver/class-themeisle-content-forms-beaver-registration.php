@@ -114,19 +114,6 @@ class Registration_Admin extends Beaver_Widget_Base {
 	 * @return array
 	 */
 	function add_widget_specific_controls( $fields ) {
-		$roles = Form_Manager::get_user_roles();
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return $fields;
-		}
-		$fields['fields'] = array(
-			'user_role' => array(
-				'type'    => 'select',
-				'label'   => __( 'Register user as:', 'textdomain' ),
-				'default' => 'subscriber',
-				'options' => $roles,
-			),
-		) + $fields['fields'];
-
 		return $fields;
 	}
 

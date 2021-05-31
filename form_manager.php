@@ -10,7 +10,7 @@ use ThemeIsle\ContentForms\Includes\Widgets_Admin\Elementor\Elementor_Widget_Man
 use ThemeIsle\ContentForms\Includes\Rest\Server;
 use ThemeIsle\FullWidthTemplates\Elementor;
 
-define( 'TI_CONTENT_FORMS_VERSION', '1.0.0' );
+define( 'TI_CONTENT_FORMS_VERSION', '1.2.2' );
 define( 'TI_CONTENT_FORMS_NAMESPACE', 'content-forms/v1' );
 define( 'TI_CONTENT_FORMS_FILE', __FILE__ );
 define( 'TI_CONTENT_FORMS_PATH', dirname( __FILE__ ) );
