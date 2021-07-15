@@ -166,7 +166,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 				'type'        => Controls_Manager::REPEATER,
 				'show_label'  => false,
 				'separator'   => 'before',
-				'fields'      => array_values( $repeater->get_controls() ),
+				'fields'      => $repeater->get_controls(),
 				'default'     => $default_fields,
 				'title_field' => '{{{ label }}}',
 			)
