@@ -56,7 +56,7 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	/**
 	 * Register the controls for each Elementor Widget.
 	 */
-	protected function _register_controls() {
+	protected function register_controls() {
 		$this->field_types = array(
 			'text'     => __( 'Text', 'textdomain' ),
 			'password' => __( 'Password', 'textdomain' ),
