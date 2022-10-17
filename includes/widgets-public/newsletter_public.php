@@ -8,8 +8,6 @@
 
 namespace ThemeIsle\ContentForms\Includes\Widgets_Public;
 
-use MailerLiteApi\Exceptions\MailerLiteSdkException;
-use MailerLiteApi\MailerLite;
 use ThemeIsle\ContentForms\Includes\Admin\Widget_Actions_Base;
 
 require_once TI_CONTENT_FORMS_PATH . '/includes/widgets-public/widget_actions_base.php';
@@ -259,6 +257,12 @@ class Newsletter_Public extends Widget_Actions_Base {
 	 * @return array
 	 */
 	private function mailerlite_subscribe( $form_settings, $result ) {
+		if ( version_compare( '7.1', phpversion() ) === 1 ) {
+			return false;
+		}
+
+		require_once TI_CONTENT_FORMS_PATH . '/library/mailerlite/vendor/autoload.php';
+
 		$api_key = $form_settings['provider_settings']['access_key'];
 		$list_id = $form_settings['provider_settings']['list_id'];
 		$data    = $form_settings['data'];
@@ -277,7 +281,7 @@ class Newsletter_Public extends Widget_Actions_Base {
 		}
 
 		try {
-			$ml_subscribers = new MailerLite( $api_key );
+			$ml_subscribers = new \MailerLiteApi\MailerLite( $api_key );
 			$groups_api     = $ml_subscribers->groups();
 			$ml_response    = $groups_api->addSubscriber( $list_id, $form_data );
 			if ( ! property_exists( $ml_response, 'error' ) ) {
@@ -286,7 +290,7 @@ class Newsletter_Public extends Widget_Actions_Base {
 				return $result;
 			}
 			return $result;
-		} catch ( MailerLiteSdkException $e ) {
+		} catch ( \MailerLiteApi\Exceptions\MailerLiteSdkException $e ) {
 			return $result;
 		}
 	}

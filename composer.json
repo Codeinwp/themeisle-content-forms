@@ -27,8 +27,5 @@
   },
   "support": {
     "issues": "https://github.com/Codeinwp/themeisle-content-forms/issues"
-  },
-  "require": {
-    "mailerlite/mailerlite-api-v2-php-sdk": "^0.3.2"
   }
 }
