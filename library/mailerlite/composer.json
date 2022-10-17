@@ -10,10 +10,10 @@
         "php-http/client-common": "^2.0",
         "php-http/discovery": "^1.7",
         "nyholm/psr7": "^1.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "php-http/guzzle6-adapter": "^2.0"
     },
     "require-dev": {
-        "php-http/guzzle6-adapter": "^2.0",
         "phpunit/phpunit": "6.* | 7.* | 8.* | 9.*"
     },
     "autoload": {
