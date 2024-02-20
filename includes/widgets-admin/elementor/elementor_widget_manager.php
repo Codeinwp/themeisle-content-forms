@@ -31,6 +31,73 @@ class Elementor_Widget_Manager {
 		// Register Orbit Fox Elementor Widgets
 		add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_elementor_widget' ) );
 
+		// Before Elementor Widget Settings Save
+		add_filter( 'elementor/document/save/data', array( $this, 'before_settings_save' ), 10, 2 );
+
+	}
+
+	/**
+	 * Sanitize the field attributes for whe width attribute.
+	 *
+	 * @param array $field The field attributes.
+	 *
+	 * @return array
+	 */
+	private function sanitize_field_attributes( $field ) {
+		$address_fields = array( 'addr2', 'city', 'state', 'zip', 'country' );
+		foreach ( $address_fields as $attribute ) {
+			if ( isset( $field[$attribute . '_width'] ) ) {
+				$field[$attribute . '_width'] = is_numeric($field[$attribute . '_width'] ) ? $field[$attribute . '_width'] : '100';
+			}
+		}
+		return $field;
+	}
+
+	/**
+	 * Search and modify the widget settings.
+	 *
+	 * @param array $elements_data The elements data.
+	 */
+	private function search_and_modify_widget_settings( &$elements_data ) {
+		foreach ( $elements_data as &$element ) {
+			if ( isset( $element['elType'] ) && $element['elType'] === 'widget' ) {
+				// Check if the widget is of the desired type
+				if ( isset( $element['widgetType'] ) && in_array( $element['widgetType'], [ 'content_form_registration', 'content_form_newsletter', 'content_form_contact' ] ) ) {
+					// Modify the settings of the widget
+					$settings = $element['settings'];
+					if ( isset( $settings['form_fields'] ) ) {
+						$form_fields = $settings['form_fields'];
+						foreach ( $form_fields as &$field ) {
+							$field = $this->sanitize_field_attributes( $field );
+						}
+						$settings['form_fields'] = $form_fields;
+					}
+					//$settings[$control_name] = $desired_value;
+					$element['settings'] = $settings;
+				}
+			}
+
+			if ( isset( $element['elements'] ) && is_array( $element['elements'] ) ) {
+				// If the element has nested elements (e.g., section or column), recursively call the function
+				$this->search_and_modify_widget_settings( $element['elements'] );
+			}
+		}
+	}
+
+	/**
+	 * Filter the document data and sanitize the form parameters.
+	 *
+	 * @param array $data The document data.
+	 * @param @param \Elementor\Core\Base\Document $document The document instance.
+	 *
+	 * @return mixed
+	 */
+	public function before_settings_save( $data, $document ) {
+		if ( ! isset( $data['elements'] ) ) {
+			return;
+		}
+		$this->search_and_modify_widget_settings( $data['elements'] );
+		return $data;
 	}
 
 	/**
