@@ -1066,19 +1066,31 @@ abstract class Elementor_Widget_Base extends Widget_Base {
 	}
 
 	/**
+	 * Sanitize alignment values before rendering.
+	 *
+	 * @param mixed $value The value to sanitize.
+	 *
+	 * @return string
+	 */
+	private function sanitize_alignment( $value ) {
+		return in_array( $value, array( 'left', 'center', 'right' ), true ) ? $value : 'left';
+	}
+
+	/**
 	 * Get style for form notification.
 	 *
 	 * @return string
 	 */
 	public function get_notice_style() {
 		$settings = $this->get_settings_for_display();
+		$notification_alignment = esc_attr( $this->sanitize_alignment( $settings['notification_alignment'] ) );
 
-		$style = 'style="margin-left:0; text-align:' . $settings['notification_alignment'] . '"';
+		$style = 'style="margin-left:0; text-align:' . $notification_alignment . '"';
 		if ( $settings['notification_alignment'] === 'right' ) {
-			$style = 'style="margin-right:0; margin-left:auto; text-align:' . $settings['notification_alignment'] . '"';
+			$style = 'style="margin-right:0; margin-left:auto; text-align:' . $notification_alignment . '"';
 		}
 		if ( $settings['notification_alignment'] === 'center' ) {
-			$style = 'style="margin-left: auto; margin-right: auto; text-align:' . $settings['notification_alignment'] . '"';
+			$style = 'style="margin-left: auto; margin-right: auto; text-align:' . $notification_alignment . '"';
 		}
 
 		return $style;
