@@ -54,6 +54,18 @@ class Elementor_Widget_Manager {
 	}
 
 	/**
+	 * Sanitize the alignment attribute.
+	 *
+	 * @param string $alignment The alignment attribute.
+	 *
+	 * @return string
+	 */
+	private function sanitize_alignment( $alignment ) {
+		$allowed_alignments = array( 'left', 'center', 'right' );
+		return in_array( $alignment, $allowed_alignments ) ? $alignment : 'left';
+	}
+
+	/**
 	 * Search and modify the widget settings.
 	 *
 	 * @param array $elements_data The elements data.
@@ -65,6 +77,9 @@ class Elementor_Widget_Manager {
 				if ( isset( $element['widgetType'] ) && in_array( $element['widgetType'], [ 'content_form_registration', 'content_form_newsletter', 'content_form_contact' ] ) ) {
 					// Modify the settings of the widget
 					$settings = $element['settings'];
+					if ( isset( $settings['notification_alignment'] ) ) {
+						$settings['notification_alignment'] = $this->sanitize_alignment( $settings['notification_alignment'] );
+					}
 					if ( isset( $settings['form_fields'] ) ) {
 						$form_fields = $settings['form_fields'];
 						foreach ( $form_fields as &$field ) {
